@@ -1,0 +1,79 @@
+{
+  "name": "KITT",
+  "version": "1.0.0",
+  "description": "Knight Industries Two Thousand",
+  "main": "main.js",
+  "author": {
+    "name": "KITT",
+    "email": "your.email@example.com"
+  },
+  "homepage": "https://your-project-homepage.com",
+  "scripts": {
+    "start": "electron main.js --inspect",
+    "pack": "electron-builder --dir",
+    "build": "electron-builder --win --mac --linux --x64 --arm64",
+    "build:all": "electron-builder --win --mac --linux",
+    "build:mac": "electron-builder --mac ",
+    "build:win": "electron-builder --win ",
+    "build:wintel": "electron-builder --win --x64",
+    "build:lin": "electron-builder  --linux",
+    "build:intel": "electron-builder --win --mac --linux --x64"
+  },
+  "build": {
+    "appId": "KITT",
+    "productName": "KITT",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/*.js.map",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "node_modules/electron-is-dev/**/*"
+    ],
+    "mac": {
+      "category": "io.KITT",
+      "target": "dmg"
+    },
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "maintainer": "Your Name <your.email@example.com>"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  },
+  "devDependencies": {
+    "electron": "^23.2.2",
+    "electron-builder": "^23.6.0"
+  },
+  "dependencies": {
+    "bing-chatai-client": "^1.0.2",
+    "dalai": "^0.3.1",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-is-dev": "^2.0.0",
+    "electron-store": "^8.1.0",
+    "mic": "^2.1.2",
+    "node-pty": "^0.10.1",
+    "openai": "^3.2.1",
+    "stream-buffers": "^3.0.2",
+    "wav": "^1.0.2"
+  }
+}
