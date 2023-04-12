@@ -79,11 +79,12 @@ function createWindow() {
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
         if (details.uploadData) {
             try {
-                const buffer = Array.from(details.uploadData)[0].bytes.toString();
-
+               
                 if (details.referrer.indexOf('https://chat.openai.com/chat') == 0) {
+                     const buffer = Array.from(details.uploadData)[0].bytes.toString();
                     log.webContents.send('chat-gpt4-api-hack-reply', buffer)
-
+                }else if (details.referrer.indexOf('https://google.com') == 0) {
+                    log.webContents.send('chat-all-api-hack-reply', buffer)
                 }
             } catch (error) {
                 console.log(error)

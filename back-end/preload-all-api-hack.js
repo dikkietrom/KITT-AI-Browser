@@ -44,6 +44,11 @@ document.addEventListener(
       cancelable: true,
     });
     txtArea().dispatchEvent(enterKeyEvent);
+
+    setTimeout(()=>{
+      ipcRenderer.send('send-input-all-return',document.body.innerText)
+    }   ,1000)
+
   } catch(e) {
     console.error('Textarea not found',e);
   }
@@ -129,5 +134,5 @@ function hasTextContent(element) {
   return false;
 }
 
-console.log('preload gpt4-api hack')
+console.log('preload all-api hack')
 
