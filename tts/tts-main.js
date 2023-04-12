@@ -1,13 +1,16 @@
 const {ipcMain} = require('electron');
 const {spawn} = require('child_process');
 const fs = require('fs');
-const {apiKeys} = require("../back-end/keys.js")
+const {apiKeys,promptIt} = require("../back-end/keys.js")
 
 let log
 let apiKey
 async function init(lg) {
     log = lg
+    
     apiKey = apiKeys('elevenlabs')
+    console.log('tts-main init api ',apiKey);
+
     if (!apiKey) {
         console.log('tts-main init no api key');
         apiKey = await promptIt('Elevenlabs API (not mandatory)', 'elevenlabs')

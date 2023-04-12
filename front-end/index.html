@@ -34,9 +34,10 @@
                 <td width="75%">
                     <div class="tab-bar">
                         <button class="tab active" onclick="showTab(0)">GPT4 View</button>
-                        <button class="tab" onclick="showTab(1)">MJ View</button>
-                        <button class="tab" onclick="showTab(2)">Google</button>
-                        <button class="tab" onclick="showTab(3)">Youtube</button>
+                        <button class="tab" onclick="showTab(1)">Open Assistant</button>
+                        <button class="tab" onclick="showTab(2)">MJ View</button>
+                        <button class="tab" onclick="showTab(3)">Google</button>
+                        <button class="tab" onclick="showTab(4)">Youtube</button>
                     </div>
                     <div class="tab-content active">
                         <div>
@@ -50,6 +51,16 @@
 
                     <div class="tab-content">
                         <div>
+                            <webview id="oa-view" src="https://open-assistant.io"></webview>
+                            <div class="button-bar">
+                                <button class="command" onclick="toggleWebView(this,'oa-view')">Show webview</button>
+                                <button class="command" onclick="toggleDevTools(this,'oa-view')">Debug</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        <div>
                             <webview id="mj-view" src="https://discord.com/channels/@me/1093057901330968647"></webview>
                             <div class="button-bar">
                                 <button class="command" onclick="toggleWebView(this,'mj-view')">Show webview</button>
@@ -57,9 +68,10 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-content">
                         <div>
-                            <webview id="google-view" src="https://google.com"></webview>
+                            <webview id="google-view" src="https://google.com/search?q=init"></webview>
                             <div class="button-bar">
                                 <button class="command" onclick="toggleWebView(this,'google-view')">Show webview</button>
                                 <button class="command" onclick="toggleDevTools(this,'google-view')">Debug</button>
@@ -89,7 +101,7 @@
 
                         ai : <select id="chat-impl"></select>
                         preset :
-                        <select id="presets">
+                        <select onchange="setPreset(this)"  id="presets">
                                     <option value=""></option>
                                     <option value="web-html">Website html</option>
                                     <option value="web-code">Website code</option>

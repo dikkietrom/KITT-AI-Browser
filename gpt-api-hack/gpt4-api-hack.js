@@ -25,6 +25,15 @@ class Gpt4apiHack extends Chat {
 }
 let currentInput
 let container
+ipcRenderer.on('chat-all-api-hack-reply', (event,arg)=>{
+        let obj = JSON.parse(arg)
+        let message = obj.input ? obj.input.trim() : ''
+        if(message){
+             currentInp.value = "please read and summarize and give the best possible reply : " + message
+             chat()
+        }
+})
+
 ipcRenderer.on('chat-gpt4-api-hack-reply', (event,arg)=>{
 
     try {
@@ -56,6 +65,8 @@ ipcRenderer.on('chat-gpt4-api-hack-reply', (event,arg)=>{
                     code= code.trim()
                     if (code.indexOf('javascript') == 0) {
                         code = code.substring(10)
+                    } else if (code.indexOf('js') == 0 ) {
+                        code = code.substring(2)
                     } else if (code.indexOf('html') == 0 || code.indexOf('<!DOCTYPE') == 0) {
                         code = '1==true'
                     }
@@ -89,4 +100,4 @@ ipcRenderer.on('chat-gpt4-api-hack-reply', (event,arg)=>{
 }
 );
 
-new Gpt4apiHack()
+let gpt4apiHack = new Gpt4apiHack()

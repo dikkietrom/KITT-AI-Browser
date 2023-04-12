@@ -83,7 +83,20 @@ function init() {
 
 }
 
+function setPreset(sel){
+    if(sel.value == 'google'){
+        currentInp.value = `when I start a question with the word "search" then reply with search() and in between the braces all words after the first word in between single quotes no comments, no explain. Wrap it in a javascript code block. Complete this based upon what I just explained
 
+                            Me : search apples
+                            You : `
+        chat()
+    }else if(!sel.value){
+        currentInp.value = `when I start a question with the word "search" then reply with search() and in between the braces all words after the first word in between single quotes no comments, no explain. Wrap it in a javascript code block. Complete this based upon what I just explained
+
+                            Me : search apples
+                            You : `
+    }
+}
 function textInputListener(input, event) {
     try {
         if (event.key === 'Enter') {

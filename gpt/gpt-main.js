@@ -67,19 +67,6 @@ ipcMain.on('gpt-models', (event)=>{
 }
 );
 
-ipcMain.on('send-input-all-return', (event,txt)=>{
-    try {
-
-       console.log('send-input-all-return', txt);
-       log.send('chat-reply', txt)
-
-    } catch (error) {
-        log('main-log', error)
-    }
-
-}
-);
-
 
 
 ipcMain.on('chat-gpt', (event,arg)=>{

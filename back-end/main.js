@@ -189,7 +189,7 @@ app.on('web-contents-created', (event,contents)=>{
             let file = path.join(__dirname, '../midjourney/preload-mj-api-hack.js')
             console.log(file)
             webPreferences.preload = file;
-         } else if (_params.src.indexOf('https://google.com') == 0) {
+         } else  {
              let file = path.join(__dirname, '../back-end/preload-all-api-hack.js')
              console.log(file)
              webPreferences.preload = file;

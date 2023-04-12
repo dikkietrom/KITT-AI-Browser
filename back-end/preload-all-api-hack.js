@@ -11,9 +11,9 @@ document.addEventListener(
     () => {
      // initMutationObserver()
      console.log('pre load all DOMContentLoaded')
-     if(loads>0) {
+     //if(loads>0) {
         ipcRenderer.send('send-input-all-return',document.body.innerText)
-     }
+     //}
      loads++
 
 
@@ -43,11 +43,31 @@ document.addEventListener(
       bubbles: true,
       cancelable: true,
     });
-    txtArea().dispatchEvent(enterKeyEvent);
 
-    setTimeout(()=>{
-      ipcRenderer.send('send-input-all-return',document.body.innerText)
-    }   ,1000)
+   // setTimeout(()=>{
+       // txtArea().dispatchEvent(enterKeyEvent);
+           const clickEvent = new MouseEvent('click', {
+             bubbles: true,       // Ensure the event bubbles up through the DOM
+             cancelable: true,    // Allow the event to be canceled
+             view: window,        // Set the view property to the current window
+             detail: 1            // Set the click count (single click)
+           });
+
+
+       // Dispatch the click event on the button
+
+    document.getElementsByTagName('button')[0].dispatchEvent(clickEvent);
+   // }   ,500)
+    console.log('send-input-all-return',document.body.innerText)
+
+    setTimeout(eval(`
+        try {
+            console.log('send-input-all-return',document.body.innerText)
+            //ipcRenderer.send('send-input-all-return',document.body.innerText)
+        } catch(e) {
+          console.error(e);
+        }`),2000)
+
 
   } catch(e) {
     console.error('Textarea not found',e);
