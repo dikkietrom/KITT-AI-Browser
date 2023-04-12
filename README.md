@@ -12,5 +12,5 @@ Still working on the install manual. The binaries are too large for here and sti
 Nodejs and python3 should be both installed when running from the command prompt with "npm start". 
 In case of errors you are on your own for now. 
 
-[![Sample Video](http://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg)](https://www.youtube.com/embed/P-G1Q_NVveM "Sample Video")
+[![Sample Video](https://yt3.googleusercontent.com/ZuYpJdbyn_SKmm1c0oFjRqXTvictEC2II21d3_1aAx4sv-01qmt3zGKmMVWsPqHfSRaofo5xAy4=s176-c-k-c0x00ffffff-no-rj)](https://www.youtube.com/embed/P-G1Q_NVveM "Sample Video")
 
