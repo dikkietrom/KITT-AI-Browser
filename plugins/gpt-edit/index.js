@@ -23,7 +23,12 @@ class GptEdit extends Chat {
             console.log(m) 
         }
     }
-
+    config() {
+        return {
+            name: 'Gpt Edit API',
+            description: 'Gpt Edit API'
+        }
+    }
 }
  
 new GptEdit()

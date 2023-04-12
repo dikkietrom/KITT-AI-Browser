@@ -2,26 +2,27 @@
 const { ipcRenderer,session } = require('electron');
 
 
+
 function txtArea(){
   return document.getElementsByTagName('textarea')[0]
 }
-let loads=0
+var loads=0
 document.addEventListener(
     'DOMContentLoaded',
     () => {
      // initMutationObserver()
      console.log('pre load all DOMContentLoaded')
-     if(loads>0) {
-        ipcRenderer.send('send-input-all-return',document.body.innerText)
-     }
+    // if(loads>0) {
+        ipcRenderer.send('send-input-google-return',document.body.innerText)
+   //  }
      loads++
 
 
     },
     false
 );
- ipcRenderer.on('send-input-all', (event,arg) => {
-    console.log('send-input-all',arg)
+ ipcRenderer.on('send-input-google', (event,arg) => {
+    console.log('send-input-google',arg)
     txtArea().value=arg
 
   //  const targetNode = document.getElementsByTagName('main')[0]
@@ -58,11 +59,11 @@ document.addEventListener(
 
     document.getElementsByTagName('button')[0].dispatchEvent(clickEvent);
    // }   ,500)
-    console.log('send-input-all-return',document.body.innerText)
+    console.log('send-input-google-return',document.body.innerText)
 
     setTimeout(eval(`
         try {
-            console.log('send-input-all-return',document.body.innerText)
+            console.log('send-input-google-return',document.body.innerText)
             //ipcRenderer.send('send-input-all-return',document.body.innerText)
         } catch(e) {
           console.error(e);

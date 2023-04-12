@@ -1,65 +1,6 @@
 let currentInp
 let replyLen = 0
 init.cnt = 0
-
-ipcRenderer.on('main-log', (event,mes)=>{
-
-    console.log('main-log : ', mes)
-}
-);
-
-ipcRenderer.on('chat-gpt4-api-hack-front', (event,arg)=>{
-    // Send input data to the renderer process
-    console.log('chat-gpt4-api-hack-main ipcRenderer', arg)
-    ipcRenderer.send('chat-reply', arg);
-    //document.body.innerHTML+=arg
-
-}
-);
-ipcRenderer.on('did-tts', (event,arg)=>{
-
-    didView.send('send-input-did', arg)
-
-}
-);
-
-let gpt4View
-let didView
-let mjView
-let googleView
-document.addEventListener('DOMContentLoaded', ()=>{
-
-    gpt4View = document.getElementById('gpt4-view');
-
-    if (gpt4View) {
-        gpt4View.addEventListener('dom-ready', ()=>{//gpt4View.openDevTools();
-        }
-        );
-    }
-    didView = document.getElementById('did-view');
-
-    if (didView) {
-        didView.addEventListener('dom-ready', ()=>{// didView.openDevTools();
-        }
-        );
-    }
-    mjView = document.getElementById('mj-view');
-
-    if (mjView) {
-        mjView.addEventListener('dom-ready', ()=>{//mjView.openDevTools();
-        }
-        );
-    }
-    googleView = document.getElementById('google-view');
-
-    if (googleView) {
-        googleView.addEventListener('dom-ready', ()=>{//mjView.openDevTools();
-        }
-        );
-    }
-}
-);
-
 function init() {
     document.getElementById('inp').focus()
     if (!currentInp) {
@@ -84,7 +25,31 @@ function init() {
     ipcRenderer.send('plugin-request')
 }
 
+ipcRenderer.on('onBeforeSendHeaders', (event,arg)=>{
+    // console.log('onBeforeSendHeaders', arg)
+
+    const domain = extractDomain(arg.url);
+
+    let plugin = plugByUrl[domain]
+    if (plugin && plugin.onBeforeSendHeaders) {
+        try {
+            plugin.onBeforeSendHeaders(JSON.parse(arg.buffer))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+)
+
+ipcRenderer.on('dev-tools-closed', (event,arg)=>{
+    let but = document.getElementById('front-debug')
+    but.innerHTML = 'Debug'
+    but.state = 'd'
+}
+)
+
 //on plugin message
+let plugByUrl = {}
 ipcRenderer.on('plugin-message', (event,dir)=>{
 
     console.log('plugin-message : ', dir)
@@ -93,14 +58,19 @@ ipcRenderer.on('plugin-message', (event,dir)=>{
     console.log(src)
     script.src = src
     script.onload = ()=>{
-        let plugin = chatsArr[chatsArr.length - 1]
+        let index = chatsArr.length - 1
+        let plugin = chatsArr[index]
         console.log('loaded plugin : ', dir, plugin)
-
+        if (!plugin.config().url) {
+            return
+        }
+        plugByUrl[extractDomain(plugin.config().url)] = plugin
         //add to the tabbar like <button class="tab" onclick="showTab(3)">Youtube</button>
         let tab = document.createElement('button')
         let tabbar = document.getElementById('webview-tab-bar')
         let length = tabbar.children.length
         tab.className = 'tab'
+
         tab.innerHTML = plugin.config().name
         tab.onclick = function() {
             showTab(length)
@@ -109,6 +79,11 @@ ipcRenderer.on('plugin-message', (event,dir)=>{
         tabbar.appendChild(tab)
 
         addWebView(dir, plugin)
+        if (length == 0) {
+            tab.className = 'tab active'
+            showTab(0)
+
+        }
 
     }
 
@@ -116,6 +91,11 @@ ipcRenderer.on('plugin-message', (event,dir)=>{
 
 }
 )
+ipcRenderer.on('main-log', (event,mes)=>{
+
+    console.log('main-log : ', mes)
+}
+);
 
 function addWebView(pluginDir, plugin) {
     //add the webview like
@@ -155,6 +135,7 @@ function addWebView(pluginDir, plugin) {
         toggleDevTools(this, pluginDir + '-view')
 
     }
+    webview.debugButton = button2
     div3.appendChild(button2)
     div2.appendChild(div3)
     div.appendChild(div2)
@@ -220,12 +201,7 @@ function debug(but) {
     but.state = 'r'
     ipcRenderer.send('debug')
 }
-ipcRenderer.on('dev-tools-closed', (event,arg)=>{
-    let but = document.getElementById('front-debug')
-    but.innerHTML = 'Debug'
-    but.state = 'd'
-}
-)
+
 function debugMain(but) {
     if (but.state === 'r') {
         but.innerHTML = 'Debug main'
@@ -267,6 +243,8 @@ function showTab(index) {
     tabContents[index].classList.add('active');
 }
 
-function search(txt) {
-    googleView.send('send-input-all', txt)
+function extractDomain(url) {
+    const domainRegex = /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:/?#\n]+)/;
+    const matches = url.match(domainRegex);
+    return matches && matches[1];
 }

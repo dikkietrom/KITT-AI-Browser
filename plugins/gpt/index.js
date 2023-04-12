@@ -21,7 +21,12 @@ class Gpt extends Chat {
             console.log(m) 
         }
     }
-
+    config() {
+        return {
+            name: 'Gpt API',
+            description: 'Gpt API'
+        }
+    }
 }
 
 ipcRenderer.on('gpt-models-reply', (event,data)=>{

@@ -19,6 +19,12 @@ class Dalle extends Chat {
 
        ipcRenderer.send('chat-dall-e', this.conversation + ' ' + currentInp.value);
     }
+    config() {
+        return {
+            name: 'Dall-e API',
+            description: 'Dall-e API'
 
+        }
+    }
 }
 new Dalle() 

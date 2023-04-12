@@ -1,7 +1,7 @@
 const {ipcMain} = require('electron');
 const {Configuration, OpenAIApi} = require("openai")
 
-const {apiKeys} = require("../back-end/keys.js")
+const {apiKeys} = require("../../back-end/keys.js")
 
 
 

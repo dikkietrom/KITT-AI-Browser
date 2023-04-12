@@ -13,7 +13,7 @@ class Google extends Chat {
             console.log('Google-api-hack',currentInp.value)
             
             currentInput = currentInp.value.trim()
-            this.webView.send('send-input', currentInput)
+            this.webView.send('send-input-google', currentInput)
             chatReply('')
 
         } catch (error) {
@@ -30,5 +30,16 @@ class Google extends Chat {
         }
     }
 }
+ipcRenderer.on('chat-google-reply', (event,arg)=>{
+        let obj = JSON.parse(arg)
+        let message = obj.input ? obj.input.trim() : ''
+        if(message){
+             currentInp.value = "please read and summarize and give the best possible reply : " + message
+             chat()
+        }
+})
 
-new Google()
+function search(txt) {
+    google.send('send-input-google', txt)
+}
+let google = new Google()

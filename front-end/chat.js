@@ -23,6 +23,12 @@ class Chat {
     config() {
         return {}
     }
+    onBeforeSendHeaders(json){
+        
+    }
+    send(key,message){
+        this.webView.send(key, message)
+    }
 }
 
 ipcRenderer.on('chat-reply', (event,token)=>{

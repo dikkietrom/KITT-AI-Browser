@@ -1,5 +1,5 @@
 const {app, BrowserWindow, ipcMain, Menu,MenuItem, ipcRenderer} = require('electron');
-
+const fs = require('fs');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const packageJson = require(path.join(__dirname, '..', 'package.json'));
@@ -77,57 +77,44 @@ function createWindow() {
     )
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
+        //console.log('onBeforeSendHeaders', details)
         if (details.uploadData) {
             try {
                
-                if (details.referrer.indexOf('https://chat.openai.com/chat') == 0) {
-                     const buffer = Array.from(details.uploadData)[0].bytes.toString();
-                    log.webContents.send('chat-gpt4-api-hack-reply', buffer)
-                }else if (details.referrer.indexOf('https://google.com') == 0) {
-                    log.webContents.send('chat-all-api-hack-reply', buffer)
-                }
+                const buffer = Array.from(details.uploadData)[0].bytes.toString();
+                let obj = {}
+                obj.buffer=buffer
+                obj.url=details.referrer
+                log.send('onBeforeSendHeaders', obj)
+
             } catch (error) {
                 console.log(error)
             }
-
         }
         if(callback){
             callback(details);
         }
     }
     )
-    const gpt = require('../gpt/gpt-main');
-    gpt(log)
-    const stt = require('../stt/stt-main');
-    stt(log)
-    const tts = require('../tts/tts-main');
-    tts(log)
-    const dalle = require('../dall-e/dall-e-main');
-    dalle(log)
-
-    const gpt4apiHack = require('../gpt-api-hack/gpt4-api-hack-main');
-    gpt4apiHack(log)
-    const gptEdit = require('../gpt-edit/gpt-edit-main');
-    gptEdit(log)
-
-//    const mjApiHack = require('../midjourney/mj-api-hack-main.js');
-//    mjApiHack(log)
 
 
 }
 //initialize plugins by getting the files from the plugins folder
 function initPlugins(){
-    const fs = require('fs');
-    const path = require('path');
-    const pluginPath = path.join(__dirname, '../plugins');
-    fs.readdirSync(pluginPath).forEach(file => {
-        console.log('initPlugins',file)
 
-         log.send('plugin-message',  file )
+    const pluginPath = path.join(__dirname, '../plugins');
+
+    const sortedFiles = fs.readdirSync(pluginPath).sort((a, b) => a.localeCompare(b));
+
+    sortedFiles.forEach(file => {
+          console.log('initPlugins', file);
+
+          log.send('plugin-message', file);
           const plugin = require(path.join(pluginPath, file, 'main.js'));
           plugin(log);
-
     });
+
+
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -137,19 +124,44 @@ app.on('ready', createWindow);
 
 // Wait for the app to be ready
 app.whenReady().then(()=>{
-    // Get the default menu
-    const menu = Menu.getApplicationMenu();
+    try {
+        autoUpdater.checkForUpdatesAndNotify();
+    } catch (error) {
+        console.log(error)
+    }
+    try {
+        // Get the default menu
+        const menu = Menu.getApplicationMenu();
 
-    // Add a new item to the "File" menu
-    menu.insert(0, new MenuItem({
-        label: 'New Menu Item',
-        click() {
-            console.log('New menu item clicked');
-        }
-    }));
+        // Add a new item to the "File" menu
+        menu.insert(0, new MenuItem({
+            label: 'New Menu Item',
+            click() {
+                console.log('New menu item clicked');
+            }
+        }));
 
-    // Set the updated menu to the application menu
-    Menu.setApplicationMenu(menu);
+        // Set the updated menu to the application menu
+        Menu.setApplicationMenu(menu);
+    } catch (error) {
+        console.log(error)
+    }
+    //try init stt
+    try {
+        const stt = require(path.join(__dirname, '../stt/stt-main.js'));
+        stt(log);
+    }catch (error) {
+        console.log(error)
+    }
+    //try init tts
+    try {
+        const tts = require(path.join(__dirname, '../tts/tts-main.js'));
+        tts(log);
+
+    }catch (error) {
+        console.log(error)
+    }
+
 }
 );
 process.on('SIGINT', ()=>{
@@ -196,22 +208,7 @@ app.on('web-contents-created', (event,contents)=>{
     contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
 
         console.log('will-attach-webview', _wawevent,webPreferences,_params)
-        //console.log('url dir ', url _params)
 
-        if (_params.src === 'https://chat.openai.com/') {
-            let file = path.join(__dirname, '../gpt-api-hack/preload-gpt4-api-hack.js')
-            console.log(file)
-            webPreferences.preload = file;
-
-        } else if (_params.preload) {
-            //let file = path.join(__dirname, '../midjourney/preload-mj-api-hack.js')
-            console.log('webPreferences.preload',webPreferences.preload)
-            //webPreferences.preload = file;
-         } else  {
-             let file = path.join(__dirname, '../back-end/preload-all-api-hack.js')
-             console.log(file)
-             webPreferences.preload = file;
-         }
     }
     )
 }

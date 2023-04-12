@@ -26,10 +26,10 @@ class OpenAssistant extends Chat {
         return {
             name: 'OpenAssistant',
             description: 'OpenAssistant',
-            url: "https://open-assistant.com"
+            url: "https://open-assistant.io"
         }
     }
 }
 
 
-new MjApiHack()
+new OpenAssistant()

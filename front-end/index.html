@@ -25,39 +25,10 @@
                 </td>
                 <td id="webviews"  width="75%">
                     <div id="webview-tab-bar" class="tab-bar">
-                        <button class="tab active" onclick="showTab(0)">GPT4 View</button>
-                        <button class="tab" onclick="showTab(1)">Open Assistant</button>
-                        <button class="tab" onclick="showTab(2)">Google</button>
-                    </div>
-                    <div class="tab-content active">
-                        <div>
-                            <webview id="gpt4-view"  src="https://chat.openai.com/"></webview>
-                            <div class="button-bar">
-                                <button class="command" onclick="toggleWebView(this,'gpt4-view')">Show webview</button>
-                                <button class="command" onclick="toggleDevTools(this,'gpt4-view')">Debug</button>
-                            </div>
-                        </div>
+
                     </div>
 
-                    <div class="tab-content">
-                        <div>
-                            <webview id="oa-view" src="https://open-assistant.io"></webview>
-                            <div class="button-bar">
-                                <button class="command" onclick="toggleWebView(this,'oa-view')">Show webview</button>
-                                <button class="command" onclick="toggleDevTools(this,'oa-view')">Debug</button>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="tab-content">
-                        <div>
-                            <webview id="google-view" src="https://google.com/search?q=init"></webview>
-                            <div class="button-bar">
-                                <button class="command" onclick="toggleWebView(this,'google-view')">Show webview</button>
-                                <button class="command" onclick="toggleDevTools(this,'google-view')">Debug</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 </td>
                 <td width="25%">

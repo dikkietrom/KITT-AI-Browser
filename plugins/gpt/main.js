@@ -1,7 +1,7 @@
 const {ipcMain, dialog} = require('electron');
 const {Configuration, OpenAIApi} = require("openai")
 
-const {apiKeys, promptIt} = require("../back-end/keys.js")
+const {apiKeys, promptIt} = require("../../back-end/keys.js")
 
 let log
 let openai
