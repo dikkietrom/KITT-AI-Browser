@@ -23,7 +23,7 @@ document.addEventListener(
  ipcRenderer.on('send-input-all', (event,arg) => {
     console.log('send-input-all',arg)
     txtArea().value=arg
-        
+
   //  const targetNode = document.getElementsByTagName('main')[0]
    // observer.observe(targetNode, config)
     triggerEnterKeyOnTextarea()
@@ -73,7 +73,7 @@ document.addEventListener(
     console.error('Textarea not found',e);
   }
 }
-let observer 
+let observer
 
 const config = {
   characterData: true,
@@ -84,7 +84,7 @@ const config = {
 
 function initMutationObserver() {
   try {
-    
+
    observer = new MutationObserver((mutationsList, observer) => {
     for (const mutation of mutationsList) {
 
@@ -97,7 +97,7 @@ function initMutationObserver() {
 
         // Calculate the delta text
         let deltaText = '';
-          let trim = oldValue.trim()  
+          let trim = oldValue.trim()
          if (!trim.length || trim.length == 1 && trim.charCodeAt(0) == 8203 ) {
             deltaText = newValue
            // console.log('new value:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
@@ -128,13 +128,13 @@ function initMutationObserver() {
      //          //if (hasTextContent(node)) {
      //              ipcRenderer.send('chat-gpt4-api-hack',deltaHTML)
 
-     //          //}             
+     //          //}
      //    //}
-     // } 
+     // }
     }
   });
 
- 
+
   } catch(e) {
     // statements
     console.log(e);
@@ -154,5 +154,5 @@ function hasTextContent(element) {
   return false;
 }
 
-console.log('preload all-api hack')
+console.log('preload Google-api hack')
 

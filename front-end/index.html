@@ -8,11 +8,6 @@
         <script src="chat.js"></script>
         <script src="index.js"></script>
         <script src="webgl.js"></script>
-
-        <script src="../gpt-api-hack/gpt4-api-hack.js"></script>
-        <script src="../gpt/gpt.js"></script>
-        <script src="../gpt-edit/gpt-edit.js"></script>
-        <script src="../dall-e/dall-e.js"></script>
         <script src="../stt/stt.js"></script>
 
 
@@ -26,8 +21,6 @@
     <table id="layout" >
             <tr height="0">
                 <td width="25%" id="avatar" >
-                    <!--webview id="did-view"  src="https://chat.d-id.com/"></webview>
-                    <button class="command"  onclick="toggleWebView(this)">Hide webview</button-->
                     <div id="web-gl"></div>
                 </td>
                 <td id="webviews"  width="75%">
@@ -35,7 +28,6 @@
                         <button class="tab active" onclick="showTab(0)">GPT4 View</button>
                         <button class="tab" onclick="showTab(1)">Open Assistant</button>
                         <button class="tab" onclick="showTab(2)">Google</button>
-                        <button class="tab" onclick="showTab(3)">Youtube</button>
                     </div>
                     <div class="tab-content active">
                         <div>
@@ -64,14 +56,6 @@
                                 <button class="command" onclick="toggleWebView(this,'google-view')">Show webview</button>
                                 <button class="command" onclick="toggleDevTools(this,'google-view')">Debug</button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="tab-content">
-                    <div>
-                        <webview id="youtube-view" src="https://youtube.com"></webview>
-                        <div class="button-bar">
-                            <button class="command" onclick="toggleWebView(this,'youtube-view')">Show webview</button>
-                            <button class="command" onclick="toggleDevTools(this,'youtube-view')">Debug</button>
                         </div>
                     </div>
                 </div>
