@@ -1,0 +1,105 @@
+
+body {
+    background-color: rgba(1,1,1,1);
+    color: #fff;
+    font-family: monospace;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 1em;
+    background-image: url(kitt.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: fit-content;
+    width: fit-content;
+    padding: 0;
+    margin: 0;
+}
+button {
+    cursor: pointer;
+
+}
+button.command {
+    left: 0px;
+    top: 0px;
+    min-height: 2em;
+    drop-shadow: 10 10 0.5em #ffff;
+    border: 0.5px solid white;
+}
+
+button.command:hover {
+}
+
+video {
+    border : 0px solid black;
+    border-radius : 5%;
+}
+
+canvas {
+    width: 400px;
+    height: 400px;
+}
+
+input:focus-visible, select:focus-visible, button:focus-visible , .speak:focus-visible {
+    border: 0.5px solid #000;
+    outline: 2px dotted #fff8;
+    drop-shadow: 10 10 0.5em #ffff;
+}
+
+pre {
+    background: #000;
+}
+
+td {
+    vertical-align: top;
+    text-shadow: -2px 2px 0px black;
+}
+
+#web-gl  {
+    width:100%;
+    height: 10em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+td#avatar {
+    overflow: hidden;
+}
+
+td.chat-id {
+    background: #ff000042;
+    white-space: nowrap;
+    text-align: right;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+td.chat-id-ai {
+    background: #ff7f0042;
+}
+
+td.chat-reply {
+    background: #000a;
+    white-space: normal;
+    padding: 1em;
+}
+
+table#layout {width: 100%;height: 100%;}
+
+input,select,textarea,button {
+    xwidth: 100%;
+    background-color: #ff0000ff;
+    border: 0px solid #ffffff57;
+    margin: 0.2em;
+    padding: 0.2em;
+    border-radius: .3em;
+    color: #Fff;
+    text-shadow: -2px 2px 0px black;
+    font-size: 1em;
+    font-weight: bold;
+    font-family: monospace;
+}
+
+webview {
+    height: 0px;
+}
+

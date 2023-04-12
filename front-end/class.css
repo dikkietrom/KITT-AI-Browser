@@ -1,0 +1,52 @@
+.speak {
+    width: 90%;
+    height: 2em;
+    background: #f0f8ff54;
+}
+
+.fix {
+}
+
+
+.button-bar {
+    display: flex;
+}
+
+
+.tab-bar {padding-left: 1em;}
+
+.tab {
+    border: none;
+    padding: 10px;
+    margin-right: 5px;
+    margin-bottom: -1px;
+    cursor: pointer;
+    font-weight: bold;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.tab.active {
+    background-color: #fff;
+    color: #f00;
+    text-shadow: none;
+    text-decoration: underline;
+}
+
+.tab-content {
+    display: none;
+    border: solid 1px #ccc;
+    padding: 10px;
+    background: #fff7;
+    border-radius: 1em;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.button-bar {
+    margin-top: 10px;
+}
+

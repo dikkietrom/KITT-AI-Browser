@@ -2,14 +2,14 @@
   "name": "KITT",
   "version": "1.0.0",
   "description": "Knight Industries Two Thousand",
-  "main": "main.js",
+  "main": "./back-end/main.js",
   "author": {
     "name": "KITT",
     "email": "your.email@example.com"
   },
   "homepage": "https://your-project-homepage.com",
   "scripts": {
-    "start": "electron main.js --inspect",
+    "start": "electron back-end/main.js --inspect",
     "pack": "electron-builder --dir",
     "build": "electron-builder --win --mac --linux --x64 --arm64",
     "build:all": "electron-builder --win --mac --linux",
@@ -65,11 +65,12 @@
     "electron-builder": "^23.6.0"
   },
   "dependencies": {
-    "bing-chatai-client": "^1.0.2",
-    "dalai": "^0.3.1",
+    "applescript": "^1.0.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
+    "electron-prompt": "^1.7.0",
     "electron-store": "^8.1.0",
+    "electron-updater": "^5.3.0",
     "mic": "^2.1.2",
     "node-pty": "^0.10.1",
     "openai": "^3.2.1",

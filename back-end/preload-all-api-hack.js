@@ -5,16 +5,23 @@ const { ipcRenderer,session } = require('electron');
 function txtArea(){
   return document.getElementsByTagName('textarea')[0]
 }
+let loads=0
 document.addEventListener(
     'DOMContentLoaded',
     () => {
      // initMutationObserver()
+     console.log('pre load all DOMContentLoaded')
+     if(loads>0) {
+        ipcRenderer.send('send-input-all-return',document.body.innerText)
+     }
+     loads++
+
 
     },
     false
 );
- ipcRenderer.on('send-input', (event,arg) => {
-    console.log('send-input',arg)
+ ipcRenderer.on('send-input-all', (event,arg) => {
+    console.log('send-input-all',arg)
     txtArea().value=arg
         
   //  const targetNode = document.getElementsByTagName('main')[0]

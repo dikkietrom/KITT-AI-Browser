@@ -1,0 +1,14 @@
+
+#model-help-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 50%;
+}
+
+
+#models {
+    z-index: 1000;
+    position: relative;
+}
