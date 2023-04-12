@@ -1,13 +1,27 @@
 const chats = {}
+var chatsArr = []
 class Chat {
     constructor(arg) {
         chats[this.constructor.name] = this
+        chatsArr.push(this)
+        //add it to the plugin select
+        try {
+            let sel = document.getElementById('chat-impl')
+            let opt = document.createElement('option')
+            sel.appendChild(opt)
+            opt.innerHTML = this.constructor.name
+            opt.value = this.constructor.name
+        }catch (error) {
+            console.log(error)
+        }
+
     }
     speak(message) {}
     listen(message, container) {
-
         container.innerHTML += message
-
+    }
+    config() {
+        return {}
     }
 }
 

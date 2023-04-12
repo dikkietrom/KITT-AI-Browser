@@ -110,10 +110,25 @@ function createWindow() {
     const gptEdit = require('../gpt-edit/gpt-edit-main');
     gptEdit(log)
 
-    const mjApiHack = require('../midjourney/mj-api-hack-main.js');
-    mjApiHack(log)
-}
+//    const mjApiHack = require('../midjourney/mj-api-hack-main.js');
+//    mjApiHack(log)
 
+
+}
+//initialize plugins by getting the files from the plugins folder
+function initPlugins(){
+    const fs = require('fs');
+    const path = require('path');
+    const pluginPath = path.join(__dirname, '../plugins');
+    fs.readdirSync(pluginPath).forEach(file => {
+        console.log('initPlugins',file)
+
+         log.send('plugin-message',  file )
+          const plugin = require(path.join(pluginPath, file, 'main.js'));
+          plugin(log);
+
+    });
+}
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.name = 'KITT'
@@ -169,26 +184,29 @@ app.on('activate', function() {
         createWindow();
     }
 });
+
+//on document loaded
+ipcMain.on('plugin-request', (event, arg) => {
+    console.log('plugin-request', arg)
+    initPlugins()
+})
+
 app.on('web-contents-created', (event,contents)=>{
     console.log('web-contents-created')
-
     contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
 
-        console.log('will-attach-webview', _params.src)
+        console.log('will-attach-webview', _wawevent,webPreferences,_params)
+        //console.log('url dir ', url _params)
 
         if (_params.src === 'https://chat.openai.com/') {
             let file = path.join(__dirname, '../gpt-api-hack/preload-gpt4-api-hack.js')
             console.log(file)
             webPreferences.preload = file;
-            //FUCK THESE MONEY HUNGRY PRICKS, WILL MAKE SOMETHING INSANELY BETTER AND CRUSH THEM MWHOOHAHAHA
-            //        } else if (_params.src === 'https://chat.d-id.com/') {
-            //            let file = path.join(__dirname, 'preload-did-api-hack.js')
-            //            console.log(file)
-            //            webPreferences.preload = file;
-        } else if (_params.src.indexOf('https://discord.com/channels/@me') == 0) {
-            let file = path.join(__dirname, '../midjourney/preload-mj-api-hack.js')
-            console.log(file)
-            webPreferences.preload = file;
+
+        } else if (_params.preload) {
+            //let file = path.join(__dirname, '../midjourney/preload-mj-api-hack.js')
+            console.log('webPreferences.preload',webPreferences.preload)
+            //webPreferences.preload = file;
          } else  {
              let file = path.join(__dirname, '../back-end/preload-all-api-hack.js')
              console.log(file)

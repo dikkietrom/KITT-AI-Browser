@@ -11,9 +11,9 @@ document.addEventListener(
     () => {
      // initMutationObserver()
      console.log('pre load all DOMContentLoaded')
-     //if(loads>0) {
+     if(loads>0) {
         ipcRenderer.send('send-input-all-return',document.body.innerText)
-     //}
+     }
      loads++
 
 

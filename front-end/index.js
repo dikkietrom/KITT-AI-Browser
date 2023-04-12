@@ -80,21 +80,96 @@ function init() {
     }
     ipcRenderer.send('stts-main')
     ipcRenderer.send('gpt-models')
-
+    //request plugin
+    ipcRenderer.send('plugin-request')
 }
 
-function setPreset(sel){
-    if(sel.value == 'google'){
+//on plugin message
+ipcRenderer.on('plugin-message', (event,dir)=>{
+
+    console.log('plugin-message : ', dir)
+    let script = document.createElement('script')
+    let src = '../plugins/' + dir + '/index.js'
+    console.log(src)
+    script.src = src
+    script.onload = ()=>{
+        let plugin = chatsArr[chatsArr.length - 1]
+        console.log('loaded plugin : ', dir, plugin)
+
+        //add to the tabbar like <button class="tab" onclick="showTab(3)">Youtube</button>
+        let tab = document.createElement('button')
+        let tabbar = document.getElementById('webview-tab-bar')
+        let length = tabbar.children.length
+        tab.className = 'tab'
+        tab.innerHTML = plugin.config().name
+        tab.onclick = function() {
+            showTab(length)
+
+        }
+        tabbar.appendChild(tab)
+
+        addWebView(dir, plugin)
+
+    }
+
+    document.body.appendChild(script)
+
+}
+)
+
+function addWebView(pluginDir, plugin) {
+    //add the webview like
+    //    <div class="tab-content">
+    //       <div>
+    //           <webview id="oa-view" src="https://open-assistant.io"></webview>
+    //           <div class="button-bar">
+    //               <button class="command" onclick="toggleWebView(this,'oa-view')">Show webview</button>
+    //               <button class="command" onclick="toggleDevTools(this,'oa-view')">Debug</button>
+    //           </div>
+    //       </div>
+    //   </div>
+    let div = document.createElement('div')
+    div.className = 'tab-content'
+    let div2 = document.createElement('div')
+    let webview = document.createElement('webview')
+    plugin.webView = webview
+    webview.id = pluginDir + '-view'
+    webview.src = plugin.config().url
+    webview.preload = '../plugins/' + pluginDir + '/preload.js'
+
+    div2.appendChild(webview)
+    let div3 = document.createElement('div')
+    div3.className = 'button-bar'
+    let button = document.createElement('button')
+    button.className = 'command'
+    button.innerHTML = 'Show webview'
+    button.onclick = function() {
+        toggleWebView(this, pluginDir + '-view')
+
+    }
+    div3.appendChild(button)
+    let button2 = document.createElement('button')
+    button2.className = 'command'
+    button2.innerHTML = 'Debug'
+    button2.onclick = function() {
+        toggleDevTools(this, pluginDir + '-view')
+
+    }
+    div3.appendChild(button2)
+    div2.appendChild(div3)
+    div.appendChild(div2)
+    document.getElementById('webviews').appendChild(div)
+}
+
+function setPreset(sel) {
+    if (sel.value == 'google') {
         currentInp.value = `when I start a question with the word "search" then reply with search() and in between the braces all words after the first word in between single quotes no comments, no explain. Wrap it in a javascript code block. Complete this based upon what I just explained
 
                             Me : search apples
                             You : `
         chat()
-    }else if(!sel.value){
-        currentInp.value = `when I start a question with the word "search" then reply with search() and in between the braces all words after the first word in between single quotes no comments, no explain. Wrap it in a javascript code block. Complete this based upon what I just explained
-
-                            Me : search apples
-                            You : `
+    } else if (!sel.value) {
+        currentInp.value = ``
     }
 }
 function textInputListener(input, event) {

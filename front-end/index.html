@@ -13,7 +13,6 @@
         <script src="../gpt/gpt.js"></script>
         <script src="../gpt-edit/gpt-edit.js"></script>
         <script src="../dall-e/dall-e.js"></script>
-        <script src="../midjourney/mj-api-hack.js"></script>
         <script src="../stt/stt.js"></script>
 
 
@@ -31,13 +30,12 @@
                     <button class="command"  onclick="toggleWebView(this)">Hide webview</button-->
                     <div id="web-gl"></div>
                 </td>
-                <td width="75%">
-                    <div class="tab-bar">
+                <td id="webviews"  width="75%">
+                    <div id="webview-tab-bar" class="tab-bar">
                         <button class="tab active" onclick="showTab(0)">GPT4 View</button>
                         <button class="tab" onclick="showTab(1)">Open Assistant</button>
-                        <button class="tab" onclick="showTab(2)">MJ View</button>
-                        <button class="tab" onclick="showTab(3)">Google</button>
-                        <button class="tab" onclick="showTab(4)">Youtube</button>
+                        <button class="tab" onclick="showTab(2)">Google</button>
+                        <button class="tab" onclick="showTab(3)">Youtube</button>
                     </div>
                     <div class="tab-content active">
                         <div>
@@ -55,16 +53,6 @@
                             <div class="button-bar">
                                 <button class="command" onclick="toggleWebView(this,'oa-view')">Show webview</button>
                                 <button class="command" onclick="toggleDevTools(this,'oa-view')">Debug</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-content">
-                        <div>
-                            <webview id="mj-view" src="https://discord.com/channels/@me/1093057901330968647"></webview>
-                            <div class="button-bar">
-                                <button class="command" onclick="toggleWebView(this,'mj-view')">Show webview</button>
-                                <button class="command" onclick="toggleDevTools(this,'mj-view')">Debug</button>
                             </div>
                         </div>
                     </div>
