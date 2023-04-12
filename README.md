@@ -14,5 +14,4 @@ In case of errors you are on your own for now.
 
 Demo video
 
-https://www.youtube.com/embed/P-G1Q_NVveM 
-
+https://www.youtube.com/watch?v=P-G1Q_NVveM&t=25s
