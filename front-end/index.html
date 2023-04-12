@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>KITT</title>
+
+        <script src="chat.js"></script>
+        <script src="index.js"></script>
+        <script src="webgl.js"></script>
+
+        <script src="../gpt-api-hack/gpt4-api-hack.js"></script>
+        <script src="../gpt/gpt.js"></script>
+        <script src="../gpt-edit/gpt-edit.js"></script>
+        <script src="../dall-e/dall-e.js"></script>
+        <script src="../midjourney/mj-api-hack.js"></script>
+        <script src="../stt/stt.js"></script>
+
+
+        <link rel="stylesheet" href="tag.css">
+        <link rel="stylesheet" href="class.css">
+        <link rel="stylesheet" href="id.css">
+
+    </head>
+    <body  onload="init()">
+
+    <table id="layout" >
+            <tr height="0">
+                <td width="25%" id="avatar" >
+                    <!--webview id="did-view"  src="https://chat.d-id.com/"></webview>
+                    <button class="command"  onclick="toggleWebView(this)">Hide webview</button-->
+                    <div id="web-gl"></div>
+                </td>
+                <td width="75%">
+                    <div class="tab-bar">
+                        <button class="tab active" onclick="showTab(0)">GPT4 View</button>
+                        <button class="tab" onclick="showTab(1)">MJ View</button>
+                        <button class="tab" onclick="showTab(2)">Google</button>
+                        <button class="tab" onclick="showTab(3)">Youtube</button>
+                    </div>
+                    <div class="tab-content active">
+                        <div>
+                            <webview id="gpt4-view"  src="https://chat.openai.com/"></webview>
+                            <div class="button-bar">
+                                <button class="command" onclick="toggleWebView(this,'gpt4-view')">Show webview</button>
+                                <button class="command" onclick="toggleDevTools(this,'gpt4-view')">Debug</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        <div>
+                            <webview id="mj-view" src="https://discord.com/channels/@me/1093057901330968647"></webview>
+                            <div class="button-bar">
+                                <button class="command" onclick="toggleWebView(this,'mj-view')">Show webview</button>
+                                <button class="command" onclick="toggleDevTools(this,'mj-view')">Debug</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                        <div>
+                            <webview id="google-view" src="https://google.com"></webview>
+                            <div class="button-bar">
+                                <button class="command" onclick="toggleWebView(this,'google-view')">Show webview</button>
+                                <button class="command" onclick="toggleDevTools(this,'google-view')">Debug</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content">
+                    <div>
+                        <webview id="youtube-view" src="https://youtube.com"></webview>
+                        <div class="button-bar">
+                            <button class="command" onclick="toggleWebView(this,'youtube-view')">Show webview</button>
+                            <button class="command" onclick="toggleDevTools(this,'youtube-view')">Debug</button>
+                        </div>
+                    </div>
+                </div>
+                </td>
+                <td width="25%">
+
+                </td>
+            </tr>
+            <tr height="0">
+                <td colspan="3">
+                    <div class="fix">
+                        <button id="front-debug" class="command" onclick="debug(this)">Debug</button>
+                        <button class="command" onclick="debugMain(this)">Debug main</button>
+                        <button class="command" onclick="rec(this)">rec</button>
+
+                        ai : <select id="chat-impl"></select>
+                        preset :
+                        <select id="presets">
+                                    <option value=""></option>
+                                    <option value="web-html">Website html</option>
+                                    <option value="web-code">Website code</option>
+                                    <option value="google">Google</option>
+                                    <option value="youtube">Youtube</option>
+                        </select>
+                        model : <select id="models" onmouseout="this.nextElementSibling.style.display='none'" onmouseover="this.nextElementSibling.style.display='inline'"></select>
+                        <img id="model-help-image" src="models.png"/>
+                        stt : <select id="stt-impl"></select>
+                        tts : <select id="voices">
+                            <option value="HgdftKHCCUuR9NqHQess">KITT</option>
+                            <option value="nWyBZbyUWniOE6sCNkVm">Me</option>
+                            <option value="tSpiKsHkdEYOPEKWvx37">Tanja</option>
+                            <option value="alice">Alice</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr height="0" >
+                <td onclick="this.parentElement.style.display='none'" class="chat-id">Me : </td>
+                <td colspan="2" class="chat-reply">
+                    <textarea class="speak" onkeydown="textInputListener(this,event)" type="text" id="inp" value=""></textarea>
+                </td>
+            </tr>
+        </table>
+
+    </body>
+    </html>
