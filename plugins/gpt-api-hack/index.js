@@ -63,6 +63,12 @@ class Gpt4apiHack extends Chat {
                             code = code.substring(2)
                         } else if (code.indexOf('html') == 0 || code.indexOf('<!DOCTYPE') == 0) {
                             code = '1==true'
+                        }else if (code.indexOf('bash') == 0) {
+                            ipcRenderer.send('bash', code.substring(4))
+                            return
+                        }else if (code.indexOf('#!/bin/bash') == 0) {
+                            ipcRenderer.send('bash', code)
+                            return
                         }
                         try {
                             console.log('chat-gpt4-api-hack-reply eval : ', code);
@@ -95,7 +101,14 @@ class Gpt4apiHack extends Chat {
 }
 let currentInput
 let container
+//bash-reply
+ipcRenderer.on('bash-reply', (event,arg)=>{
+    // Send input data to the renderer process
+    console.log('bash-reply', arg)
+    currentInp.value = arg
+    //chat()
 
+})
 ipcRenderer.on('chat-gpt4-api-hack-front', (event,arg)=>{
     // Send input data to the renderer process
     console.log('chat-gpt4-api-hack-main ipcRenderer', arg)
@@ -104,5 +117,9 @@ ipcRenderer.on('chat-gpt4-api-hack-front', (event,arg)=>{
 
 }
 );
+
+function exec(command) {
+    alert(command)
+}
 
 let gpt4apiHack = new Gpt4apiHack()

@@ -148,11 +148,18 @@ function setPreset(sel) {
 
                             Me : search apples
                             You : `
-        chat()
+    } else if (sel.value == 'bash') {
+        currentInp.value = `a bash script that compiles and runs a simple hello world c program, no comments, no explain, in a code block please`
     } else if (!sel.value) {
         currentInp.value = ``
+        return
     }
+    chat()
+
 }
+
+
+
 function textInputListener(input, event) {
     try {
         if (event.key === 'Enter') {

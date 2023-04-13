@@ -1,0 +1,5 @@
+{
+  "win": {
+    "artifactName": "arm/KITT-wintel.${ext}"
+  }
+}

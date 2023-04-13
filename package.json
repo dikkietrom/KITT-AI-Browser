@@ -15,7 +15,7 @@
     "build:all": "electron-builder --win --mac --linux",
     "build:mac": "electron-builder --mac ",
     "build:win": "electron-builder --win ",
-    "build:wintel": "electron-builder --win --x64",
+    "build:wintel": "electron-builder --win --x64 --config=wintel-builder-config.json",
     "build:lin": "electron-builder  --linux",
     "build:intel": "electron-builder --win --mac --linux --x64"
   },

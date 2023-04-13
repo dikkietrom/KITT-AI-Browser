@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain, Menu,MenuItem, ipcRenderer} = require('electron');
+const {app, BrowserWindow, ipcMain, Menu, MenuItem, ipcRenderer} = require('electron');
 const fs = require('fs');
 const isDev = require('electron-is-dev');
 const path = require('path');
@@ -14,10 +14,6 @@ const {WritableStreamBuffer} = require('stream-buffers');
 
 const appName = packageJson.name;
 const {session} = require('electron');
-
-
-
-
 
 autoUpdater.setFeedURL({
     provider: 'github',
@@ -65,7 +61,9 @@ function createWindow() {
     });
     createWindow.mainWindow = mainWindow
     log.webContents = mainWindow.webContents
-    log.send =  (name,message) => { mainWindow.webContents.send(name,message) }
+    log.send = (name,message)=>{
+        mainWindow.webContents.send(name, message)
+    }
     const filter = {
         urls: ['*://*/*'],
     };
@@ -80,40 +78,39 @@ function createWindow() {
         //console.log('onBeforeSendHeaders', details)
         if (details.uploadData) {
             try {
-               
+
                 const buffer = Array.from(details.uploadData)[0].bytes.toString();
                 let obj = {}
-                obj.buffer=buffer
-                obj.url=details.referrer
+                obj.buffer = buffer
+                obj.url = details.referrer
                 log.send('onBeforeSendHeaders', obj)
 
             } catch (error) {
                 console.log(error)
             }
         }
-        if(callback){
+        if (callback) {
             callback(details);
         }
     }
     )
 
-
 }
 //initialize plugins by getting the files from the plugins folder
-function initPlugins(){
+function initPlugins() {
 
     const pluginPath = path.join(__dirname, '../plugins');
 
-    const sortedFiles = fs.readdirSync(pluginPath).sort((a, b) => a.localeCompare(b));
+    const sortedFiles = fs.readdirSync(pluginPath).sort((a,b)=>a.localeCompare(b));
 
-    sortedFiles.forEach(file => {
-          console.log('initPlugins', file);
+    sortedFiles.forEach(file=>{
+        console.log('initPlugins', file);
 
-          log.send('plugin-message', file);
-          const plugin = require(path.join(pluginPath, file, 'main.js'));
-          plugin(log);
-    });
-
+        log.send('plugin-message', file);
+        const plugin = require(path.join(pluginPath, file, 'main.js'));
+        plugin(log);
+    }
+    );
 
 }
 // This method will be called when Electron has finished
@@ -150,7 +147,7 @@ app.whenReady().then(()=>{
     try {
         const stt = require(path.join(__dirname, '../stt/stt-main.js'));
         stt(log);
-    }catch (error) {
+    } catch (error) {
         console.log(error)
     }
     //try init tts
@@ -158,7 +155,17 @@ app.whenReady().then(()=>{
         const tts = require(path.join(__dirname, '../tts/tts-main.js'));
         tts(log);
 
-    }catch (error) {
+    } catch (error) {
+        console.log(error)
+    }
+    //try init bash
+    try {
+        console.log('try bash')
+
+        const bash = require(path.join(__dirname, './bash.js'));
+        bash(log);
+
+    } catch (error) {
         console.log(error)
     }
 
@@ -198,16 +205,17 @@ app.on('activate', function() {
 });
 
 //on document loaded
-ipcMain.on('plugin-request', (event, arg) => {
+ipcMain.on('plugin-request', (event,arg)=>{
     console.log('plugin-request', arg)
     initPlugins()
-})
+}
+)
 
 app.on('web-contents-created', (event,contents)=>{
     console.log('web-contents-created')
     contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
 
-        console.log('will-attach-webview', _wawevent,webPreferences,_params)
+        console.log('will-attach-webview', _wawevent, webPreferences, _params)
 
     }
     )
@@ -227,31 +235,34 @@ ipcMain.on('debug-stop', ()=>{
 let chromeMainDebug
 ipcMain.on('debug-main', ()=>{
 
-//    chromeMainDebug = spawn('open', ['-a', 'Google Chrome', 'chrome://inspect']);
-//      chromeMainDebug.on('exit', (code) => {
-//            // spawn('killall', ['Google Chrome']);
-//          console.log(code)
-//
-//      });
-    let process = exec('open -a "Google Chrome" chrome://inspect', (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error executing command: ${error}`);
-        return;
-      }
+    //    chromeMainDebug = spawn('open', ['-a', 'Google Chrome', 'chrome://inspect']);
+    //      chromeMainDebug.on('exit', (code) => {
+    //            // spawn('killall', ['Google Chrome']);
+    //          console.log(code)
+    //
+    //      });
+    let process = exec('open -a "Google Chrome" chrome://inspect', (error,stdout,stderr)=>{
+        if (error) {
+            console.error(`Error executing command: ${error}`);
+            return;
+        }
 
-    });
-    process.on('close', (code) => {
+    }
+    );
+    process.on('close', (code)=>{
         console.log(`child close exited with code ${code}`);
-          //process.kill()
-         // spawn('killall', ['Google Chrome']);
-
-    });
-     process.on('exit', (code) => {
-       console.log(`chrome inspect exit exited with code ${code}`);
-         //process.kill()
+        //process.kill()
         // spawn('killall', ['Google Chrome']);
 
-     });
+    }
+    );
+    process.on('exit', (code)=>{
+        console.log(`chrome inspect exit exited with code ${code}`);
+        //process.kill()
+        // spawn('killall', ['Google Chrome']);
+
+    }
+    );
 }
 )
 ipcMain.on('debug-main-stop', ()=>{
