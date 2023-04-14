@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         source.connect(analyser);
         animate();
     }
-    ).catch(error=>console.error(error));
+    ).catch(error=>err(error));
 
     for (let i = 0; i < 3; i++) {
         let meter = document.createElement('div');
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         for (let i = 0; i < amountRows / 2; i++) {
             for (let ii = 0; ii < 3; ii++) {
                 let led = meters[ii].children[amountRows / 2 - 1 - i]
-                // console.log(gradientToHex(0))
+                // log(gradientToHex(0))
 
                 led.style.opacity = 0
                 if (rms > tresh && ii == 1 && i < rms) {

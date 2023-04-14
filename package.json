@@ -62,18 +62,20 @@
   },
   "devDependencies": {
     "electron": "^23.2.2",
-    "electron-builder": "^23.6.0"
+    "electron-builder": "^24.2.0"
   },
   "dependencies": {
     "applescript": "^1.0.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-prompt": "^1.7.0",
+    "electron-rebuild": "^3.2.9",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
     "mic": "^2.1.2",
     "node-pty": "^0.10.1",
     "openai": "^3.2.1",
+    "robotjs": "^0.6.0",
     "stream-buffers": "^3.0.2",
     "wav": "^1.0.2"
   }

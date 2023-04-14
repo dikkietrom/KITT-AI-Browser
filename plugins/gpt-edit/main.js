@@ -15,8 +15,8 @@ async function init(lg) {
 
  
 
-ipcMain.on('chat-gpt-edit', (event,arg)=>{
-    console.log('chat-gpt-edit speak', arg.txt);
+ipcMain.on('plugin-gpt-edit', (event,arg)=>{
+    log('plugin-gpt-edit speak', arg.txt);
     reqJson(event, arg.txt, arg.instruction ,arg.model)
 }
 );
@@ -38,19 +38,19 @@ function reqJson(event, txt, instruction,dataModel) {
         };
 
         fetch('https://api.openai.com/v1/edits', requestOptions).then(response=>response.json()).then(data=>{
-            console.log(data)
-            event.sender.send('chat-reply', data)
+            log(data)
+            event.sender.send('plugin-reply', data)
         }
         ).catch(error=>{
-            event.sender.send('chat-reply', `gpt-edit-main Error: ${error.message}`)
+            event.sender.send('plugin-reply', `gpt-edit-main Error: ${error.message}`)
 
-            console.log(error)
+            log(error)
         }
         );
 
     } catch (error) {
         let m = `gpt-edit-main Error: ${error.message}`
-        event.sender.send('chat-reply', m)
+        event.sender.send('plugin-reply', m)
         log(m)
     }
 

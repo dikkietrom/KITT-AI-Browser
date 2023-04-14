@@ -1,4 +1,4 @@
-class Gpt4apiHack extends Chat {
+class Gpt4apiHack extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -10,37 +10,38 @@ class Gpt4apiHack extends Chat {
     speak() {
 
         try {
-            //console.log('gpt4-api-hack',currentInp.value) 
+            //log('gpt4-api-hack',currentInp.value) 
 
             currentInput = currentInp.value.trim()
             this.webView.send('send-input', currentInput)
-            chatReply('')
+            pluginReply('')
 
         } catch (error) {
             let m = `gpt4-api-hack Error: ${error.message}`
 
-            console.log(m)
+            log(m)
         }
     }
     config() {
         return {
             name: 'Gpt4ApiHack',
             description: 'Gpt4ApiHack',
+            role: 'CEO',
             url: "https://chat.openai.com/"
         }
     }
     onBeforeSendHeaders(arg) {
        try {
             // Send input data to the renderer process
-            // console.log('chat-gpt4-api-hack-reply arg : ', arg);
+            // log('plugin-gpt4-api-hack-reply arg : ', arg);
 
             let obj = arg
             let message = obj.input ? obj.input.trim() : ''
-            console.log('onBeforeSendHeaders currentInput : ', currentInput);
+            log('onBeforeSendHeaders currentInput : ', currentInput);
             if (message && message != currentInput) {
-                console.log('chat-gpt4-api-hack ipcRenderer', message)
+                log('plugin-gpt4-api-hack ipcRenderer', message)
                 if (message.indexOf(currentInput) != -1) {
-                    console.log('chat-gpt4-api-hack ipcRenderer', message)
+                    log('plugin-gpt4-api-hack ipcRenderer', message)
 
                     message = message.substring(message.indexOf(currentInput) + currentInput.length)
                 }
@@ -55,7 +56,7 @@ class Gpt4apiHack extends Chat {
                         code = message.substring(index + 3, message.indexOf('```', index + 3))
                         message = message.substring(0, index) + message.substring(message.indexOf('```', index + 3) + 3)
                         index = message.indexOf('```')
-                        d.innerHTML += '<div onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>'+code+'</div>'
+                        d.innerHTML += '<pre onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>'+code+'</pre>'
                         code= code.trim()
                         if (code.indexOf('javascript') == 0) {
                             code = code.substring(10)
@@ -71,30 +72,32 @@ class Gpt4apiHack extends Chat {
                             return
                         }
                         try {
-                            console.log('chat-gpt4-api-hack-reply eval : ', code);
-                            //eval('try{x=0/0;' + code + '}catch(e){console.log(e);alert(e.message); window.currentInput.value = e.message}')
+                            log('plugin-gpt4-api-hack-reply eval : ', code);
+                            //eval('try{x=0/0;' + code + '}catch(e){log(e);alert(e.message); window.currentInput.value = e.message}')
                             eval(code)
                         } catch (e) {
-                            console.log(e)
+                            log(e)
                             currentInp.value = e.message
-                            setTimeout('chat()', 500);
+                            setTimeout('plugin()', 500);
                         }
                     }
                 } else {
                     let d = document.createElement('span')
                     d.innerHTML = message
                     container.appendChild(d)
-                    //event.sender.send('chat-gpt4-api-hack-reply', message);
-                    console.log('chat-gpt4-api-hack-reply selVal(\'voices\').value : ', selVal('voices'));
-                    ipcRenderer.send('tts', {
-                        txt: message,
-                        voice: selVal('voices')
-                    })
+                    //event.sender.send('plugin-gpt4-api-hack-reply', message);
+                    log('plugin-gpt4-api-hack-reply selVal(\'voices\').value : ', selVal('voices'));
+                    if (selVal('voices') ) {
+                          ipcRenderer.send('tts', {
+                                txt: message,
+                                voice: selVal('voices')
+                            })
+                    }
                 }
 
             }
         } catch (error) {
-            console.log(error)
+            log(error)
         }
 
     }
@@ -104,15 +107,15 @@ let container
 //bash-reply
 ipcRenderer.on('bash-reply', (event,arg)=>{
     // Send input data to the renderer process
-    console.log('bash-reply', arg)
+    log('bash-reply', arg)
     currentInp.value = arg
-    //chat()
+    //plugin()
 
 })
-ipcRenderer.on('chat-gpt4-api-hack-front', (event,arg)=>{
+ipcRenderer.on('plugin-gpt4-api-hack-front', (event,arg)=>{
     // Send input data to the renderer process
-    console.log('chat-gpt4-api-hack-main ipcRenderer', arg)
-    ipcRenderer.send('chat-reply', arg);
+    log('plugin-gpt4-api-hack-main ipcRenderer', arg)
+    ipcRenderer.send('plugin-reply', arg);
     //document.body.innerHTML+=arg
 
 }

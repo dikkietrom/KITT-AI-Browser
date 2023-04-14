@@ -1,4 +1,4 @@
-class Google extends Chat {
+class Google extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -10,32 +10,33 @@ class Google extends Chat {
     speak() {
 
         try {
-            console.log('Google-api-hack',currentInp.value)
+            log('Google-api-hack',currentInp.value)
             
             currentInput = currentInp.value.trim()
             this.webView.send('send-input-google', currentInput)
-            chatReply('')
+            pluginReply('')
 
         } catch (error) {
             let m = `mj-api-hack Error: ${error.message}`
 
-            console.log(m)
+            log(m)
         }
     }
     config() {
         return {
             name: 'Google',
             description: 'Google',
+            role: 'worker',
             url: "https://google.com/search?q=init"
         }
     }
 }
-ipcRenderer.on('chat-google-reply', (event,arg)=>{
+ipcRenderer.on('plugin-google-reply', (event,arg)=>{
         let obj = JSON.parse(arg)
         let message = obj.input ? obj.input.trim() : ''
         if(message){
              currentInp.value = "please read and summarize and give the best possible reply : " + message
-             chat()
+             plugin()
         }
 })
 

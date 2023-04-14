@@ -6,9 +6,9 @@ body {
     font-size: 1.5em;
     font-weight: bold;
     padding: 1em;
-    background-image: url(kitt.png);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100%;
+    background-attachment: fixed;
     height: fit-content;
     width: fit-content;
     padding: 0;
@@ -52,6 +52,14 @@ pre {
 td {
     vertical-align: top;
     text-shadow: -2px 2px 0px black;
+}
+
+div#console-view {
+    font-size: 0.75em;
+    min-height: 10em;
+    max-height: 10em;
+    overflow: auto;
+    width: inherit;
 }
 
 #web-gl  {

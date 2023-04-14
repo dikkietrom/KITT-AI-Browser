@@ -7,14 +7,14 @@ ipcRenderer.on('stts-main-reply', (event,stts)=>{
         let option = document.createElement('option')
         sttImpl.appendChild(option)
         option.innerHTML = p
-        option.chatImpl = s
+        option.pluginImpl = s
     }
     event.sender.send('stt-impl', sttImpl[sttImpl.selectedIndex].value);
 }
 );
 ipcRenderer.on('mic-reply', (event,mes)=>{
 
-    console.log('mic-reply : ', mes)
+    log('mic-reply : ', mes)
 }
 )
 ipcRenderer.on('stt-reply', (event,mes)=>{
@@ -27,7 +27,7 @@ ipcRenderer.on('stt-reply', (event,mes)=>{
 
 
     currentInp.value += mes
-    chat()
+    plugin()
 
 }
 )

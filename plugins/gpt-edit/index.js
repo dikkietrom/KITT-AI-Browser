@@ -1,4 +1,4 @@
-class GptEdit extends Chat {
+class GptEdit extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -15,17 +15,18 @@ class GptEdit extends Chat {
             arg.txt =  inpStr.substring(0,inpStr.lastIndexOf(':')) 
             arg.instruction = inpStr.substring(inpStr.lastIndexOf(':')+1)
             arg.model = selVal('models')
-            ipcRenderer.send('chat-gpt-edit',  arg);
+            ipcRenderer.send('plugin-gpt-edit',  arg);
 
         } catch (error) {
             let m = `gpt-edit Error: ${error.message}`
              
-            console.log(m) 
+            log(m) 
         }
     }
     config() {
         return {
             name: 'Gpt Edit API',
+            role: 'worker',
             description: 'Gpt Edit API'
         }
     }

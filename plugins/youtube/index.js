@@ -1,4 +1,4 @@
-class Youtube extends Chat {
+class Youtube extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -10,22 +10,23 @@ class Youtube extends Chat {
     speak() {
 
         try {
-            console.log('Youtube-api-hack',currentInp.value)
+            log('Youtube-api-hack',currentInp.value)
             
             currentInput = currentInp.value.trim()
             this.webView.send('send-input', currentInput)
-            chatReply('')
+            pluginReply('')
 
         } catch (error) {
             let m = `Youtube-api-hack Error: ${error.message}`
 
-            console.log(m)
+            log(m)
         }
     }
     config() {
         return {
             name: 'Youtube',
             description: 'Youtube',
+            role: 'worker',
             url: "https://youtube.com"
         }
     }

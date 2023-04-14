@@ -14,8 +14,8 @@ async function init() {
 
 }
 
-ipcMain.on('chat-dall-e', (event,arg)=>{
-    console.log('chat-dall-e speak', arg);
+ipcMain.on('plugin-dall-e', (event,arg)=>{
+    log('plugin-dall-e speak', arg);
     try {
         // Send a message to the server
         const requestOptions = {
@@ -32,19 +32,19 @@ ipcMain.on('chat-dall-e', (event,arg)=>{
         };
 
         fetch('https://api.openai.com/v1/images/generations', requestOptions).then(response=>response.json()).then(data=>{
-            console.log(data)
-            event.sender.send('chat-reply', data)
+            log(data)
+            event.sender.send('plugin-reply', data)
         }
         ).catch(error=>{
-            event.sender.send('chat-reply', `dall-e-main Error: ${error.message}`)
+            event.sender.send('plugin-reply', `dall-e-main Error: ${error.message}`)
 
-            console.log(error)
+            log(error)
         }
         );
 
     } catch (error) {
         let m = `dall-e-main Error: ${error.message}`
-        event.sender.send('chat-reply', m)
+        event.sender.send('plugin-reply', m)
         log(m)
     }
 

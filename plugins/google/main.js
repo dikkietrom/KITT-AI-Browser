@@ -5,19 +5,15 @@ async function init(lg) {
 
     
 }
-let load = 0
 ipcMain.on('send-input-google-return', (event,arg)=>{
-    if(load==0){
-       load++
-        return
-    }
+
    // Send input data to the renderer process
-   console.log('send-input-google-return ipcMain',arg)
+   log('send-input-google-return ipcMain',arg.substring(0,20)+'')
    let obj = {}
    obj.input = arg
-   console.log('Request body: ', obj);
+   log('Request body: ', obj);
    if(obj.input){
-        log.webContents.send('chat-google-reply', JSON.stringify(obj));
+        log.webContents.send('plugin-google-reply', JSON.stringify(obj));
    }
    
 }

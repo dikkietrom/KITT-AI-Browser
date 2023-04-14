@@ -13,27 +13,27 @@ async function init(lg) {
         apiKey: apiKeys('openAIKey')
     });
     if (!configuration.apiKey) {
-        console.log('gpt-main init no api key');
+        log('gpt-main init no api key');
         const openAIKey = await promptIt('OpenAI API (not mandatory)', 'openAIKey')
         if (openAIKey) {
-            console.log('gpt-main got key', openAIKey);
+            log('gpt-main got key', openAIKey);
 
             configuration.apiKey = openAIKey
         } else {
-            console.log('no gpt-main  key', openAIKey);
+            log('no gpt-main  key', openAIKey);
 
             return
         }
     }
     if (!configuration.organization) {
-        console.log('gpt-main init no organization key');
+        log('gpt-main init no organization key');
         const openAIOrg = await promptIt('OpenAI organization ID (not mandatory)', 'openAIOrg')
         if (openAIOrg) {
-            console.log('gpt-main got org', openAIOrg);
+            log('gpt-main got org', openAIOrg);
 
             configuration.organization = openAIOrg
         } else {
-            console.log('no gpt-main org', openAIKey);
+            log('no gpt-main org', openAIKey);
 
             return
         }
@@ -43,34 +43,32 @@ async function init(lg) {
         organization: apiKeys('openAIOrg'),
         apiKey: apiKeys('openAIKey')
     });
-    console.log('gpt-main init openAI ', configuration);
+    log('gpt-main init openAI ', configuration);
     openai = new OpenAIApi(configuration);
 
-    console.log('gpt-main init wait models response ');
+    log('gpt-main init wait models response ');
     const response = await openai.listEngines();
-    console.log('gpt-main init got response  ');
+    log('gpt-main init got response  ');
 
     modelsData = response.data.data
-    // console.log('gpt-main init got modelsData : ', modelsData);
+    // log('gpt-main init got modelsData : ', modelsData);
     log.webContents.send('gpt-models-reply', modelsData)
 
 }
 
 ipcMain.on('gpt-models', (event)=>{
     try {
-        //          console.log('gpt-models', modelsData);
         event.sender.send('gpt-models-reply', modelsData)
     } catch (error) {
-        log('main-log', error)
+        log(error)
     }
-
 }
 );
 
 
 
-ipcMain.on('chat-gpt', (event,arg)=>{
-    console.log('chat-gpt speak', arg.txt);
+ipcMain.on('plugin-gpt', (event,arg)=>{
+    log('plugin-gpt speak', arg.txt);
     reqJson(event, arg.txt, arg.model)
 }
 );
@@ -82,7 +80,7 @@ function reqJson(event, txt, dataModel) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + apiKey('openAIKey')
+                'Authorization': 'Bearer ' + apiKeys('openAIKey')
             },
             body: JSON.stringify({
                 "model": dataModel,
@@ -94,20 +92,20 @@ function reqJson(event, txt, dataModel) {
             })
         };
 
-        fetch('https://api.openai.com/v1/chat/completions', requestOptions).then(response=>response.json()).then(data=>{
-            console.log(data)
-            event.sender.send('chat-reply', data)
+        fetch('https://api.openai.com/v1/plugin/completions', requestOptions).then(response=>response.json()).then(data=>{
+            log(data)
+            event.sender.send('plugin-reply', data)
         }
         ).catch(error=>{
-            event.sender.send('chat-reply', `gpt-main Error: ${error.message}`)
+            event.sender.send('plugin-reply', `gpt-main Error: ${error.message}`)
 
-            console.log(error)
+            log(error)
         }
         );
 
     } catch (error) {
         let m = `gpt-main Error: ${error.message}`
-        event.sender.send('chat-reply', m)
+        event.sender.send('plugin-reply', m)
         log(m)
     }
 

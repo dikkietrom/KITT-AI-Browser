@@ -17,7 +17,7 @@ document.addEventListener(
     false
 );
  ipcRenderer.on('send-input', (event,arg) => {
-    console.log('send-input',arg)
+    log('send-input',arg)
 //    txtArea().innerHTML=arg
         
   //  const targetNode = document.getElementsByTagName('main')[0]
@@ -60,9 +60,9 @@ triggerEnterKeyOnTextarea()
 
     txtArea().dispatchEvent(inputEvent);
   } catch(e) {
-    console.error('Textarea not found',e);
+    err('Textarea not found',e);
   }
 }
 
-console.log('preload OpenAssistant-api hack')
+log('preload OpenAssistant-api hack')
 

@@ -1,10 +1,8 @@
-const {app, BrowserWindow, ipcMain, Menu, MenuItem, ipcRenderer} = require('electron');
-const fs = require('fs');
+const {session,app, BrowserWindow, ipcMain, Menu, MenuItem, ipcRenderer} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const packageJson = require(path.join(__dirname, '..', 'package.json'));
-const {spawn, exec} = require('child_process');
-const applescript = require('applescript');
+const {spawn} = require('child_process');
 
 const url = require('url');
 const {autoUpdater} = require('electron-updater');
@@ -13,8 +11,8 @@ const {Readable} = require('stream');
 const {WritableStreamBuffer} = require('stream-buffers');
 
 const appName = packageJson.name;
-const {session} = require('electron');
 
+const {log,err,initShared} = require(path.join(__dirname, '..','lib/shared.js'));
 autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dikkietrom',
@@ -61,6 +59,7 @@ function createWindow() {
     });
     createWindow.mainWindow = mainWindow
     log.webContents = mainWindow.webContents
+    initShared(mainWindow.webContents)
     log.send = (name,message)=>{
         mainWindow.webContents.send(name, message)
     }
@@ -69,13 +68,13 @@ function createWindow() {
     };
 
     mainWindow.webContents.on('devtools-closed', ()=>{
-        console.log('devtools-closed', log)
+        log('devtools-closed')
         log.send('dev-tools-closed')
     }
     )
 
     session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
-        //console.log('onBeforeSendHeaders', details)
+        //log('onBeforeSendHeaders', details)
         if (details.uploadData) {
             try {
 
@@ -86,7 +85,7 @@ function createWindow() {
                 log.send('onBeforeSendHeaders', obj)
 
             } catch (error) {
-                console.log(error)
+                log(error)
             }
         }
         if (callback) {
@@ -96,35 +95,27 @@ function createWindow() {
     )
 
 }
-//initialize plugins by getting the files from the plugins folder
-function initPlugins() {
-
-    const pluginPath = path.join(__dirname, '../plugins');
-
-    const sortedFiles = fs.readdirSync(pluginPath).sort((a,b)=>a.localeCompare(b));
-
-    sortedFiles.forEach(file=>{
-        console.log('initPlugins', file);
-
-        log.send('plugin-message', file);
-        const plugin = require(path.join(pluginPath, file, 'main.js'));
-        plugin(log);
-    }
-    );
-
-}
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.name = 'KITT'
 
 app.on('ready', createWindow);
+app.on('web-contents-created', (event,contents)=>{
+    log('web-contents-created')
+    contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
 
+        //log('will-attach-webview', _wawevent, webPreferences, _params)
+
+    }
+    )
+}
+)
 // Wait for the app to be ready
 app.whenReady().then(()=>{
     try {
         autoUpdater.checkForUpdatesAndNotify();
     } catch (error) {
-        console.log(error)
+        log(error)
     }
     try {
         // Get the default menu
@@ -134,45 +125,39 @@ app.whenReady().then(()=>{
         menu.insert(0, new MenuItem({
             label: 'New Menu Item',
             click() {
-                console.log('New menu item clicked');
+                log('New menu item clicked');
             }
         }));
 
         // Set the updated menu to the application menu
         Menu.setApplicationMenu(menu);
     } catch (error) {
-        console.log(error)
+        log(error)
     }
-    //try init stt
-    try {
-        const stt = require(path.join(__dirname, '../stt/stt-main.js'));
-        stt(log);
-    } catch (error) {
-        console.log(error)
-    }
-    //try init tts
-    try {
-        const tts = require(path.join(__dirname, '../tts/tts-main.js'));
-        tts(log);
 
-    } catch (error) {
-        console.log(error)
-    }
-    //try init bash
-    try {
-        console.log('try bash')
-
-        const bash = require(path.join(__dirname, './bash.js'));
-        bash(log);
-
-    } catch (error) {
-        console.log(error)
-    }
+    //try init
+    initMainScript('../stt/stt-main.js')
+    initMainScript('../tts/tts-main.js')
+    initMainScript('./bash.js')
+    initMainScript('./ipcMain.js')
 
 }
 );
+
+function initMainScript(script) {
+    //try init plugins
+    try {
+        log('try ', script)
+
+        const func = require(path.join(__dirname, script));
+        func(log);
+    } catch (error) {
+        err(error)
+    }
+}
+
 process.on('SIGINT', ()=>{
-    console.log('Received SIGINT signal.');
+    log('Received SIGINT signal.');
     spawn('killall', ['Google Chrome']);
     // Quit the app
     app.quit();
@@ -204,73 +189,4 @@ app.on('activate', function() {
     }
 });
 
-//on document loaded
-ipcMain.on('plugin-request', (event,arg)=>{
-    console.log('plugin-request', arg)
-    initPlugins()
-}
-)
 
-app.on('web-contents-created', (event,contents)=>{
-    console.log('web-contents-created')
-    contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
-
-        console.log('will-attach-webview', _wawevent, webPreferences, _params)
-
-    }
-    )
-}
-)
-ipcMain.on('debug', ()=>{
-    createWindow.mainWindow.webContents.openDevTools();
-
-}
-)
-ipcMain.on('debug-stop', ()=>{
-    createWindow.mainWindow.webContents.closeDevTools();
-
-}
-)
-
-let chromeMainDebug
-ipcMain.on('debug-main', ()=>{
-
-    //    chromeMainDebug = spawn('open', ['-a', 'Google Chrome', 'chrome://inspect']);
-    //      chromeMainDebug.on('exit', (code) => {
-    //            // spawn('killall', ['Google Chrome']);
-    //          console.log(code)
-    //
-    //      });
-    let process = exec('open -a "Google Chrome" chrome://inspect', (error,stdout,stderr)=>{
-        if (error) {
-            console.error(`Error executing command: ${error}`);
-            return;
-        }
-
-    }
-    );
-    process.on('close', (code)=>{
-        console.log(`child close exited with code ${code}`);
-        //process.kill()
-        // spawn('killall', ['Google Chrome']);
-
-    }
-    );
-    process.on('exit', (code)=>{
-        console.log(`chrome inspect exit exited with code ${code}`);
-        //process.kill()
-        // spawn('killall', ['Google Chrome']);
-
-    }
-    );
-}
-)
-ipcMain.on('debug-main-stop', ()=>{
-    spawn('killall', ['Google Chrome']);
-}
-)
-
-function log(msg) {
-    //console.log(msg);
-    createWindow.mainWindow.webContents.send('main-log', msg);
-}

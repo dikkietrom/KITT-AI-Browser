@@ -1,4 +1,4 @@
-class MjApiHack extends Chat {
+class MjApiHack extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -10,28 +10,30 @@ class MjApiHack extends Chat {
     speak() {
 
         try {
-            console.log('mj-api-hack',currentInp.value)
+            log('mj-api-hack',currentInp.value)
             
             currentInput = currentInp.value.trim()
             this.webView.send('send-input', currentInput)
-            chatReply('')
+            pluginReply('')
 
         } catch (error) {
             let m = `mj-api-hack Error: ${error.message}`
 
-            console.log(m)
+            log(m)
         }
     }
     config() {
         return {
             name: 'MjApiHack',
             description: 'MjApiHack',
+            role: 'worker',
+            skill: 'tti',
             url: "https://discord.com/channels/@me/1093057901330968647"
         }
     }
 }
 
-ipcRenderer.on('chat-mj-api-hack-reply', (event,arg)=>{
+ipcRenderer.on('plugin-mj-api-hack-reply', (event,arg)=>{
 
   
 }

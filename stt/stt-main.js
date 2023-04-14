@@ -6,23 +6,23 @@ const path = require('path');
 
 const mic = require('mic');
 const wav = require('wav');
+const {log,err} = require(path.join(__dirname, '..','lib/shared.js'));
 
 const sttsMain = {}
-let log
 
 const IP = '127.0.0.1';
 const PORT = 12346;
 
 function init(lg) {
-    console.log('stt-main init')
-    log = lg
+
+    log('stt-main init')
     ipcMain.on('mic', async(event)=>{
         const outputPath = 'stt/stt-mic-output.wav';
 
         try {
             rec = true
             await recordMicAudioToWav(outputPath);
-            console.log('WAV file successfully written.');
+            log('WAV file successfully written.');
             event.sender.send('mic-reply', {
                 message: 'WAV file successfully written.'
             });
@@ -30,7 +30,7 @@ function init(lg) {
            
 
         } catch (err) {
-            console.error('Error writing WAV file:', err);
+            err('Error writing WAV file:', err);
             err.message = 'Error writing WAV file: ' + err.message;
             event.sender.send('mic-reply', err);
         }
@@ -39,7 +39,7 @@ function init(lg) {
             sttImpl.transcribe(event)           
 
         } catch (err) {
-            console.error('Error transcribe :', err);
+            err('Error transcribe :', err);
             err.message = 'Error transcribe  : ' + err.message;
             event.sender.send('mic-reply', err);
         }
@@ -52,7 +52,7 @@ function init(lg) {
             rec = false
             event.sender.send('mic-stop-reply','rec stopped');
         } catch (err) {
-            console.error('Error mic-stop :', err);
+            err('Error mic-stop :', err);
             err.message = 'Error mic-stop : ' + err.message;
             event.sender.send('mic-stop-reply', err);
         }
@@ -70,18 +70,18 @@ function init(lg) {
 
      try {
         let pyt = path.join(__dirname, 'whisper.py')
-        console.log('pyt', pyt)
+        log('pyt', pyt)
         // Spawn a child process and execute the Python script
         const pythonProcess = spawn('python3', [ pyt ]);
 
         // Log the output from the Python script
         pythonProcess.stdout.on('data', (data)=>{
-            console.log('main whisper data', str)
+            log('main whisper data', str)
             log(m)
         }
         );
         pythonProcess.stdout.on('connect', (data)=>{
-            console.log('main whisper up', str)
+            log('main whisper up', str)
             log(m)
         }
         );
@@ -89,7 +89,7 @@ function init(lg) {
         // Log any errors from the Python script
         pythonProcess.stderr.on('error', (data)=>{
             let m = `stderr whisper: ${data}`
-            console.error(m);
+            err(m);
             log(m)
         }
         );
@@ -97,13 +97,13 @@ function init(lg) {
         // Handle the exit event of the Python script
         pythonProcess.on('close', (code)=>{
             let m = `whisper process exited with code ${code}`
-            console.log(m);
+            log(m);
             log(m)
         }
         );
 
      } catch (err) {
-        console.error('Error start whisper server:', err);
+        err('Error start whisper server:', err);
         //log(err)
      }
 
@@ -174,7 +174,7 @@ class WhisperMain extends SttMain {
                 port: PORT
             }, ()=>{
                 let m = `Connected to whisper server at ${IP}:${PORT}`
-                console.log(m);
+                log(m);
                 log(m)
             }
             )
@@ -182,7 +182,7 @@ class WhisperMain extends SttMain {
             client.on('data', (data)=>{
                 event.sender.send('stt-reply', new String(data))
                 let m = `Received from whisper server: ${data}`
-                console.log(m);
+                log(m);
                 log(m)
                 // Close the connection
                 client.end();
@@ -192,7 +192,7 @@ class WhisperMain extends SttMain {
             // Print a message when the connection is closed
             client.on('end', ()=>{
                 let m = 'Disconnected from whisper server'
-                console.log(m);
+                log(m);
                 log(m)
             }
             );
@@ -200,7 +200,7 @@ class WhisperMain extends SttMain {
             // Print a message in case of an error
             client.on('error', (error)=>{
                 let m = `whisper Error: ${error.message}`
-                console.error(m);
+                err(m);
                 event.sender.send('stt-reply', `whisper Error: ${error.message}`)
                 log(m)
 

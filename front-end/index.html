@@ -5,8 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>KITT</title>
 
-        <script src="chat.js"></script>
+        <script src="../lib/shared.js"></script>
+        <script src="plugin.js"></script>
+        <script src="log.js"></script>
+
         <script src="index.js"></script>
+        <script src="ipcRenderer.js"></script>
         <script src="webgl.js"></script>
         <script src="../stt/stt.js"></script>
 
@@ -20,10 +24,10 @@
 
     <table id="layout" >
             <tr height="0">
-                <td width="25%" id="avatar" >
+                <td style=width:10em id="avatar" >
                     <div id="web-gl"></div>
                 </td>
-                <td id="webviews"  width="75%">
+                <td id="webviews"  >
                     <div id="webview-tab-bar" class="tab-bar">
 
                     </div>
@@ -31,8 +35,8 @@
 
                 </div>
                 </td>
-                <td width="25%">
-
+                <td style=width:20em>
+                    <div id="console-view"></div>
                 </td>
             </tr>
             <tr height="0">
@@ -42,7 +46,7 @@
                         <button class="command" onclick="debugMain(this)">Debug main</button>
                         <button class="command" onclick="rec(this)">rec</button>
 
-                        ai : <select id="chat-impl"></select>
+                        ai : <select id="plugin-impl"></select>
                         preset :
                         <select onchange="setPreset(this)"  id="presets">
                                     <option value=""></option>
@@ -56,6 +60,7 @@
                         <img id="model-help-image" src="models.png"/>
                         stt : <select id="stt-impl"></select>
                         tts : <select id="voices">
+                            <option value=""></option>
                             <option value="HgdftKHCCUuR9NqHQess">KITT</option>
                             <option value="nWyBZbyUWniOE6sCNkVm">Me</option>
                             <option value="tSpiKsHkdEYOPEKWvx37">Tanja</option>

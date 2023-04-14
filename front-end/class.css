@@ -1,20 +1,29 @@
-.speak {
-    width: 90%;
-    height: 2em;
-    background: #f0f8ff54;
+.button-bar {
+    margin-top: 10px;
+     display: flex;
 }
 
+.log-word , .log-info{
+    background:#ddd;
+    padding-right:.5em;
+    text-shadow:none;
+    color:black;
+}
+.log-info {
+    background:#f77;
+    display: inline;
+    font-size: .8em;
+}
 .fix {
 }
 
+ 
 
-.button-bar {
-    display: flex;
+.speak {
+    width: calc(100% - 1em);
+    height: 2em;
+    background: #f0f8ff54;
 }
-
-
-.tab-bar {padding-left: 1em;}
-
 .tab {
     border: none;
     padding: 10px;
@@ -27,12 +36,15 @@
     border-bottom-right-radius: 0;
 }
 
+
 .tab.active {
     background-color: #fff;
     color: #f00;
     text-shadow: none;
     text-decoration: underline;
 }
+.tab-bar {padding-left: 1em;}
+
 
 .tab-content {
     display: none;
@@ -44,9 +56,5 @@
 
 .tab-content.active {
     display: block;
-}
-
-.button-bar {
-    margin-top: 10px;
 }
 

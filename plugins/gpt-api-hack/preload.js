@@ -14,7 +14,7 @@ document.addEventListener(
     false
 );
  ipcRenderer.on('send-input', (event,arg) => {
-    console.log('send-input',arg)
+    log('send-input',arg)
     txtArea().value=arg
         
   //  const targetNode = document.getElementsByTagName('main')[0]
@@ -23,7 +23,6 @@ document.addEventListener(
 
 
 })
-
 
 
  function triggerEnterKeyOnTextarea() {
@@ -38,7 +37,7 @@ document.addEventListener(
     });
     txtArea().dispatchEvent(enterKeyEvent);
   } catch(e) {
-    console.error('Textarea not found',e);
+    err('Textarea not found',e);
   }
 }
 let observer 
@@ -56,28 +55,28 @@ function initMutationObserver() {
    observer = new MutationObserver((mutationsList, observer) => {
     for (const mutation of mutationsList) {
 
-       // console.log('MutationObserver:', mutation);
+       // log('MutationObserver:', mutation);
 
       if (mutation.type === 'characterData') {
         const oldValue = mutation.oldValue;
         const newValue = mutation.target.textContent;
-       // console.log('Delta text:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
+       // log('Delta text:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
 
         // Calculate the delta text
         let deltaText = '';
           let trim = oldValue.trim()  
          if (!trim.length || trim.length == 1 && trim.charCodeAt(0) == 8203 ) {
             deltaText = newValue
-           // console.log('new value:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
+           // log('new value:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
 
          }else if (newValue.length > oldValue.length) {
 
             deltaText = newValue.substring(oldValue.length);
-        //  console.log('new value > ','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
+        //  log('new value > ','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
          }
 
 //        if(deltaText){
-//            console.log('Delta text:', deltaText);
+//            log('Delta text:', deltaText);
 //            ipcRenderer.send('tts',deltaText)
 //        }
 
@@ -92,9 +91,9 @@ function initMutationObserver() {
      //        // // Get the outerHTML of the added nodes
      //        const deltaHTML = addedNodes.map(node => node.outerHTML).join('');
 
-     //         console.log('Delta HTML:', deltaHTML);
+     //         log('Delta HTML:', deltaHTML);
      //          //if (hasTextContent(node)) {
-     //              ipcRenderer.send('chat-gpt4-api-hack',deltaHTML)
+     //              ipcRenderer.send('plugin-gpt4-api-hack',deltaHTML)
 
      //          //}             
      //    //}
@@ -105,7 +104,7 @@ function initMutationObserver() {
  
   } catch(e) {
     // statements
-    console.log(e);
+    log(e);
   }
 }
 function hasTextContent(element) {
@@ -122,5 +121,5 @@ function hasTextContent(element) {
   return false;
 }
 
-console.log('preload gpt4-api hack')
+log('preload gpt4-api hack')
 

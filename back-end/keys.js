@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const prompt = require('electron-prompt');
+const {log,err} = require(path.join(__dirname, '..','lib/shared.js'));
 
 function apiKeys(kind) {
   let fileName = 'keys/'
@@ -37,7 +38,7 @@ async function promptIt(title, kind) {
             return r;
         }
     } catch (err) {
-        console.error(err);
+        err(err);
     }
 }
 

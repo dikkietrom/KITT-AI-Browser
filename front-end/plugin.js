@@ -1,18 +1,34 @@
-const chats = {}
-var chatsArr = []
-class Chat {
+
+const pluginByName = {}
+const pluginByDir = {}
+class Plugin {
     constructor(arg) {
-        chats[this.constructor.name] = this
-        chatsArr.push(this)
+        pluginByName[this.constructor.name] = this
+        
+        try {
+            throw new Error()
+        } catch (error) {
+            let dir = error.stack
+            let part = '/KITT/plugins'
+            dir = dir.substring(dir.indexOf(part)+part.length+1)
+            dir = dir.substring(0,dir.indexOf('/'))
+            
+            pluginByDir[dir]=this
+            log('dir',dir)
+        }
+
         //add it to the plugin select
         try {
-            let sel = document.getElementById('chat-impl')
+            let sel = document.getElementById('plugin-impl')
             let opt = document.createElement('option')
             sel.appendChild(opt)
             opt.innerHTML = this.constructor.name
             opt.value = this.constructor.name
+            if(this.config().role=='CEO'){
+                opt.selected = true
+            }
         }catch (error) {
-            console.log(error)
+            err(error)
         }
 
     }
@@ -31,15 +47,15 @@ class Chat {
     }
 }
 
-ipcRenderer.on('chat-reply', (event,token)=>{
-    chatReply(token)
+ipcRenderer.on('plugin-reply', (event,token)=>{
+    pluginReply(token)
 
 }
 );
-function chatReturn(append) {
+function pluginReturn(append) {
     let ret = document.getElementById('layout')
     if (append.tagName != 'TR') {
-        alert('chatReturn() expects a TR element')
+        alert('pluginReturn() expects a TR element')
         return
     }
     if (append) {
@@ -47,20 +63,20 @@ function chatReturn(append) {
     }
 
 }
-function chatReply(token) {
+function pluginReply(token) {
     try {
-        console.log('chat response : ', token)
+        log('plugin response : ', token)
 
-        let td = newChatReplyRow(chatImpl().constructor.name, 'chat-id-ai')
-        chatImpl().listen(token, td)
+        let td = newPluginReplyRow(pluginImpl().constructor.name, 'plugin-id-ai')
+        pluginImpl().listen(token, td)
 
         newInp()
 
     } catch (error) {
-        console.log(error)
+        err(error)
     }
 }
-function newChatReplyRow(who, cls) {
+function newPluginReplyRow(who, cls) {
     let tr = document.createElement('tr')
 
     tr.height = 0
@@ -71,20 +87,20 @@ function newChatReplyRow(who, cls) {
         }
 
     }
-    td.className = 'chat-id ' + (cls ? cls : '')
+    td.className = 'plugin-id ' + (cls ? cls : '')
     tr.appendChild(td)
     td.innerHTML = `${who} : `
 
     td = document.createElement('td')
-    td.className = 'chat-reply'
+    td.className = 'plugin-reply'
     td.colSpan = 2
     tr.appendChild(td)
-    chatReturn(tr)
+    pluginReturn(tr)
     return td
 }
 function newInp(container) {
 
-    let td = newChatReplyRow('Me')
+    let td = newPluginReplyRow('Me')
 
     let inp = document.createElement('textarea')
     inp.className = 'speak'
@@ -100,11 +116,12 @@ function newInp(container) {
     currentInp = inp
 
 }
-function chatImpl() {
-    let sel = document.getElementById('chat-impl')
-    return chats[sel.value]
+function pluginImpl() {
+    let sel = document.getElementById('plugin-impl')
+    return pluginByName[sel.value]
 }
-function chat() {
+function plugin() {
+    log('start')
     let pre = document.createElement('span')
     pre.style.cursor = 'pointer'
     pre.innerHTML = currentInp.value
@@ -116,7 +133,7 @@ function chat() {
     currentInp.parentElement.appendChild(pre)
     currentInp.outerHTML = ''
     ipcRenderer.send('tts-kitt', selVal('voices'))
-    chatImpl().speak()
+    pluginImpl().speak()
 }
 
 ipcRenderer.on('tts-d-id-stream', (event, arg) => {

@@ -1,4 +1,4 @@
-class Gpt extends Chat {
+class Gpt extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -13,17 +13,18 @@ class Gpt extends Chat {
             let arg = {}
             arg.txt = this.conversation + ' ' + currentInp.value
             arg.model = selVal('models')
-            ipcRenderer.send('chat-gpt',  arg);
+            ipcRenderer.send('plugin-gpt',  arg);
 
         } catch (error) {
             let m = `gpt Error: ${error.message}`
              
-            console.log(m) 
+            log(m) 
         }
     }
     config() {
         return {
             name: 'Gpt API',
+            role: 'manager',
             description: 'Gpt API'
         }
     }
@@ -31,7 +32,7 @@ class Gpt extends Chat {
 
 ipcRenderer.on('gpt-models-reply', (event,data)=>{
 
-    console.log('models : ', data)
+    log('models : ', data)
     if(data==null){//on app reload get it from memory, give it some time
         setTimeout( function  () {
             event.sender.send('gpt-models') 
@@ -42,8 +43,8 @@ ipcRenderer.on('gpt-models-reply', (event,data)=>{
     models.innerHTML=''
     for (let index = 0; index < data.length; index++) {
         //let data = response[index]
-        // console.log(data.id)
-        //console.log(data[index].id)
+        // log(data.id)
+        //log(data[index].id)
         let d = data[index]
         let option = document.createElement('option') 
         models.appendChild(option)

@@ -1,4 +1,4 @@
-class OpenAssistant extends Chat {
+class OpenAssistant extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -10,22 +10,23 @@ class OpenAssistant extends Chat {
     speak() {
 
         try {
-            console.log('OpenAssistant-api-hack',currentInp.value)
+            log('OpenAssistant-api-hack',currentInp.value)
             
             currentInput = currentInp.value.trim()
             this.webView.send('send-input', currentInput)
-            chatReply('')
+            pluginReply('')
 
         } catch (error) {
             let m = `mj-api-hack Error: ${error.message}`
 
-            console.log(m)
+            log(m)
         }
     }
     config() {
         return {
             name: 'OpenAssistant',
             description: 'OpenAssistant',
+            role: 'manager',
             url: "https://open-assistant.io"
         }
     }

@@ -1,4 +1,4 @@
-class Dalle extends Chat {
+class Dalle extends Plugin {
     constructor(arg) {
         super(arg)
         this.conversation = ''
@@ -17,11 +17,13 @@ class Dalle extends Chat {
     }
     speak() {
 
-       ipcRenderer.send('chat-dall-e', this.conversation + ' ' + currentInp.value);
+       ipcRenderer.send('plugin-dall-e', this.conversation + ' ' + currentInp.value);
     }
     config() {
         return {
             name: 'Dall-e API',
+            role: 'worker',
+            skill: 'tti',
             description: 'Dall-e API'
 
         }
