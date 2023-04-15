@@ -122,15 +122,15 @@ function pluginImpl() {
 }
 function plugin() {
     log('start')
-    let pre = document.createElement('span')
-    pre.style.cursor = 'pointer'
-    pre.innerHTML = currentInp.value
-     pre.onclick = function() {
+    get('console-view').innerHTML=''
+    let s = span(currentInp.parentElement)
+    s.style.cursor = 'pointer'
+    s.innerHTML = currentInp.value
+     s.onclick = function() {
          currentInp.value = this.innerHTML
          currentInp.focus()
      }
 
-    currentInp.parentElement.appendChild(pre)
     currentInp.outerHTML = ''
     ipcRenderer.send('tts-kitt', selVal('voices'))
     pluginImpl().speak()

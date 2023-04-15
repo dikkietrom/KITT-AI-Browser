@@ -8,10 +8,16 @@
     padding-right:.5em;
     text-shadow:none;
     color:black;
+    width: calc(50% - 1em);
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 1em;
 }
 .log-info {
     background:#f77;
-    display: inline;
+    display: inline-block;
     font-size: .8em;
 }
 .fix {

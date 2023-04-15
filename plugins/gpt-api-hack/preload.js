@@ -1,7 +1,8 @@
 // preload.js
-const { ipcRenderer,session } = require('electron');
+const { ipcRenderer } = require('electron');
 
-
+eval ( ipcRenderer.sendSync('logPreload'))
+const log = logPreload
 function txtArea(){
   return document.getElementsByTagName('textarea')[0]
 }

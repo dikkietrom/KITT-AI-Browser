@@ -41,6 +41,8 @@ function setPreset(sel) {
                             You : `
     } else if (sel.value == 'bash') {
         currentInp.value = `a bash script that generates, compiles and runs a simple hello world c program, no comments, no explain, in a code block please`
+    } else if (sel.value == 'ceo') {
+        currentInp.value = `you are ceo of a company that is run by an ai board, ai managers and ai workers. I am only messagebroker. The customer is a GP that wants to have an online digital clone available for the patient to act as an assistant to do the intake and prepare the GP work. You make it happen. Direct you message always to the customer or the other ai's. The workers execute external services. We have a google worker, dall-e worker, gpt api worker. All ai's are instances of yourself and you train them for their task and update the plugin files. There is also a code execution service, you can request code executions through the broker and get result from the broker so if you need info from the file system you can do it like that. All ai's and external services are plugins. When we need a new service then you write the plugin and train the worker for it's task. First task is make a website. Start with execution. You can send multiple message at once, so give as many instructions to as many ai's as possible. I am available for advice. Always start your message with the name of the receiver and a colon. Eg google-service : get latest info about technology. The reply you get is the same so you know where it is coming from. Think about a good name for the product we will make for the customer. The name of the customer is JD Beugelaar. My name is Dennis. Always speak to the broker otherwise I cannot hear you ok? The broker is an imaginary concept, I act as broker by copy and pasting your messages. You are the CEO, I am the broker but also your advisor. So when you need advice then speak to the broker, like you do with everybody else ok. That means that you don't explain anything, no comments. Only messages that start with receiver name , then a colon and then the message. So when you reply and want to say something to me then start with "dennis : " and then what you want to say ok?`
     } else if (!sel.value) {
         currentInp.value = ``
         return
@@ -48,7 +50,6 @@ function setPreset(sel) {
     plugin()
 
 }
-
 function textInputListener(input, event) {
     try {
         if (event.key === 'Enter') {

@@ -13,8 +13,11 @@ document.addEventListener(
     // initMutationObserver()
   //  log(document.body.innerText)
   //  log('pre load all DOMContentLoaded',location)
-    ipcRenderer.send('send-input-google-return',document.body.innerText)
+    if (location.toString().indexOf('q=init')==-1) {
+       ipcRenderer.send('send-input-google-return',document.body.innerText)
 
+    }
+   
 
    },
    false

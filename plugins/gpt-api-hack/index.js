@@ -58,6 +58,9 @@ class Gpt4apiHack extends Plugin {
                         index = message.indexOf('```')
                         d.innerHTML += '<pre onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>'+code+'</pre>'
                         code= code.trim()
+                        if (code.indexOf('python'==0)) {
+                            throw new Error("cannot directly execute python, include writing the python and executing it")
+                        }
                         if (code.indexOf('javascript') == 0) {
                             code = code.substring(10)
                         } else if (code.indexOf('js') == 0 ) {
@@ -78,7 +81,7 @@ class Gpt4apiHack extends Plugin {
                         } catch (e) {
                             log(e)
                             currentInp.value = e.message
-                            setTimeout('plugin()', 500);
+                            //setTimeout('plugin()', 500);
                         }
                     }
                 } else {
