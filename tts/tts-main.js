@@ -54,9 +54,9 @@ async function speak(txt, voice) {
             elevenSpeak(txt, voice)
         }
 
-    } catch (err) {
-        err('Error start tts :', err);
-        log(err)
+    } catch (e) {
+        e.message = 'Error start tts :' + e.message
+        err(e);
     }
 }
 

@@ -6,9 +6,15 @@ ipcRenderer.on('onBeforeSendHeaders', (event,arg)=>{
     let plugin = plugByUrl[domain]
     if (plugin && plugin.onBeforeSendHeaders) {
         try {
-            plugin.onBeforeSendHeaders(JSON.parse(arg.buffer))
+            let obj = {}
+            let buffers = arg.buffer.split('\n')
+            for (let index = 0; index < buffers.length; index++) {
+                obj[index] = JSON.parse(buffers[index])
+
+            }
+            plugin.onBeforeSendHeaders(obj)
         } catch (error) {
-            log(error)
+            err(error)
         }
     }
 }
@@ -29,28 +35,31 @@ ipcRenderer.on('plugin-message', (event,sortedDirs)=>{
 
     sortedDirs.forEach(dir=>{
         log('initPlugins dir : ', dir);
-        let script = document.createElement('script')
-        let src = '../plugins/' + dir + '/index.js'
-        log(src)
-        script.src = src
-        document.body.appendChild(script)
+        if (dir != '.DS_Store') {
+            let script = document.createElement('script')
+            let src = '../plugins/' + dir + '/index.js'
+            log(src)
+            script.src = src
+            document.body.appendChild(script)
 
-        script.onload = (arg)=>{
-            log(arg)
-            let plugin = pluginByDir[dir]
-            if (plugin.config().url) {
-                let tab = onScriptLoad({
-                    index: index,
-                    dir: dir,
-                    plugin:plugin
-                })
-                
-                let i = index++
-                tab.onclick = ()=>{
-                    showTab(i)
+            script.onload = (arg)=>{
+                log(arg)
+                let plugin = pluginByDir[dir]
+                if (plugin.config().url && plugin.config().active) {
+                    let tab = onScriptLoad({
+                        index: index,
+                        dir: dir,
+                        plugin: plugin
+                    })
+
+                    let i = index++
+                    tab.onclick = ()=>{
+                        showTab(i)
+                    }
+
                 }
-                
             }
+
         }
 
     }
@@ -61,9 +70,11 @@ ipcRenderer.on('plugin-message', (event,sortedDirs)=>{
 ipcRenderer.on('main-log', (event,mes)=>{
     console.log(mes.join(' '))
     try {
-        addLog(div('console-view'), mes)
+        addLog({
+            messages: mes
+        })
     } catch (error) {
-        log(error)
+        err(error)
     }
 }
 );
@@ -71,9 +82,11 @@ ipcRenderer.on('main-log', (event,mes)=>{
 ipcRenderer.on('preload-log', (event,mes)=>{
     console.log(mes.join(' '))
     try {
-        addLog(div('console-view'), mes)
+        addLog({
+            messages: mes
+        })
     } catch (error) {
-        log(error)
+        err(error)
     }
 }
 );

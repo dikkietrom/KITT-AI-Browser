@@ -44,14 +44,13 @@ function reqJson(event, txt, instruction,dataModel) {
         ).catch(error=>{
             event.sender.send('plugin-reply', `gpt-edit-main Error: ${error.message}`)
 
-            log(error)
+            err(error)
         }
         );
 
     } catch (error) {
-        let m = `gpt-edit-main Error: ${error.message}`
         event.sender.send('plugin-reply', m)
-        log(m)
+        err(error) 
     }
 
 }

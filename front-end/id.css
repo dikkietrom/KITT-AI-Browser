@@ -1,4 +1,29 @@
+#avatar {
+    overflow: hidden;
+    background-position: center;
+    background-size:contain;
+    background-image:url('0_0.png');
+    opacity:1;
+    background-repeat: no-repeat;
+}  
+#console-view {
+    font-size: 0.75em;
+    min-height: 10em;
+    max-height: 10em;
+    overflow: auto;
+    width: inherit;
+}
 
+
+#layout {width: 100%;height: 100%;}
+
+#models {
+    z-index: 1000;
+    position: relative;
+}
+
+
+  
 #model-help-image {
     position: fixed;
     top: 0;
@@ -8,7 +33,9 @@
 }
 
 
-#models {
-    z-index: 1000;
-    position: relative;
+#web-gl  {
+    width:100%;
+    height: 10em;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }

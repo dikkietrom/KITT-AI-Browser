@@ -17,9 +17,7 @@ class Youtube extends Plugin {
             pluginReply('')
 
         } catch (error) {
-            let m = `Youtube-api-hack Error: ${error.message}`
-
-            log(m)
+            err(error) 
         }
     }
     config() {
@@ -27,6 +25,7 @@ class Youtube extends Plugin {
             name: 'Youtube',
             description: 'Youtube',
             role: 'worker',
+            active: false,
             url: "https://youtube.com"
         }
     }

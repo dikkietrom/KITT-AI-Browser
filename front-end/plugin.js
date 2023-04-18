@@ -1,20 +1,20 @@
-
 const pluginByName = {}
 const pluginByDir = {}
+const pluginById = {}
 class Plugin {
     constructor(arg) {
         pluginByName[this.constructor.name] = this
-        
+        pluginById[this.config().id]=this
         try {
             throw new Error()
         } catch (error) {
             let dir = error.stack
             let part = '/KITT/plugins'
-            dir = dir.substring(dir.indexOf(part)+part.length+1)
-            dir = dir.substring(0,dir.indexOf('/'))
-            
-            pluginByDir[dir]=this
-            log('dir',dir)
+            dir = dir.substring(dir.indexOf(part) + part.length + 1)
+            dir = dir.substring(0, dir.indexOf('/'))
+
+            pluginByDir[dir] = this
+            log('dir', dir)
         }
 
         //add it to the plugin select
@@ -24,10 +24,10 @@ class Plugin {
             sel.appendChild(opt)
             opt.innerHTML = this.constructor.name
             opt.value = this.constructor.name
-            if(this.config().role=='CEO'){
+            if (this.config().role == 'CEO') {
                 opt.selected = true
             }
-        }catch (error) {
+        } catch (error) {
             err(error)
         }
 
@@ -39,10 +39,11 @@ class Plugin {
     config() {
         return {}
     }
-    onBeforeSendHeaders(json){
-        
+    exec(){
+        throw new Error('exec not implemented for ' + this.config().name)
     }
-    send(key,message){
+    onBeforeSendHeaders(json) {}
+    send(key, message) {
         this.webView.send(key, message)
     }
 }
@@ -67,7 +68,7 @@ function pluginReply(token) {
     try {
         log('plugin response : ', token)
 
-        let td = newPluginReplyRow(pluginImpl().constructor.name, 'plugin-id-ai')
+        let td = newPluginReplyRow(pluginImpl().constructor.name, 'plugin-id')
         pluginImpl().listen(token, td)
 
         newInp()
@@ -87,7 +88,7 @@ function newPluginReplyRow(who, cls) {
         }
 
     }
-    td.className = 'plugin-id ' + (cls ? cls : '')
+    td.className = '' + (cls ? cls : '')
     tr.appendChild(td)
     td.innerHTML = `${who} : `
 
@@ -100,7 +101,7 @@ function newPluginReplyRow(who, cls) {
 }
 function newInp(container) {
 
-    let td = newPluginReplyRow('Me')
+    let td = newPluginReplyRow('Me', 'chat-id')
 
     let inp = document.createElement('textarea')
     inp.className = 'speak'
@@ -122,20 +123,49 @@ function pluginImpl() {
 }
 function plugin() {
     log('start')
-    get('console-view').innerHTML=''
+    get('console-view').innerHTML = ''
     let s = span(currentInp.parentElement)
     s.style.cursor = 'pointer'
     s.innerHTML = currentInp.value
-     s.onclick = function() {
-         currentInp.value = this.innerHTML
-         currentInp.focus()
-     }
-
+    s.onclick = function() {
+        currentInp.value = this.innerHTML
+        currentInp.focus()
+    }
     currentInp.outerHTML = ''
     ipcRenderer.send('tts-kitt', selVal('voices'))
-    pluginImpl().speak()
+    let message = new Message()
+    message.to=['ggl']
+    message.content=currentInp.value
+    message.from='user'
+    message.send()
 }
 
-ipcRenderer.on('tts-d-id-stream', (event, arg) => {
-    alert(arg)
-})
+function codeBlocks(arg) {
+    let index = message.indexOf('```')
+    let code = ''
+    let ret = []
+    if (index != -1) {
+
+        while (index != -1) {
+            let d = document.createElement('span')
+            d.innerHTML = '[code return]'
+            container.appendChild(d)
+            code = message.substring(index + 3, message.indexOf('```', index + 3))
+            message = message.substring(0, index) + message.substring(message.indexOf('```', index + 3) + 3)
+            index = message.indexOf('```')
+            d.innerHTML += '<pre onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>' + code + '</pre>'
+            code = code.trim()
+            if (code.indexOf('python' == 0)) {
+                ret.push( new Error("cannot directly execute python, include writing the python and executing it"))
+            } else{
+                 ret.push(code)
+            }
+
+
+        }
+    } else {
+        return null
+    }
+    return ret
+
+}

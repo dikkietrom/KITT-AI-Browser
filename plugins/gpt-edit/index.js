@@ -20,7 +20,7 @@ class GptEdit extends Plugin {
         } catch (error) {
             let m = `gpt-edit Error: ${error.message}`
              
-            log(m) 
+            err(error) 
         }
     }
     config() {

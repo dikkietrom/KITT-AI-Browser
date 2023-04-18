@@ -29,19 +29,20 @@ function init(lg) {
 
            
 
-        } catch (err) {
-            err('Error writing WAV file:', err);
-            err.message = 'Error writing WAV file: ' + err.message;
-            event.sender.send('mic-reply', err);
+        } catch (e) {
+            e.message = 'Error writing WAV file: ' + e.message;
+            err( e);
+
+            event.sender.send('mic-reply', e);
         }
         try {
 
             sttImpl.transcribe(event)           
 
-        } catch (err) {
-            err('Error transcribe :', err);
-            err.message = 'Error transcribe  : ' + err.message;
-            event.sender.send('mic-reply', err);
+        } catch (e) {
+            e.message = 'Error transcribe  : ' + e.message;
+            err('Error transcribe :', e);
+            event.sender.send('mic-reply', e);
         }
         
     }
@@ -51,10 +52,10 @@ function init(lg) {
         try {
             rec = false
             event.sender.send('mic-stop-reply','rec stopped');
-        } catch (err) {
-            err('Error mic-stop :', err);
-            err.message = 'Error mic-stop : ' + err.message;
-            event.sender.send('mic-stop-reply', err);
+        } catch (e) {
+            e.message = 'Error mic-stop : ' + e.message;
+            err(e);
+            event.sender.send('mic-stop-reply', e);
         }
     }
     );
@@ -102,9 +103,8 @@ function init(lg) {
         }
         );
 
-     } catch (err) {
-        err('Error start whisper server:', err);
-        //log(err)
+     } catch (e) {
+        err( e);
      }
 
 
@@ -210,9 +210,9 @@ class WhisperMain extends SttMain {
             client.write('sst-request');
 
         } catch (error) {
-            let m = `wisper outer catch Error: ${error.message}`
-            event.sender.send('stt-reply', m)
-            log(m)
+            error.message = `wisper outer catch Error: ${error.message}`
+            event.sender.send('stt-reply', error.message)
+            err(error)
         }
 
     }

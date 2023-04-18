@@ -60,7 +60,7 @@ triggerEnterKeyOnTextarea()
 
     txtArea().dispatchEvent(inputEvent);
   } catch(e) {
-    err('Textarea not found',e);
+    err(e);
   }
 }
 

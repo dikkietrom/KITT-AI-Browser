@@ -60,7 +60,7 @@ ipcMain.on('gpt-models', (event)=>{
     try {
         event.sender.send('gpt-models-reply', modelsData)
     } catch (error) {
-        log(error)
+        err(error)
     }
 }
 );
@@ -99,14 +99,13 @@ function reqJson(event, txt, dataModel) {
         ).catch(error=>{
             event.sender.send('plugin-reply', `gpt-main Error: ${error.message}`)
 
-            log(error)
+            err(error)
         }
         );
 
     } catch (error) {
-        let m = `gpt-main Error: ${error.message}`
         event.sender.send('plugin-reply', m)
-        log(m)
+        err(error) 
     }
 
 }

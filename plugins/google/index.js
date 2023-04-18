@@ -10,37 +10,42 @@ class Google extends Plugin {
     speak() {
 
         try {
-            log('Google-api-hack',currentInp.value)
-            
+            log('Google-api-hack', currentInp.value)
+
             currentInput = currentInp.value.trim()
             this.webView.send('send-input-google', currentInput)
             pluginReply('')
 
         } catch (error) {
-            let m = `mj-api-hack Error: ${error.message}`
 
-            log(m)
+            err(error)
         }
     }
     config() {
         return {
+            id: 'ggl',
             name: 'Google',
             description: 'Google',
             role: 'worker',
+            active: true,
             url: "https://google.com/search?q=init"
         }
     }
+    search(txt) {
+        this.send('send-input-google', txt)
+    }
+    exec(message){
+        return `search result : ${message.content}  `
+    }
 }
 ipcRenderer.on('plugin-google-reply', (event,arg)=>{
-        let obj = JSON.parse(arg)
-        let message = obj.input ? obj.input.trim() : ''
-        if(message){
-             currentInp.value = "please read and summarize and give the best possible reply : " + message
-             plugin()
-        }
-})
-
-function search(txt) {
-    google.send('send-input-google', txt)
+    let obj = JSON.parse(arg)
+    let message = obj.input ? obj.input.trim() : ''
+    if (message) {
+        currentInp.value = "please read and summarize and give the best possible reply : " + message
+        plugin()
+    }
 }
+)
+
 let google = new Google()

@@ -38,14 +38,13 @@ ipcMain.on('plugin-dall-e', (event,arg)=>{
         ).catch(error=>{
             event.sender.send('plugin-reply', `dall-e-main Error: ${error.message}`)
 
-            log(error)
+            err(error)
         }
         );
 
     } catch (error) {
-        let m = `dall-e-main Error: ${error.message}`
         event.sender.send('plugin-reply', m)
-        log(m)
+        err(error)
     }
 
 }

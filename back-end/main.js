@@ -78,14 +78,15 @@ function createWindow() {
         if (details.uploadData) {
             try {
 
-                const buffer = Array.from(details.uploadData)[0].bytes.toString();
+                const buffer = details.uploadData.lenght ?  Array.from(details.uploadData)[0].bytes.toString() : ''
                 let obj = {}
+                obj.requestHeaders=details.requestHeaders
                 obj.buffer = buffer
                 obj.url = details.referrer
                 log.send('onBeforeSendHeaders', obj)
 
             } catch (error) {
-                log(error)
+                err(error)
             }
         }
         if (callback) {
@@ -115,7 +116,7 @@ app.whenReady().then(()=>{
     try {
         autoUpdater.checkForUpdatesAndNotify();
     } catch (error) {
-        log(error)
+        err(error)
     }
     try {
         // Get the default menu
@@ -132,7 +133,7 @@ app.whenReady().then(()=>{
         // Set the updated menu to the application menu
         Menu.setApplicationMenu(menu);
     } catch (error) {
-        log(error)
+        err(error)
     }
 
     //try init

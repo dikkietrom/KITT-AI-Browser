@@ -17,9 +17,7 @@ class OpenAssistant extends Plugin {
             pluginReply('')
 
         } catch (error) {
-            let m = `mj-api-hack Error: ${error.message}`
-
-            log(m)
+            err(error) 
         }
     }
     config() {

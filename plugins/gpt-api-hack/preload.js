@@ -38,7 +38,7 @@ document.addEventListener(
     });
     txtArea().dispatchEvent(enterKeyEvent);
   } catch(e) {
-    err('Textarea not found',e);
+    err(e);
   }
 }
 let observer 
@@ -105,7 +105,7 @@ function initMutationObserver() {
  
   } catch(e) {
     // statements
-    log(e);
+    err(e);
   }
 }
 function hasTextContent(element) {

@@ -3,7 +3,7 @@ const robot = require('robotjs');
 const path = require('path');
 const fs = require('fs');
 const {spawn, exec} = require('child_process');
-const {err} = require(path.join(__dirname, '..','lib/shared.js'));
+const {err} = require(path.join(__dirname, '..', 'lib/shared.js'));
 
 function init(lg) {
     log = lg
@@ -17,7 +17,6 @@ ipcMain.on('plugin-request', (event,arg)=>{
 }
 )
 
-
 ipcMain.on('debug', ()=>{
     log.webContents.openDevTools();
 
@@ -29,7 +28,7 @@ ipcMain.on('debug-stop', ()=>{
 }
 )
 
- ipcMain.on('debug-main', ()=>{
+ipcMain.on('debug-main', ()=>{
 
     //    chromeMainDebug = spawn('open', ['-a', 'Google Chrome', 'chrome://inspect']);
     //      chromeMainDebug.on('exit', (code) => {
@@ -72,7 +71,6 @@ ipcMain.on('preload-log', (event,mes)=>{
 }
 );
 
-
 //initialize plugins by getting the files from the plugins folder
 async function initPlugins() {
 
@@ -86,9 +84,27 @@ async function initPlugins() {
 
     for (let i = 0; i < sortedDirs.length; i++) {
         const dir = sortedDirs[i];
+        if (dir == '.DS_Store') {
+            continue
+        }
         log('initPlugins', dir);
-        const plugin = require(path.join(pluginPath, dir, 'main.js'));
-        await plugin(log);
+        try {
+
+            // Path to check
+            const file = path.join(pluginPath, dir, 'main.js')
+
+            // Check if path exists
+            if (fs.existsSync(file)) { 
+                const plugin = require(file); 
+                await plugin(log); 
+            } else{
+                log('[INFO] : ' + file + ' does not exist')
+            }
+            
+
+        } catch (error) {
+            err(error)
+        }
     }
 
     log.send('plugin-message', sortedDirs);

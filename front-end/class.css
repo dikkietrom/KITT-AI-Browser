@@ -1,35 +1,116 @@
 .button-bar {
     margin-top: 10px;
-     display: flex;
+    display: flex;
 }
 
-.log-word , .log-info{
-    background:#ddd;
-    padding-right:.5em;
-    text-shadow:none;
-    color:black;
-    width: calc(50% - 1em);
-    display: inline-block;
-    overflow: hidden;
+
+
+.chat-id , .plugin-id {
+    background: #ff000042;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    height: 1em;
+    text-align: right;
+    padding: 1em;
+    border-radius: 1em;
 }
-.log-info {
-    background:#f77;
-    display: inline-block;
-    font-size: .8em;
+
+
+.chat-id-ai {
+    background: #ff7f0042;
 }
+
+.chat-reply , .plugin-reply {
+    background: #000a;
+    white-space: normal;
+    padding: 1em;
+}
+.command {
+    left: 0px;
+    top: 0px;
+    min-height: 2em;
+    drop-shadow: 10 10 0.5em #ffff;
+    border: 0.5px solid white;
+}
+
+.command:hover {
+}
+
 .fix {
 }
+.log-error > .log-info {
+    background:white;
+    color:black;
+    font-weight:bold;
+}
+.log-error > .log-word {
+    background:#f00;
+    color:white;
+    font-weight:bold;
+}
+.log-line , .log-line-open {
+    text-shadow: none;
+    overflow: hidden;
+    height: 1em;
+    color: black;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fffd;
+    display: inline-block;
+    width: calc(100% - 1em);
+    vertical-align: top;
+    text-overflow: ellipsis;
+}
 
- 
+.log-line-open {
+    overflow: visible;
+    height: fit-content;
+    white-space: break-spaces;
+    padding: 0.3em;
+    border: 0.1em solid black;
+    display:block;
+}
+.log-line-open > .log-info{
+    width:calc(100% - 1em);
+}
+.log-info:hover{
+    width:100%
+}
+.log-word , .log-info {
+    background: #ddd;
+    padding-right: .5em;
+    width: 50%;
+    display: inherit;
+    overflow: inherit;
+    white-space: inherit;
+    text-overflow: inherit;
+    height: inherit;
+    cursor: inherit;
+}
 
+.log-info {
+    background: #f77;
+    font-size: .8em;
+}
+
+.log-word {
+    display: inline;
+}
+
+
+.plugin-id {
+    background: none;
+}
 .speak {
     width: calc(100% - 1em);
     height: 2em;
     background: #f0f8ff54;
 }
+
+.speak:focus-visible {
+    border: 0.5px solid #000;
+    outline: 2px dotted #fff8;
+    drop-shadow: 10 10 0.5em #ffff;
+}
+
 .tab {
     border: none;
     padding: 10px;
@@ -42,15 +123,16 @@
     border-bottom-right-radius: 0;
 }
 
-
 .tab.active {
     background-color: #fff;
     color: #f00;
     text-shadow: none;
     text-decoration: underline;
 }
-.tab-bar {padding-left: 1em;}
 
+.tab-bar {
+    padding-left: 2em;
+}
 
 .tab-content {
     display: none;
@@ -62,5 +144,6 @@
 
 .tab-content.active {
     display: block;
+    margin: 1em;
+    margin-top: 0;
 }
-

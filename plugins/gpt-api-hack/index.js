@@ -17,16 +17,16 @@ class Gpt4apiHack extends Plugin {
             pluginReply('')
 
         } catch (error) {
-            let m = `gpt4-api-hack Error: ${error.message}`
 
-            log(m)
+            err(error)
         }
     }
     config() {
         return {
             name: 'Gpt4ApiHack',
             description: 'Gpt4ApiHack',
-            role: 'CEO',
+            role: 'xCEO',
+            active:true,
             url: "https://chat.openai.com/"
         }
     }
@@ -69,8 +69,10 @@ class Gpt4apiHack extends Plugin {
                             code = '1==true'
                         }else if (code.indexOf('bash') == 0) {
                             ipcRenderer.send('bash', code.substring(4))
+                            currentInp.value = code
                             return
                         }else if (code.indexOf('#!/bin/bash') == 0) {
+                            //currentInp.value = code
                             ipcRenderer.send('bash', code)
                             return
                         }
@@ -79,15 +81,14 @@ class Gpt4apiHack extends Plugin {
                             //eval('try{x=0/0;' + code + '}catch(e){log(e);alert(e.message); window.currentInput.value = e.message}')
                             eval(code)
                         } catch (e) {
-                            log(e)
+                            err(e)
                             currentInp.value = e.message
                             //setTimeout('plugin()', 500);
                         }
                     }
                 } else {
-                    let d = document.createElement('span')
+                    let d = span(container)
                     d.innerHTML = message
-                    container.appendChild(d)
                     //event.sender.send('plugin-gpt4-api-hack-reply', message);
                     log('plugin-gpt4-api-hack-reply selVal(\'voices\').value : ', selVal('voices'));
                     if (selVal('voices') ) {
@@ -100,7 +101,7 @@ class Gpt4apiHack extends Plugin {
 
             }
         } catch (error) {
-            log(error)
+            err(error)
         }
 
     }

@@ -18,13 +18,14 @@ class Gpt extends Plugin {
         } catch (error) {
             let m = `gpt Error: ${error.message}`
              
-            log(m) 
+            err(error) 
         }
     }
     config() {
         return {
             name: 'Gpt API',
             role: 'manager',
+            active: true,
             description: 'Gpt API'
         }
     }

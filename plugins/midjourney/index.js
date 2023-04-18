@@ -17,9 +17,7 @@ class MjApiHack extends Plugin {
             pluginReply('')
 
         } catch (error) {
-            let m = `mj-api-hack Error: ${error.message}`
-
-            log(m)
+            err(error) 
         }
     }
     config() {
@@ -28,6 +26,7 @@ class MjApiHack extends Plugin {
             description: 'MjApiHack',
             role: 'worker',
             skill: 'tti',
+            active:false,    
             url: "https://discord.com/channels/@me/1093057901330968647"
         }
     }
