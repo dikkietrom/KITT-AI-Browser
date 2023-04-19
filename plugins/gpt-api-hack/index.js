@@ -108,14 +108,7 @@ class Gpt4apiHack extends Plugin {
 }
 let currentInput
 let container
-//bash-reply
-ipcRenderer.on('bash-reply', (event,arg)=>{
-    // Send input data to the renderer process
-    log('bash-reply', arg)
-    currentInp.value = arg
-    //plugin()
 
-})
 ipcRenderer.on('plugin-gpt4-api-hack-front', (event,arg)=>{
     // Send input data to the renderer process
     log('plugin-gpt4-api-hack-main ipcRenderer', arg)

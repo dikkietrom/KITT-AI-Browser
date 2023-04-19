@@ -1,4 +1,4 @@
-ipcRenderer.on('onBeforeSendHeaders', (event,arg)=>{
+ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg){
     // log('onBeforeSendHeaders', arg)
 
     const domain = extractDomain(arg.url);
@@ -9,7 +9,9 @@ ipcRenderer.on('onBeforeSendHeaders', (event,arg)=>{
             let obj = {}
             let buffers = arg.buffer.split('\n')
             for (let index = 0; index < buffers.length; index++) {
-                obj[index] = JSON.parse(buffers[index])
+                if (buffers[index]) {
+                    obj[index] = JSON.parse(buffers[index])
+                }
 
             }
             plugin.onBeforeSendHeaders(obj)
@@ -19,7 +21,19 @@ ipcRenderer.on('onBeforeSendHeaders', (event,arg)=>{
     }
 }
 )
+ipcRenderer.on('plugin-reply', (event,token)=>{
+    pluginReply(token)
 
+}
+);
+//bash-reply
+ipcRenderer.on('bash-reply', (event,arg)=>{
+    // Send input data to the renderer process
+    log('bash-reply', arg)
+    currentInp.value = arg
+    //plugin()
+
+})
 ipcRenderer.on('dev-tools-closed', (event,arg)=>{
     let but = document.getElementById('front-debug')
     but.innerHTML = 'Debug'
@@ -43,7 +57,6 @@ ipcRenderer.on('plugin-message', (event,sortedDirs)=>{
             document.body.appendChild(script)
 
             script.onload = (arg)=>{
-                log(arg)
                 let plugin = pluginByDir[dir]
                 if (plugin.config().url && plugin.config().active) {
                     let tab = onScriptLoad({

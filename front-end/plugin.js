@@ -4,7 +4,7 @@ const pluginById = {}
 class Plugin {
     constructor(arg) {
         pluginByName[this.constructor.name] = this
-        pluginById[this.config().id]=this
+        pluginById[this.config().id] = this
         try {
             throw new Error()
         } catch (error) {
@@ -39,7 +39,7 @@ class Plugin {
     config() {
         return {}
     }
-    exec(){
+    exec(message) {
         throw new Error('exec not implemented for ' + this.config().name)
     }
     onBeforeSendHeaders(json) {}
@@ -48,11 +48,51 @@ class Plugin {
     }
 }
 
-ipcRenderer.on('plugin-reply', (event,token)=>{
-    pluginReply(token)
+function plugin() {
+    log('start')
+    get('console-view').innerHTML = ''
+    let s = span(currentInp.parentElement)
+    s.style.cursor = 'pointer'
+    s.innerHTML = currentInp.value
+    s.onclick = function() {
+        currentInp.value = this.innerHTML
+        currentInp.focus()
+    }
+    currentInp.outerHTML = ''
+    ipcRenderer.send('tts-kitt', selVal('voices'))
+    let message = new Message()
+    let content = currentInp.value.trim()
+    let toc = 0
+    if (content.charAt(0) == '/') {
+        let spaceIndex = content.indexOf(' ')
+        let pluginId = content.substring(1, spaceIndex == -1 ? content.length  : spaceIndex )
+        message.to[0] = pluginById[pluginId]
+        content = spaceIndex == -1 ? '' : content.substring(spaceIndex).trim()
+    } else {
+        message.to[0] = pluginById['ceo']
 
+    }
+
+    message.content = content
+
+    message.from = pluginById['user']
+    message.send()
 }
-);
+
+function pluginReply(message) {
+    try {
+        log('plugin response : ', message)
+        let pluginFrom = message.from
+        let td = newPluginReplyRow(pluginFrom.config().name, 'plugin-id')
+        message.to[0].listen(message, td)
+
+        newInp()
+
+    } catch (error) {
+        err(error)
+    }
+}
+
 function pluginReturn(append) {
     let ret = document.getElementById('layout')
     if (append.tagName != 'TR') {
@@ -64,19 +104,8 @@ function pluginReturn(append) {
     }
 
 }
-function pluginReply(token) {
-    try {
-        log('plugin response : ', token)
 
-        let td = newPluginReplyRow(pluginImpl().constructor.name, 'plugin-id')
-        pluginImpl().listen(token, td)
 
-        newInp()
-
-    } catch (error) {
-        err(error)
-    }
-}
 function newPluginReplyRow(who, cls) {
     let tr = document.createElement('tr')
 
@@ -121,24 +150,6 @@ function pluginImpl() {
     let sel = document.getElementById('plugin-impl')
     return pluginByName[sel.value]
 }
-function plugin() {
-    log('start')
-    get('console-view').innerHTML = ''
-    let s = span(currentInp.parentElement)
-    s.style.cursor = 'pointer'
-    s.innerHTML = currentInp.value
-    s.onclick = function() {
-        currentInp.value = this.innerHTML
-        currentInp.focus()
-    }
-    currentInp.outerHTML = ''
-    ipcRenderer.send('tts-kitt', selVal('voices'))
-    let message = new Message()
-    message.to=['ggl']
-    message.content=currentInp.value
-    message.from='user'
-    message.send()
-}
 
 function codeBlocks(arg) {
     let index = message.indexOf('```')
@@ -156,11 +167,10 @@ function codeBlocks(arg) {
             d.innerHTML += '<pre onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>' + code + '</pre>'
             code = code.trim()
             if (code.indexOf('python' == 0)) {
-                ret.push( new Error("cannot directly execute python, include writing the python and executing it"))
-            } else{
-                 ret.push(code)
+                ret.push(new Error("cannot directly execute python, include writing the python and executing it"))
+            } else {
+                ret.push(code)
             }
-
 
         }
     } else {

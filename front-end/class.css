@@ -45,7 +45,10 @@
     background:#f00;
     color:white;
     font-weight:bold;
+    
+     
 }
+
 .log-line , .log-line-open {
     text-shadow: none;
     overflow: hidden;

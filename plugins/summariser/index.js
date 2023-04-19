@@ -3,12 +3,9 @@ class Summariser extends Plugin {
         super(arg)
         this.conversation = ''
     }
-    listen(message, _container) {
-             
-       
-    }
-    speak(message) { 
-         pluginReply(message)   
+    listen(message, _container) {}
+    speak(message) {
+        pluginReply(message)
     }
     config() {
         return {
@@ -18,12 +15,11 @@ class Summariser extends Plugin {
             role: 'worker',
             active: true,
         }
-    } 
-    exec(message){
-        this.speak(message.content)
+    }
+    exec(message) {
+        return `search result : ${message.content}  `
+
     }
 }
- 
+
 new Summariser()
-
-

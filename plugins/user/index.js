@@ -4,11 +4,11 @@ class User extends Plugin {
         this.conversation = ''
     }
     listen(message, _container) {
-             
-       
+        _container.innerText = message.content
+
     }
-    speak(message) { 
-         pluginReply(message)   
+    speak(message) {
+        pluginReply(message)
     }
     config() {
         return {
@@ -18,12 +18,10 @@ class User extends Plugin {
             role: 'user',
             active: true,
         }
-    } 
-    exec(message){
-        this.speak(message.content)
+    }
+    exec(message) {
+        return message.content
     }
 }
- 
+
 new User()
-
-

@@ -31,18 +31,23 @@ class Google extends Plugin {
             url: "https://google.com/search?q=init"
         }
     }
-    search(txt) {
-        this.send('send-input-google', txt)
-    }
-    exec(message){
-        return `search result : ${message.content}  `
+    exec(message) {
+        let result = ''
+
+        this.webView.send('send-input-google', message.content)
+        .then( alert('1') )
+            
+
+        
+        return  "searching for \"" + message.content + "\""
     }
 }
+
 ipcRenderer.on('plugin-google-reply', (event,arg)=>{
     let obj = JSON.parse(arg)
     let message = obj.input ? obj.input.trim() : ''
     if (message) {
-        currentInp.value = "please read and summarize and give the best possible reply : " + message
+        //currentInp.value = "please read and summarize and give the best possible reply : " + message
         plugin()
     }
 }

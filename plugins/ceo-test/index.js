@@ -14,11 +14,15 @@ class CeoTest extends Plugin {
         return {
             name: 'CeoTest',
             description: 'CeoTest',
+            id:'ceo',
             role: 'CEO',
             active: true,
             url: "../plugins/ceo-test/index.html"
         }
     } 
+     exec(){
+         return "got message"
+     }
 }
  
 new CeoTest()
