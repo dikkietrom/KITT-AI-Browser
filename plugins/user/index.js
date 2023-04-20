@@ -1,15 +1,8 @@
 class User extends Plugin {
     constructor(arg) {
         super(arg)
-        this.conversation = ''
-    }
-    listen(message, _container) {
-        _container.innerText = message.content
+     }
 
-    }
-    speak(message) {
-        pluginReply(message)
-    }
     config() {
         return {
             name: 'User',

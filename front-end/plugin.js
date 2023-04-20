@@ -3,6 +3,8 @@ const pluginByDir = {}
 const pluginById = {}
 class Plugin {
     constructor(arg) {
+        this.message = null
+
         pluginByName[this.constructor.name] = this
         pluginById[this.config().id] = this
         try {
@@ -32,23 +34,24 @@ class Plugin {
         }
 
     }
-    speak(message) {}
-    listen(message, container) {
-        container.innerHTML += message
-    }
+
     config() {
-        return {}
+        throw new Error('config not implemented for ' + this.config().name)
     }
     exec(message) {
         throw new Error('exec not implemented for ' + this.config().name)
     }
-    onBeforeSendHeaders(json) {}
+    onBeforeSendHeaders(json) {
+        throw new Error('onBeforeSendHeaders not implemented for ' + this.config().name)
+
+    }
+
     send(key, message) {
         this.webView.send(key, message)
     }
 }
 
-function plugin() {
+function run() {
     log('start')
     get('console-view').innerHTML = ''
     let s = span(currentInp.parentElement)
@@ -65,12 +68,30 @@ function plugin() {
     let toc = 0
     if (content.charAt(0) == '/') {
         let spaceIndex = content.indexOf(' ')
-        let pluginId = content.substring(1, spaceIndex == -1 ? content.length  : spaceIndex )
+        let pluginId = content.substring(1, spaceIndex == -1 ? content.length : spaceIndex)
         message.to[0] = pluginById[pluginId]
         content = spaceIndex == -1 ? '' : content.substring(spaceIndex).trim()
     } else {
         message.to[0] = pluginById['ceo']
+    }
+    message.chain.push(message.to[0])
 
+    let chainPos = content.indexOf('/')
+    let chainSpec = chainPos == -1 ? '' : content.substring(chainPos)
+
+    content = content.indexOf('/') == -1 ? content : content.substring(0, content.indexOf('/') - 1)
+
+    if (chainPos != -1) {
+
+        let chain = chainSpec.split('/')
+        for (let index = 0; index < chain.length; index++) {
+            let pluginId = chain[index]
+            if (pluginId != chain && pluginId) {
+                message.chain.push(pluginById[pluginId])
+                message.to.push(pluginById[pluginId])
+            }
+
+        }
     }
 
     message.content = content
@@ -82,51 +103,38 @@ function plugin() {
 function pluginReply(message) {
     try {
         log('plugin response : ', message)
-        let pluginFrom = message.from
-        let td = newPluginReplyRow(pluginFrom.config().name, 'plugin-id')
-        message.to[0].listen(message, td)
+        let pluginTo = message.to[0]
+        let plgn = pluginTo ? pluginTo : message.chain[message.chain.length - 1]
 
-        newInp()
+        let replyTd = newPluginReplyRow(plgn.config().name, 'plugin-id')
+        let container = div(replyTd)
+
+        container.innerHTML = message.content
 
     } catch (error) {
         err(error)
     }
 }
 
-function pluginReturn(append) {
-    let ret = document.getElementById('layout')
-    if (append.tagName != 'TR') {
-        alert('pluginReturn() expects a TR element')
-        return
-    }
-    if (append) {
-        ret.appendChild(append)
-    }
-
-}
-
-
 function newPluginReplyRow(who, cls) {
-    let tr = document.createElement('tr')
-
-    tr.height = 0
-    let td = document.createElement('td')
-    td.onclick = function(event) {
-        if (tr.getElementsByClassName('speak').length == 0) {
-            tr.style.display = 'none'
+    let row = tr('layout')
+    row.height = 0
+    let cell = td(row)
+    cell.onclick = function(event) {
+        if (row.getElementsByClassName('speak').length == 0) {
+            row.style.display = 'none'
         }
 
     }
-    td.className = '' + (cls ? cls : '')
-    tr.appendChild(td)
-    td.innerHTML = `${who} : `
+    cell.className = '' + (cls ? cls : '')
 
-    td = document.createElement('td')
-    td.className = 'plugin-reply'
-    td.colSpan = 2
-    tr.appendChild(td)
-    pluginReturn(tr)
-    return td
+    cell.innerHTML = `${who} : `
+
+    cell = td(row)
+    cell.className = 'plugin-reply'
+    cell.colSpan = 2
+
+    return cell
 }
 function newInp(container) {
 
@@ -160,7 +168,7 @@ function codeBlocks(arg) {
         while (index != -1) {
             let d = document.createElement('span')
             d.innerHTML = '[code return]'
-            container.appendChild(d)
+            arg.container.appendChild(d)
             code = message.substring(index + 3, message.indexOf('```', index + 3))
             message = message.substring(0, index) + message.substring(message.indexOf('```', index + 3) + 3)
             index = message.indexOf('```')

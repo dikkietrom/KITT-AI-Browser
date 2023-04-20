@@ -27,7 +27,7 @@ ipcRenderer.on('stt-reply', (event,mes)=>{
 
 
     currentInp.value += mes
-    plugin()
+    run()
 
 }
 )

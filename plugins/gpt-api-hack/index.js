@@ -1,26 +1,9 @@
+let currentInput
 class Gpt4apiHack extends Plugin {
     constructor(arg) {
         super(arg)
-        this.conversation = ''
     }
-    listen(message, _container) {
 
-        container = _container
-    }
-    speak() {
-
-        try {
-            //log('gpt4-api-hack',currentInp.value) 
-
-            currentInput = currentInp.value.trim()
-            this.webView.send('send-input', currentInput)
-            pluginReply('')
-
-        } catch (error) {
-
-            err(error)
-        }
-    }
     config() {
         return {
             name: 'Gpt4ApiHack',
@@ -78,12 +61,11 @@ class Gpt4apiHack extends Plugin {
                         }
                         try {
                             log('plugin-gpt4-api-hack-reply eval : ', code);
-                            //eval('try{x=0/0;' + code + '}catch(e){log(e);alert(e.message); window.currentInput.value = e.message}')
                             eval(code)
                         } catch (e) {
                             err(e)
                             currentInp.value = e.message
-                            //setTimeout('plugin()', 500);
+                            //setTimeout('run()', 500);
                         }
                     }
                 } else {
@@ -106,8 +88,7 @@ class Gpt4apiHack extends Plugin {
 
     }
 }
-let currentInput
-let container
+
 
 ipcRenderer.on('plugin-gpt4-api-hack-front', (event,arg)=>{
     // Send input data to the renderer process

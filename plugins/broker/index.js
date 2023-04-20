@@ -1,12 +1,8 @@
 class Broker extends Plugin {
     constructor(arg) {
         super(arg)
-        this.conversation = ''
     }
-    listen(message, _container) {}
-    speak(message) {
-        pluginReply(message)
-    }
+ 
     config() {
         return {
             name: 'Broker',
@@ -20,21 +16,19 @@ class Broker extends Plugin {
     exec(message) {
         try {
             if (!message.to.length) {
-                throw new Error('Message has no receiver')
-            }
-            let pluginTo = message.to[0]
-            if (!pluginTo) {
-                throw new Error('Message has no receiver')
-            }
-            message.content = pluginTo.exec(message)
-            //next to?
-            if (message.to.length > 1) {
-                message.to.shift()
-                message.send()
-            } else {
                 message.to = [message.from]
-                message.from = pluginTo
+                message.from = message.chain[message.chain.length - 1]
                 pluginReply(message)
+                newInp()
+                return
+            }
+            let screenMessage = message.to.shift().exec(message)
+            message.content = screenMessage
+            pluginReply(message)
+            if (!message.to.length) {
+                 newInp()
+            }else{
+                message.send()
             }
 
         } catch (error) {
@@ -43,6 +37,7 @@ class Broker extends Plugin {
             message.content = error.message
             message.from = this
             pluginReply(message)
+            newInp()
         }
     }
 }
@@ -50,6 +45,7 @@ class Message {
     constructor(arg) {
         this.id = generateUniqueId()
         this.to = []
+        this.chain = []
         this.from = null
         this.content = null
     }

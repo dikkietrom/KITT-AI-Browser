@@ -10,7 +10,6 @@ function init() {
     }
 
     const randomNum = Math.random();
-    log('randomNum', randomNum);
 
     if (randomNum > 0.5) {
         document.body.style.backgroundImage = "url('kitt-back.png')";
@@ -44,13 +43,13 @@ function setPreset(sel) {
         currentInp.value = ``
         return
     }
-    plugin()
+    run()
 
 }
 function textInputListener(input, event) {
     try {
         if (event.key === 'Enter') {
-            plugin()
+            run()
             event.preventDefault();
             return false
         }
@@ -164,8 +163,7 @@ function element(parent, tag) {
         }
         return element
     } catch (error) {
-        error.message = `parent ${parent} not found for catched error : ${error.message}`
-        throw error
+        err(error)
     }
 }
 function div(parent) {
@@ -174,4 +172,11 @@ function div(parent) {
 
 function span(parent) {
     return element(parent, 'span')
+}
+function td(parent) {
+    return element(parent, 'td')
+}
+
+function tr(parent) {
+    return element(parent, 'tr')
 }

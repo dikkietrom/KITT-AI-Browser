@@ -1,25 +1,10 @@
 class Google extends Plugin {
     constructor(arg) {
         super(arg)
-        this.conversation = ''
     }
-    listen(message, _container) {
+    onBeforeSendHeaders(json) {
+        //not in use
 
-        container = _container
-    }
-    speak() {
-
-        try {
-            log('Google-api-hack', currentInp.value)
-
-            currentInput = currentInp.value.trim()
-            this.webView.send('send-input-google', currentInput)
-            pluginReply('')
-
-        } catch (error) {
-
-            err(error)
-        }
     }
     config() {
         return {
@@ -28,28 +13,26 @@ class Google extends Plugin {
             description: 'Google',
             role: 'worker',
             active: true,
-            url: "https://google.com/search?q=init"
+            url: "https://google.com"
         }
     }
     exec(message) {
-        let result = ''
-
+        this.message = message       
         this.webView.send('send-input-google', message.content)
-        .then( alert('1') )
-            
-
-        
-        return  "searching for \"" + message.content + "\""
+        return `searching for "${message.content}"`
     }
+
+    
 }
-
-ipcRenderer.on('plugin-google-reply', (event,arg)=>{
-    let obj = JSON.parse(arg)
-    let message = obj.input ? obj.input.trim() : ''
-    if (message) {
-        //currentInp.value = "please read and summarize and give the best possible reply : " + message
-        plugin()
-    }
+ipcRenderer.on('plugin-google-reply', (event,json)=>{
+    // log('plugin-google-reply')
+    // let message = google.message
+    // if (message) {
+    //     let obj = JSON.parse(json)
+    //     message.content = obj.input ? obj.input.trim() : ''
+    //     google.message = null
+    //     message.send()
+    // }
 }
 )
 

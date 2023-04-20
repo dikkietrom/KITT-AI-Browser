@@ -1,26 +1,8 @@
 class Gpt extends Plugin {
     constructor(arg) {
         super(arg)
-        this.conversation = ''
-    }
-    listen(message, container) {    
+     }
 
-        container.innerHTML += message.error?message.error.message: message.choices[0].message.content
-    }
-    speak() {   
-        
-        try {
-            let arg = {}
-            arg.txt = this.conversation + ' ' + currentInp.value
-            arg.model = selVal('models')
-            ipcRenderer.send('plugin-gpt',  arg);
-
-        } catch (error) {
-            let m = `gpt Error: ${error.message}`
-             
-            err(error) 
-        }
-    }
     config() {
         return {
             name: 'Gpt API',

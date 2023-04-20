@@ -16,7 +16,8 @@ function log() {
 function addLog(arg) {
     let messages = arg.messages
     let depth = arg.depth
-    let line = div('console-view')
+    let consoleView = get('console-view')
+    let line = div(consoleView)
     line.onclick = function() {
         if (line.classList.contains('log-line-open')) {
             line.classList.remove('log-line-open')
@@ -44,5 +45,6 @@ function addLog(arg) {
         }
     }
     )
+    consoleView.scrollTop = consoleView.scrollHeight
 
 }

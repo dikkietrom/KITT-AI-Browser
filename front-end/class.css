@@ -23,6 +23,13 @@
     white-space: normal;
     padding: 1em;
 }
+
+.plugin-reply > div {
+    max-height: 6em;
+    overflow: auto;
+}
+
+
 .command {
     left: 0px;
     top: 0px;

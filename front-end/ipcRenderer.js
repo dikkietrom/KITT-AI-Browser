@@ -31,7 +31,7 @@ ipcRenderer.on('bash-reply', (event,arg)=>{
     // Send input data to the renderer process
     log('bash-reply', arg)
     currentInp.value = arg
-    //plugin()
+    //run()
 
 })
 ipcRenderer.on('dev-tools-closed', (event,arg)=>{
