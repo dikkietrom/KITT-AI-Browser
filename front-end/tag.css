@@ -58,5 +58,5 @@ input,select,textarea,button {
 }
 
 webview {
-    height: 10px;
+    height: 0px;
 }

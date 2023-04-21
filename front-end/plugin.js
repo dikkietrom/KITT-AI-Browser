@@ -1,6 +1,7 @@
 const pluginByName = {}
 const pluginByDir = {}
 const pluginById = {}
+const pluginByRole = {}
 class Plugin {
     constructor(arg) {
         this.async = false
@@ -11,12 +12,15 @@ class Plugin {
             throw new Error()
         } catch (error) {
             let dir = error.stack.split('\n')
-            dir = dir[dir.length-1]
+            dir = dir[dir.length - 1]
             let part = '/KITT/plugins'
             dir = dir.substring(dir.indexOf(part) + part.length + 1)
             dir = dir.substring(0, dir.indexOf('/'))
 
             pluginByDir[dir] = this
+            let role = this.config().role
+            pluginByRole[role] = pluginByRole[role] ? pluginByRole[role] : []
+            pluginByRole[role].push(this)
             log('dir', dir)
         }
 
@@ -72,16 +76,16 @@ function run() {
         let pluginId = content.substring(1, spaceIndex == -1 ? content.length : spaceIndex)
         message.to[0] = pluginById[pluginId]
         if (!message.to[0]) {
-            message.to=[]
+            message.to = []
             message.from = pluginById['user']
-            message.chain.push(pluginById['broker'])  
+            message.chain.push(pluginById['broker'])
             message.content = `plugin with id ${pluginId} not found`
             message.send()
             return
         }
         content = spaceIndex == -1 ? '' : content.substring(spaceIndex).trim()
     } else {
-        message.to[0] = pluginById['ceo']
+        message.to[0] = pluginByRole['CEO'][0]
     }
     message.chain.push(message.to[0])
 
@@ -125,8 +129,13 @@ function pluginReply(message) {
     }
 }
 
-function newPluginReplyRow(who, cls) {
-    let row = tr('layout')
+function newPluginReplyRow(who, cls, pos) {
+    let row = document.createElement('tr')
+    let layout = get('layout')
+    let tbody = layout.getElementsByTagName('tbody')[0]
+   tbody.insertBefore( row, tbody.children[2])
+    //layout.appendChild( row)
+
     row.height = 0
     let cell = td(row)
     cell.onclick = function(event) {
@@ -159,7 +168,7 @@ function newInp(container) {
 
     inp.value = ''
     inp.focus()
-    document.body.scrollHeight = document.body.scrollTop
+    //document.body.scrollTop = document.body.scrollHeight
     currentInp = inp
 
 }

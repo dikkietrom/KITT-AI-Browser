@@ -133,7 +133,9 @@ function onScriptLoad(arg) {
     if (index == 0) {
         tab.className = 'tab active'
         showTab(0)
-
+    }
+    if (plugin.config().role=='CEO') {
+        showTab(index)
     }
     return tab
 }
