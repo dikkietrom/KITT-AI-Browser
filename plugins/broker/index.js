@@ -2,7 +2,7 @@ class Broker extends Plugin {
     constructor(arg) {
         super(arg)
     }
- 
+
     config() {
         return {
             name: 'Broker',
@@ -15,19 +15,38 @@ class Broker extends Plugin {
 
     exec(message) {
         try {
+            //aync end
             if (!message.to.length) {
-                message.to = [message.from]
-                message.from = message.chain[message.chain.length - 1]
                 pluginReply(message)
                 newInp()
                 return
             }
-            let screenMessage = message.to.shift().exec(message)
+            let to = message.to[0]
+            if (message.lockedBy) {
+                pluginReply(message)
+                message.lockedBy.message = null
+                message.lockedBy = null
+            }
+            let screenMessage
+            if (to.async) {
+                screenMessage = `working on "${message.content}"`
+                message.lockedBy = to
+                message.lockedBy.message = message
+            }
+            let execMessage = to.exec(message)
+            if (execMessage && to.async) {
+                screenMessage = execMessage
+            } else if(!to.async) {
+                screenMessage = execMessage
+            }
+
             message.content = screenMessage
             pluginReply(message)
-            if (!message.to.length) {
-                 newInp()
-            }else{
+            message.to.shift()
+            //sync end
+            if (!message.to.length && !to.async) {
+                newInp()
+            } else if (message.to.length && !to.async) {
                 message.send()
             }
 

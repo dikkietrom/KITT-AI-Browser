@@ -3,7 +3,7 @@ const pluginByDir = {}
 const pluginById = {}
 class Plugin {
     constructor(arg) {
-        this.message = null
+        this.async = false
 
         pluginByName[this.constructor.name] = this
         pluginById[this.config().id] = this
@@ -103,7 +103,7 @@ function run() {
 function pluginReply(message) {
     try {
         log('plugin response : ', message)
-        let pluginTo = message.to[0]
+        let pluginTo = message.lockedBy ? message.lockedBy : message.to[0]
         let plgn = pluginTo ? pluginTo : message.chain[message.chain.length - 1]
 
         let replyTd = newPluginReplyRow(plgn.config().name, 'plugin-id')
