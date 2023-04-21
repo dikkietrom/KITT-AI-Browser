@@ -4,17 +4,25 @@ ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg
     const domain = extractDomain(arg.url);
 
     let plugin = plugByUrl[domain]
+
     if (plugin && plugin.onBeforeSendHeaders) {
         try {
-            let obj = {}
-            let buffers = arg.buffer.split('\n')
+            let arr = []
+               
+
+            let buffers = arg.buffer
+           
             for (let index = 0; index < buffers.length; index++) {
                 if (buffers[index]) {
-                    obj[index] = JSON.parse(buffers[index])
+                   try {
+                        arr[index] = JSON.parse(buffers[index])
+                   } catch (error) {
+                        arr[index] = error
+                   }
                 }
 
             }
-            plugin.onBeforeSendHeaders(obj)
+            plugin.onBeforeSendHeaders(arr)
         } catch (error) {
             err(error)
         }

@@ -1,21 +1,19 @@
-class Summariser extends Plugin {
+class Summariser extends OpenAssistant {
     constructor(arg) {
         super(arg)
-     }
- 
+    }
+
     config() {
         return {
             name: 'Summariser',
             id: 'sum',
             description: 'Summariser',
             role: 'worker',
-            active: true,
+            active: false,
+            url: "https://open-assistant.io"
         }
     }
-    exec(message) {
-        return `sum result : ${message.content}  `
-
-    }
+    
 }
 
 new Summariser()

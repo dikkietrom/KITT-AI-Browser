@@ -1,68 +1,26 @@
-// preload.js
-const { ipcRenderer } = require('electron');
+const {ipcRenderer} = require('electron');
 
+eval(ipcRenderer.sendSync('logPreload'))
+const log = logPreload
+log('Open Ass preload.js got logPreload')
+console.log()
+document.addEventListener('DOMContentLoaded', ()=>{
 
-function txtArea(){
-    //returns div with role textbox
-    return document.querySelector('[role="textbox"]')
+    log('pre load all DOMContentLoaded',location)
+    ipcRenderer.send('send-input-Open Ass-return', document.body.innerText)
+ 
+}, false);
+
+function txtArea() {
+    return document.getElementsByTagName('textarea')[0]
+} 
+
+ipcRenderer.on('send-input-Open Ass', (event,message)=>{
+    log('send-input Open Ass', message)
+    //location.href = 'https://www.google.com/search?q='+message
 
 }
-document.addEventListener(
-    'DOMContentLoaded',
-    () => {
-     // initMutationObserver()
+)
 
 
-    },
-    false
-);
- ipcRenderer.on('send-input', (event,arg) => {
-    log('send-input',arg)
-//    txtArea().innerHTML=arg
-        
-  //  const targetNode = document.getElementsByTagName('main')[0]
-   // observer.observe(targetNode, config)
-  //  triggerEnterKeyOnTextarea()
-   // txtArea().focus()
-    //document.execCommand('insertText', false, arg)
-// Select the element where the range will be created
-
- txtArea().focus()
-  const range = document.createRange();
-
-  // Event listener for text selection
-
-
-
-
-      range.setStart(window.getSelection().anchorNode, window.getSelection().anchorOffset);
-      range.setEnd(window.getSelection().focusNode, window.getSelection().focusOffset);
-
-      const newTextNode = document.createTextNode(arg);
-      range.deleteContents();
-      range.insertNode(newTextNode);
-
- txtArea().focus()
-triggerEnterKeyOnTextarea()
-
-
-})
-
- function triggerEnterKeyOnTextarea() {
-  try {
-   const inputEvent = new KeyboardEvent("input", {
-        bubbles: true,
-        cancelable: true,
-        key: "Enter",
-        charCode: 13,
-        keyCode: 13,
-      });
-
-    txtArea().dispatchEvent(inputEvent);
-  } catch(e) {
-    err(e);
-  }
-}
-
-log('preload OpenAssistant-api hack')
-
+log('preload Open Ass-api hack')

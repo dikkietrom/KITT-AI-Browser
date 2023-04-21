@@ -10,7 +10,8 @@ class Plugin {
         try {
             throw new Error()
         } catch (error) {
-            let dir = error.stack
+            let dir = error.stack.split('\n')
+            dir = dir[dir.length-1]
             let part = '/KITT/plugins'
             dir = dir.substring(dir.indexOf(part) + part.length + 1)
             dir = dir.substring(0, dir.indexOf('/'))
@@ -70,6 +71,14 @@ function run() {
         let spaceIndex = content.indexOf(' ')
         let pluginId = content.substring(1, spaceIndex == -1 ? content.length : spaceIndex)
         message.to[0] = pluginById[pluginId]
+        if (!message.to[0]) {
+            message.to=[]
+            message.from = pluginById['user']
+            message.chain.push(pluginById['broker'])  
+            message.content = `plugin with id ${pluginId} not found`
+            message.send()
+            return
+        }
         content = spaceIndex == -1 ? '' : content.substring(spaceIndex).trim()
     } else {
         message.to[0] = pluginById['ceo']

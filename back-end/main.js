@@ -73,15 +73,16 @@ function createWindow() {
     }
     )
 
-    session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
-        //log('onBeforeSendHeaders', details)
+    session.defaultSession.webRequest
+        .onBeforeSendHeaders(filter, (details,callback)=>{
+        
         if (details.uploadData) {
             try {
 
-                const buffer = details.uploadData.lenght ?  Array.from(details.uploadData)[0].bytes.toString() : ''
+                const buffer = details.uploadData.length ?  Array.from(details.uploadData)[0].bytes.toString() : ''
                 let obj = {}
                 obj.requestHeaders=details.requestHeaders
-                obj.buffer = buffer
+                obj.buffer = buffer.split('\n')
                 obj.url = details.referrer
                 log.send('onBeforeSendHeaders', obj)
 
@@ -124,9 +125,9 @@ app.whenReady().then(()=>{
 
         // Add a new item to the "File" menu
         menu.insert(0, new MenuItem({
-            label: 'New Menu Item',
+            label: 'Update',
             click() {
-                log('New menu item clicked');
+                autoUpdater.checkForUpdatesAndNotify();
             }
         }));
 
