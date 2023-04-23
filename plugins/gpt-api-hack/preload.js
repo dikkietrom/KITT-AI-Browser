@@ -29,10 +29,8 @@ console.log(mutations)
 
     mutations.forEach((mutation)=>{
       if (mutation.type === 'characterData') {
-
-
-                ipcRenderer.send('gpt-hack-delta-text',{data:mutation.target.textContent})
-        }
+            ipcRenderer.send('gpt-hack-delta-text',{data:mutation.target.textContent})
+      }
     }
     );
 }

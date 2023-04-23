@@ -5,7 +5,7 @@ const pluginByRole = {}
 class Plugin {
     constructor(arg) {
         this.async = false
-
+        this.streamer=false
         pluginByName[this.constructor.name] = this
         pluginById[this.config().id] = this
         try {

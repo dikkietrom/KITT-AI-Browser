@@ -2,6 +2,8 @@ class Gpt4apiHack extends Plugin {
     constructor(arg) {
         super(arg)
         this.async = true
+        this.streamer=true
+
     }
 
     config() {
@@ -37,7 +39,10 @@ ipcRenderer.on('gpt-hack-delta-text', (event,json)=>{
     if (gpt4apiHack.message) {
         console.log(json)
         gpt4apiHack.message.content = json.data
-        gpt4apiHack.container.innerText = json.data
+        if (gpt4apiHack.container) {
+            gpt4apiHack.container.innerText = json.data
+            gpt4apiHack.container.scrollTop = gpt4apiHack.container.scrollHeight
+        }
     }
 }
 );
@@ -46,11 +51,9 @@ ipcRenderer.on('get-last', (event,last)=>{
         // Send input data to the renderer process
         console.log('get last index ' + gpt4apiHack.container)
         gpt4apiHack.message.content = last
-        try {
+        if(gpt4apiHack.container) {
             gpt4apiHack.container.innerText = '[CLEARED]'
-        } catch (error) {
-            err(error)
-        }
+        }  
         gpt4apiHack.message.send()
     }
 }

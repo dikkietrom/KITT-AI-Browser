@@ -51,7 +51,7 @@ class Broker extends Plugin {
             message.content = screenMessage
 
             pluginReply(message)
-            if (to.async) {
+            if (to.async && to.streamer) {
                 message.content = ''
                 to.container = pluginReply(message)
             }

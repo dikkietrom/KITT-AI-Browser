@@ -28,35 +28,7 @@ const observer = new MutationObserver((mutations)=>{
     mutations.forEach((mutation)=>{
 
       if (mutation.type === 'characterData') {
-               const oldValue = mutation.oldValue;
-               const newValue = mutation.target.textContent;
-
-
-               if(oldValue=='Untitled' && newValue == currentInput){
-                    return
-               }
-               console.log('oldValue',oldValue)
-               console.log('newValue',newValue)
-
-              // log('Delta text:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
-
-               // Calculate the delta text
-               let deltaText = ''
-                 let trim = oldValue.trim()
-                if (reset ) {
-                    console.log('reset on delta',reset)
-                   deltaText = newValue
-                   reset = false
-                  // log('new value:','\'' ,oldValue,'\'',' -> \'',newValue,'\'');
-
-                }else if (newValue.length > oldValue.length) {
-                    console.log('else reset on delta',reset)
-
-                   deltaText = newValue.substring(oldValue.length);
-                }
-                console.log('deltaText',deltaText)
-
-                ipcRenderer.send('oa-delta-text',{data:deltaText,target:mutation.target.className})
+          ipcRenderer.send('oa-delta-text',{data:mutation.target.textContent})
         }
     }
     );

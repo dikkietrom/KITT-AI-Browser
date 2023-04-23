@@ -2,6 +2,8 @@ class OpenAssistant extends Plugin {
     constructor(arg) {
         super(arg)
         this.async = true
+        this.streamer=true
+
     }
 
     config() {
@@ -33,8 +35,9 @@ class OpenAssistant extends Plugin {
 }
 ipcRenderer.on('oa-delta-text', (event,json)=>{
     if(oa.message){
-        oa.message.content += json.data
-        span(oa.container).innerHTML=json.data
+        oa.message.content = json.data
+        oa.container.innerText=json.data
+        oa.container.scrollTop = oa.container.scrollHeight
     }
 }
 );
