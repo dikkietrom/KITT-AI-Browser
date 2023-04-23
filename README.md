@@ -14,7 +14,7 @@ In case of errors you are on your own for now.
 
 Video's
 
-https://www.youtube.com/channel/UClCyKTE3fCmm3D1RBVhkeYg
+https://www.youtube.com/@dik9091/videos
 
 KITT features a user-friendly plugin architecture that makes extending its capabilities a breeze. By simply adding files to the dedicated plugin directory, you can effortlessly integrate new functionalities and enhancements.
 
