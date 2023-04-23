@@ -18,30 +18,41 @@ class Gpt4apiHack extends Plugin {
         this.webView.send('send-input', message.content)
     }
 
-    onBeforeSendHeaders(messages) {
+    onData(json) {
+        console.log(json.url)
+        if (json.url.indexOf('https://chat.openai.com/backend-api/moderations') == 0) {
+       // if (json.url.indexOf('https://chat.openai.com/backend-api/conversations?offset') == 0) {
+            if (this.message) {
+ 
 
-        if (this.message) {
-            for (let index = 0; index < messages.length; index++) {
-                let m = messages[index]
-                let content = this.message.content
-                m.input = m.input && m.input.trim ? m.input.trim() : m.input
-                let cnd = m.input && m.input.indexOf && (m.input.indexOf(content + '\n') == 0 || m.input.indexOf(this.reply + '\n') == 0)
-                if (m.input && m.input.indexOf && cnd) {
-                    this.message.content = m.input.substring(m.input.indexOf(content) + content.length + 2)
-                    this.reply = this.message.content
-                    this.message.send()
-                }
+                console.log('onData ' + gpt4apiHack.container)
+                this.webView.send('get-last')
+
             }
         }
     }
 }
 
-ipcRenderer.on('plugin-gpt4-api-hack-front', (event,arg)=>{
-    // Send input data to the renderer process
-    log('plugin-gpt4-api-hack-main ipcRenderer', arg)
-    ipcRenderer.send('plugin-reply', arg);
-    //document.body.innerHTML+=arg
-
+ipcRenderer.on('gpt-hack-delta-text', (event,json)=>{
+    if (gpt4apiHack.message) {
+        console.log(json)
+        gpt4apiHack.message.content = json.data
+        gpt4apiHack.container.innerText = json.data
+    }
+}
+);
+ipcRenderer.on('get-last', (event,last)=>{
+    if (gpt4apiHack.message) {
+        // Send input data to the renderer process
+        console.log('get last index ' + gpt4apiHack.container)
+        gpt4apiHack.message.content = last
+        try {
+            gpt4apiHack.container.innerText = '[CLEARED]'
+        } catch (error) {
+            err(error)
+        }
+        gpt4apiHack.message.send()
+    }
 }
 );
 

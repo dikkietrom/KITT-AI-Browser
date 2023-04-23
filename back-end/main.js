@@ -1,4 +1,4 @@
-const {session,app, BrowserWindow, ipcMain, Menu, MenuItem, ipcRenderer} = require('electron');
+const {session, app, BrowserWindow, ipcMain, Menu, MenuItem, ipcRenderer, protocol} = require('electron');
 const isDev = require('electron-is-dev');
 const path = require('path');
 const packageJson = require(path.join(__dirname, '..', 'package.json'));
@@ -10,9 +10,14 @@ const {autoUpdater} = require('electron-updater');
 const {Readable} = require('stream');
 const {WritableStreamBuffer} = require('stream-buffers');
 
+const {PassThrough} = require('stream');
+
 const appName = packageJson.name;
 
-const {log,err,initShared} = require(path.join(__dirname, '..','lib/shared.js'));
+const {log, err, initShared} = require(path.join(__dirname, '..', 'lib/shared.js'));
+const filter = {
+    urls: ['*://*/*'],
+};
 autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dikkietrom',
@@ -63,9 +68,6 @@ function createWindow() {
     log.send = (name,message)=>{
         mainWindow.webContents.send(name, message)
     }
-    const filter = {
-        urls: ['*://*/*'],
-    };
 
     mainWindow.webContents.on('devtools-closed', ()=>{
         log('devtools-closed')
@@ -73,15 +75,69 @@ function createWindow() {
     }
     )
 
-    session.defaultSession.webRequest
-        .onBeforeSendHeaders(filter, (details,callback)=>{
-        
+    let ses = session.defaultSession
+    //console.log(session)
+    //            ses.webRequest.onBeforeRedirect((details, callback) => {
+    //                console.log('session.defaultSession.webRequest.onBeforeRedirect', details.url)
+    //
+    //            });
+    //            ses.webRequest.onBeforeRequest((details, callback) => {
+    //                        if (details.url.indexOf('devtool') == -1) {
+    ////
+    ////                            const url = details.url;
+    ////                            const requestId = details.id;
+    ////                            const passThrough = new PassThrough();
+    ////
+    ////                            let data = Buffer.from('');
+    ////
+    ////                            passThrough.on('data', (chunk) => {
+    ////                              data = Buffer.concat([data, chunk]);
+    ////                            });
+    ////
+    ////                            passThrough.on('end', () => {
+    ////                              handleResponseData(url, data);
+    ////                            });
+    ////
+    ////                            callback({ responseHeaders: details.responseHeaders, stream: passThrough });
+    //
+    //                }
+    //
+    //            });
+    //            ses.webRequest.onResponseStarted((details, callback) => {
+    //                console.log('session.defaultSession.webRequest.onResponseStarted', details.url)
+    //
+    //            });
+    //
+
+    //            ses.webRequest.onErrorOccurred((details, callback) => {
+    //                console.log('session.defaultSession.webRequest.onErrorOccurred', details.url)
+    //
+    //            });
+    //            ses.webRequest.onHeadersReceived((details, callback) => {
+    //                console.log('session.defaultSession.webRequest.onHeadersReceived', details.url)
+    //
+    //
+    //            });
+    //            ses.webRequest.onResponseStarted((details, callback) => {
+    //                console.log('session.defaultSession.webRequest.onResponseStarted', details.url)
+    //
+    //            });
+    //
+
+    //        session.defaultSession.webRequest.onSendHeaders((details,callback)=>{
+    //            if (details.url.indexOf('devtool') == -1) {
+    //                console.log('session.defaultSession.webRequest.onSendHeaders', details.url)
+    //            }
+    //        }
+    //        );
+    session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
+
         if (details.uploadData) {
             try {
 
-                const buffer = details.uploadData.length ?  Array.from(details.uploadData)[0].bytes.toString() : ''
+                const buffer = details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
                 let obj = {}
-                obj.requestHeaders=details.requestHeaders
+                obj.requestHeaders = details.requestHeaders
                 obj.buffer = buffer.split('\n')
                 obj.url = details.referrer
                 log.send('onBeforeSendHeaders', obj)
@@ -104,10 +160,22 @@ app.name = 'KITT'
 app.on('ready', createWindow);
 app.on('web-contents-created', (event,contents)=>{
     log('web-contents-created')
+
     contents.on('will-attach-webview', (_wawevent,webPreferences,_params)=>{
+        log('will-attach-webview')
+        // console.log(webPreferences.partition)
+        let partition = webPreferences.partition
+        let ses = session.fromPartition(partition);
 
-        //log('will-attach-webview', _wawevent, webPreferences, _params)
-
+        ses.webRequest.onCompleted(filter, (details,callback)=>{
+            if (details.url.indexOf('devtool') == -1) {
+                if(partition=='persist:gpt'){
+                    //console.log(details)
+                }
+                log.send('ses.webRequest.onCompleted',{url:details.url,partition:partition})
+            }
+        }
+        );
     }
     )
 }
@@ -124,15 +192,18 @@ app.whenReady().then(()=>{
         const menu = Menu.getApplicationMenu();
 
         // Add a new item to the "File" menu
-        menu.insert(0, new MenuItem({
-            label: 'Update',
+        let item = new MenuItem({
+            id: 'update',
+            label: 'update',
             click() {
                 autoUpdater.checkForUpdatesAndNotify();
             }
-        }));
+        })
+        item.menu = menu
+        menu.append(item);
 
         // Set the updated menu to the application menu
-        Menu.setApplicationMenu(menu);
+        // Menu.setApplicationMenu(menu);
     } catch (error) {
         err(error)
     }
@@ -190,5 +261,3 @@ app.on('activate', function() {
         createWindow();
     }
 });
-
-

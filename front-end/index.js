@@ -71,7 +71,7 @@ function selVal(id) {
 function toggleWebView(button, id) {
     let webview = document.getElementById(id)
     if (webview.showing) {
-        webview.style.height = '0px'
+        webview.style.height = '1px'
         button.innerHTML = 'Show webview'
 
         webview.showing = false

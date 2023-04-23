@@ -3,10 +3,7 @@ class Google extends Plugin {
         super(arg)
         this.async=true
     }
-    onBeforeSendHeaders(json) {
-        //not in use
 
-    }
     config() {
         return {
             id: 'ggl',

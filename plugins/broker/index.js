@@ -19,12 +19,19 @@ class Broker extends Plugin {
             if (!message.to.length) {
                 pluginReply(message)
                 newInp()
+                message.lockedBy.message = null
+                message.lockedBy.container = null
+                console.log('message.lockedBy.container', message.lockedBy.container)
+                message.lockedBy = null
                 return
             }
             let to = message.to[0]
             if (message.lockedBy) {
+
                 pluginReply(message)
                 message.lockedBy.message = null
+                message.lockedBy.container = null
+                console.log('message.lockedBy.container', message.lockedBy.container)
                 message.lockedBy = null
             }
             let screenMessage
@@ -42,9 +49,11 @@ class Broker extends Plugin {
             }
 
             message.content = screenMessage
+
             pluginReply(message)
             if (to.async) {
-                message.content=content
+                message.content = ''
+                to.container = pluginReply(message)
             }
             message.to.shift()
             //sync end

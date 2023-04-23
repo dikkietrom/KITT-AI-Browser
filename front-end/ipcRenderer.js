@@ -5,7 +5,7 @@ ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg
 
     let plugin = plugByUrl[domain]
 
-    if (plugin && plugin.onBeforeSendHeaders) {
+    if (plugin) {
         try {
             let arr = []
                
@@ -22,13 +22,17 @@ ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg
                 }
 
             }
-            plugin.onBeforeSendHeaders(arr)
+            plugin.onData(arr)
         } catch (error) {
             err(error)
         }
     }
 }
 )
+
+
+
+
 ipcRenderer.on('plugin-reply', (event,token)=>{
     pluginReply(token)
 
@@ -99,7 +103,6 @@ ipcRenderer.on('main-log', (event,mes)=>{
     }
 }
 );
-
 ipcRenderer.on('preload-log', (event,mes)=>{
     console.log(mes.join(' '))
     try {
@@ -109,6 +112,14 @@ ipcRenderer.on('preload-log', (event,mes)=>{
     } catch (error) {
         err(error)
     }
+}
+);
+ipcRenderer.on('ses.webRequest.onCompleted', (event,json)=>{
+    let plugin = pluginById[json.partition.substring(8)]
+    if(plugin){
+        plugin.onData(json)
+    }
+
 }
 );
 
@@ -156,6 +167,7 @@ function addWebView(pluginDir, plugin) {
     let div2 = div(div1)
     let webview = document.createElement('webview')
     plugin.webView = webview
+    webview.partition = 'persist:' +  plugin.config().id
     webview.id = pluginDir + '-view'
     webview.src = plugin.config().url
     webview.preload = '../plugins/' + pluginDir + '/preload.js'

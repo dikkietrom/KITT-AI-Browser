@@ -1,25 +1,43 @@
 class OpenAssistant extends Plugin {
     constructor(arg) {
         super(arg)
-     }
- 
+        this.async = true
+    }
+
     config() {
         return {
             name: 'OpenAssistant',
-            id:'oa',
+            id: 'oa',
             description: 'OpenAssistant',
             role: 'manager',
-            active:false,
+            active: true,
             url: "https://open-assistant.io"
         }
     }
-    onBeforeSendHeaders(json) {
-        log(json)
+    onData(json) {
+        if (json.url.indexOf('https://open-assistant.io/api/chat/events?chat_id') == 0) {
+            if (this.message) {
+                try {
+                     this.container.innerHTML = '[CLEARED]'
+                } catch (error) {
+                        err(error)
+                }
+                let that = this
+                setTimeout(() => that.message.send() ,100)
+            }
+        }
     }
-    exec(message){
-         
+    exec(message) {
+        this.webView.send('send-input', message.content)
     }
 }
+ipcRenderer.on('oa-delta-text', (event,json)=>{
+    if(oa.message){
+        oa.message.content += json.data
+        span(oa.container).innerHTML=json.data
+    }
+}
+);
 
 
-new OpenAssistant()
+let oa = new OpenAssistant()

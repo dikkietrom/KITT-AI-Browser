@@ -14,14 +14,20 @@ class Plugin {
             let dir = error.stack.split('\n')
             dir = dir[dir.length - 1]
             let part = '/KITT/plugins'
-            dir = dir.substring(dir.indexOf(part) + part.length + 1)
-            dir = dir.substring(0, dir.indexOf('/'))
+            let index = dir.indexOf(part)
+            if (index == -1) {
+                dir = extractPluginDirFromAsar(dir)
+            } else {
+                dir = dir.substring(index + part.length + 1)
+
+                dir = dir.substring(0, dir.indexOf('/'))
+            }
 
             pluginByDir[dir] = this
             let role = this.config().role
             pluginByRole[role] = pluginByRole[role] ? pluginByRole[role] : []
             pluginByRole[role].push(this)
-            log('dir', dir)
+            log(dir)
         }
 
         //add it to the plugin select
@@ -46,10 +52,10 @@ class Plugin {
     exec(message) {
         throw new Error('exec not implemented for ' + this.config().name)
     }
-    onBeforeSendHeaders(json) {
-        throw new Error('onBeforeSendHeaders not implemented for ' + this.config().name)
-
+    onData(json) {
+ 
     }
+
 
     send(key, message) {
         this.webView.send(key, message)
@@ -115,15 +121,15 @@ function run() {
 
 function pluginReply(message) {
     try {
-        log('plugin response : ', message)
+        log('plugin response : ', message.content)
         let pluginTo = message.lockedBy ? message.lockedBy : message.to[0]
         let plgn = pluginTo ? pluginTo : message.chain[message.chain.length - 1]
 
         let replyTd = newPluginReplyRow(plgn.config().name, 'plugin-id')
         let container = div(replyTd)
 
-        container.innerHTML = message.content
-
+        container.innerText = message.content
+        return container
     } catch (error) {
         err(error)
     }
@@ -133,7 +139,7 @@ function newPluginReplyRow(who, cls, pos) {
     let row = document.createElement('tr')
     let layout = get('layout')
     let tbody = layout.getElementsByTagName('tbody')[0]
-   tbody.insertBefore( row, tbody.children[2])
+    tbody.insertBefore(row, tbody.children[2])
     //layout.appendChild( row)
 
     row.height = 0
@@ -204,4 +210,14 @@ function codeBlocks(arg) {
     }
     return ret
 
+}
+function extractPluginDirFromAsar(path) {
+    const pattern = /app\.asar\/plugins\/([^/]+)\//;
+    const match = path.match(pattern);
+
+    if (match && match[1]) {
+        return match[1];
+    } else {
+        return null;
+    }
 }

@@ -6,17 +6,20 @@ async function init(lg) {
     
 }
 
-ipcMain.on('plugin-gpt4-api-hack', (event,arg)=>{
+ipcMain.on('gpt-hack-delta-text', (event,arg)=>{
    // Send input data to the renderer process
-   log('plugin-gpt4-api-hack ipcMain',arg)
-   let obj = JSON.parse(buffer)
-   log('Request body: ', obj);
-   if(obj.input){
-        log.webContents.send('plugin-gpt4-api-hack-reply', arg);
-   }
+   log.send('gpt-hack-delta-text',arg)
+
 }
 );
 
+
+ipcMain.on('get-last', (event,last)=>{
+   // Send input data to the renderer process
+   log.send('get-last',last)
+
+}
+);
 
 
 

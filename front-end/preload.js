@@ -1,6 +1,7 @@
 
 window.electron = require('electron');
-const { ipcRenderer } = require('electron');
+const { ipcRenderer,systemPreferences } = require('electron');
 window.ipcRenderer = ipcRenderer;
+window.systemPreferences = systemPreferences;
 
 

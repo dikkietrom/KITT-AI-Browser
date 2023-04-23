@@ -1,5 +1,8 @@
 const meters = []
 document.addEventListener('DOMContentLoaded', ()=>{
+    if(systemPreferences && systemPreferences.askForMediaAccess){
+        systemPreferences.askForMediaAccess("microphone")
+    }
 
     const audioContext = new AudioContext();
     const analyser = audioContext.createAnalyser();
@@ -11,6 +14,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         audio: true
     }).then(stream=>{
         const source = audioContext.createMediaStreamSource(stream);
+        log(source)
         source.connect(analyser);
         animate();
     }

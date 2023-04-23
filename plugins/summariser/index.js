@@ -1,4 +1,4 @@
-class Summariser extends OpenAssistant {
+class Summariser extends Plugin {
     constructor(arg) {
         super(arg)
     }
@@ -14,6 +14,9 @@ class Summariser extends OpenAssistant {
         }
     }
     
+    exec(message){
+        return "please summarise : " + message.content
+    }
 }
 
 new Summariser()

@@ -150,6 +150,13 @@
     padding: 10px;
     background: #fff7;
     border-radius: 1em;
+    width: 100%;
+    overflow: auto;
+}
+
+.tab-content > div {
+    width: 5em;
+    /* overflow: visible; */
 }
 
 .tab-content.active {
