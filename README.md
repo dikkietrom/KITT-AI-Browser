@@ -12,10 +12,9 @@ Still working on the install manual. The binaries are too large for here and sti
 Nodejs and python3 should be both installed when running from the command prompt with "npm start". 
 In case of errors you are on your own for now. 
 
-Intro video
+Video's
 
-https://www.youtube.com/watch?v=P-G1Q_NVveM&t=25s
-
+https://www.youtube.com/@dik9091/videos
 
 KITT features a user-friendly plugin architecture that makes extending its capabilities a breeze. By simply adding files to the dedicated plugin directory, you can effortlessly integrate new functionalities and enhancements.
 
