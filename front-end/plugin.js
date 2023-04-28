@@ -85,6 +85,7 @@ class Plugin {
 function run() {
     log('start')
     get('console-view').innerHTML = ''
+    get('console-view-parent').className=''
     let s = span(currentInp.parentElement)
     s.style.cursor = 'pointer'
     s.innerHTML = currentInp.value

@@ -19,7 +19,7 @@ class Feed extends Plugin {
         if (!this.data) {
             let nxt = message.to[1]
             let data = []
-            let size = 1000
+            let size = 8000
             let content = message.content
             this.parts = content.length / size
     

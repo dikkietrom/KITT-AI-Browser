@@ -10,11 +10,24 @@
 #console-view {
     font-size: 0.75em;
     min-height: 10em;
-    max-height: 10em;
+    max-height: 100%;
     overflow: auto;
-    width: inherit;
+    position: sticky;
+    top: 0;
+    margin-left: auto;
+    margin-top: 1em;
 }
 
+#console-view-parent {
+    position: absolute;
+    top: 0;
+    right: 1em;
+    width: 20%;
+    height: calc(100% - 2em);
+    z-index:1000;
+    display:block;
+    overflow: hidden;
+}
 
 #layout {width: 100%;height: 100%;}
 
@@ -39,4 +52,9 @@
     height: 10em;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+}
+
+#webviews {
+    margin: auto;
+    vertical-align: middle;
 }

@@ -1,5 +1,6 @@
 :root {
   --command-padding: 0.2em;
+  --console-fade-time : 10s;
 }
 
 body {
@@ -46,6 +47,7 @@ td {
     vertical-align: top;
     text-shadow: -2px 2px 0px black;
 }
+
 
 input,select,textarea,button {
     xwidth: 100%;

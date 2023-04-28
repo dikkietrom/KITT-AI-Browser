@@ -1,5 +1,6 @@
 function log() {
     try {
+        get('console-view-parent').classList.add('console-view-fade')
         let depth = 2
         if (arguments[0] && arguments[0][0]instanceof Error) {
             console.error(arguments[0][0])

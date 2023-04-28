@@ -190,9 +190,9 @@ function addWebView(pluginDir, plugin) {
     plgWebView.debugButton = debugButton
 
     let urlBox = div(bar)
-    urlBox.innerHTML=plgWebView.src
-    urlBox.className='urlBox'
+    urlBox.innerHTML = plgWebView.src
+    urlBox.className ='urlBox'
 
-    plgWebView.urlBox = urlBox
+    //plgWebView.urlBox = urlBox
 
 }

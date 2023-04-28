@@ -4,7 +4,14 @@
     display: flex;
 }
 
-
+.console-view-fade{
+    transition: opacity var(--console-fade-time) ease,z-index var(--console-fade-time) ease,height var(--console-fade-time) ease;
+    opacity: 0;
+    z-index:-1000;
+    height: 0px !important;
+    overflow: hidden;
+     
+}
 
 .chat-id , .plugin-id {
     background: #ff000042;
@@ -13,7 +20,6 @@
     padding: 1em;
     border-radius: 1em;
 }
-
 
 .chat-id-ai {
     background: #ff7f0042;
@@ -30,13 +36,13 @@
     overflow: auto;
 }
 
-
 .command {
     left: 0px;
     top: 0px;
     min-height: 2em;
-    drop-shadow: 10 10 0.5em #ffff;
     border: 0.5px solid white;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
 }
 
 .command:hover {
@@ -125,13 +131,15 @@
 .tab {
     border: none;
     padding: 10px;
-    margin-right: 5px;
+    margin: 0;
     margin-bottom: -1px;
     cursor: pointer;
     font-weight: bold;
-    border-bottom: none;
+    border-bottom: 1px solid white;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border-left: 1px solid white;
+    border-top: 0.5px solid white;
 }
 
 .tab.active {
@@ -151,7 +159,7 @@
     padding: 10px;
     background: #fff7;
     border-radius: 1em;
-    width: 100%;
+    width: calc(100% - 1em);
     overflow: auto;
 }
 
@@ -165,5 +173,7 @@
     margin-top: 0;
 }
 .urlBox{
-    padding: var(---command-padding);
+    padding: var(--command-padding);
+    margin: auto;
+    margin-left: 1em;
 }
