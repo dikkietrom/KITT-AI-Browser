@@ -94,10 +94,10 @@ function reqJson(event, txt, dataModel) {
 
         fetch('https://api.openai.com/v1/plugin/completions', requestOptions).then(response=>response.json()).then(data=>{
             log(data)
-            event.sender.send('plugin-reply', data)
+            log.send('plugin-reply', data)
         }
         ).catch(error=>{
-            event.sender.send('plugin-reply', `gpt-main Error: ${error.message}`)
+            log.send('plugin-reply', `gpt-main Error: ${error.message}`)
 
             err(error)
         }

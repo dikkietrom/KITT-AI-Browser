@@ -2,7 +2,7 @@
   "name": "KITT",
   "version": "1.0.0",
   "description": "Knight Industries Two Thousand",
-  "main": "./back-end/main.js --inspect",
+  "main": "./back-end/main.js",
   "permissions": [
     "audioCapture"
   ],
@@ -64,7 +64,7 @@
     }
   },
   "devDependencies": {
-    "electron": "^23.2.2",
+    "electron": "^23.2.4",
     "electron-builder": "^24.2.1"
   },
   "dependencies": {

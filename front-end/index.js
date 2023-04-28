@@ -4,6 +4,16 @@ init.cnt = 0
 let plugByUrl = {}
 
 function init() {
+
+    let recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.onresult = function(event) {
+        if (event.results.length > 0) {
+            log(even)
+        }
+    }
+    recognition.start();
     document.getElementById('inp').focus()
     if (!currentInp) {
         currentInp = document.getElementById('inp')

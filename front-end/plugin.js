@@ -5,9 +5,10 @@ const pluginByRole = {}
 class Plugin {
     constructor(arg) {
         this.async = false
-        this.streamer=false
+        this.streamer = false
         pluginByName[this.constructor.name] = this
         pluginById[this.config().id] = this
+
         try {
             throw new Error()
         } catch (error) {
@@ -53,9 +54,28 @@ class Plugin {
         throw new Error('exec not implemented for ' + this.config().name)
     }
     onData(json) {
- 
     }
+    onTimeOut() {
 
+        if (this.message) {
+            this.webView.send('get-last')
+        }
+        this.timeoutId = null
+    }
+    startTimer() {
+        this.stopTimer()
+        let that = this
+        this.timeoutId = setTimeout(()=>{
+            this.onTimeOut()
+        }
+        , 2000);
+        // Cancel the timeout
+    }
+    stopTimer() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId)
+        }
+    }
 
     send(key, message) {
         this.webView.send(key, message)
@@ -129,6 +149,11 @@ function pluginReply(message) {
         let container = div(replyTd)
 
         container.innerText = message.content
+        container.onclick = (e)=>{
+            if (currentInp) {
+                currentInp.value = e.target.innerText
+            }
+        }
         return container
     } catch (error) {
         err(error)

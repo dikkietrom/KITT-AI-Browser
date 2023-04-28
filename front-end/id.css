@@ -1,6 +1,7 @@
 #avatar {
     overflow: hidden;
     background-position: center;
+    background-position-y: top;
     background-size:contain;
     background-image:url('0_0.png');
     opacity:1;

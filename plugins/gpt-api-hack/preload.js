@@ -25,10 +25,11 @@ const config = {
 
 let reset = true
 const observer = new MutationObserver((mutations)=>{
-console.log(mutations)
+
 
     mutations.forEach((mutation)=>{
       if (mutation.type === 'characterData') {
+            console.log(mutation.target.textContent)
             ipcRenderer.send('gpt-hack-delta-text',{data:mutation.target.textContent})
       }
     }

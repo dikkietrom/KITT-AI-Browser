@@ -21,7 +21,7 @@ class Broker extends Plugin {
                 newInp()
                 message.lockedBy.message = null
                 message.lockedBy.container = null
-                console.log('message.lockedBy.container', message.lockedBy.container)
+                log('message.lockedBy.container', message.lockedBy.container)
                 message.lockedBy = null
                 return
             }

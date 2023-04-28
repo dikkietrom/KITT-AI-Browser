@@ -155,8 +155,7 @@
 }
 
 .tab-content > div {
-    width: 5em;
-    /* overflow: visible; */
+
 }
 
 .tab-content.active {

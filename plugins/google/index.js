@@ -17,8 +17,6 @@ class Google extends Plugin {
     exec(message) {
         this.webView.send('send-input-google', message.content)
     }
-
-    
 }
 ipcRenderer.on('plugin-google-reply', (event,json)=>{
     log('plugin-google-reply')

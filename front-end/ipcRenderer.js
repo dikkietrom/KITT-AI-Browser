@@ -1,4 +1,4 @@
-ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg){
+ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event, arg) {
     // log('onBeforeSendHeaders', arg)
 
     const domain = extractDomain(arg.url);
@@ -8,17 +8,16 @@ ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg
     if (plugin) {
         try {
             let arr = []
-               
 
             let buffers = arg.buffer
-           
+
             for (let index = 0; index < buffers.length; index++) {
                 if (buffers[index]) {
-                   try {
+                    try {
                         arr[index] = JSON.parse(buffers[index])
-                   } catch (error) {
+                    } catch (error) {
                         arr[index] = error
-                   }
+                    }
                 }
 
             }
@@ -27,11 +26,7 @@ ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event,arg
             err(error)
         }
     }
-}
-)
-
-
-
+})
 
 ipcRenderer.on('plugin-reply', (event,token)=>{
     pluginReply(token)
@@ -45,7 +40,8 @@ ipcRenderer.on('bash-reply', (event,arg)=>{
     currentInp.value = arg
     //run()
 
-})
+}
+)
 ipcRenderer.on('dev-tools-closed', (event,arg)=>{
     let but = document.getElementById('front-debug')
     but.innerHTML = 'Debug'
@@ -116,7 +112,7 @@ ipcRenderer.on('preload-log', (event,mes)=>{
 );
 ipcRenderer.on('ses.webRequest.onCompleted', (event,json)=>{
     let plugin = pluginById[json.partition.substring(8)]
-    if(plugin){
+    if (plugin) {
         plugin.onData(json)
     }
 
@@ -145,7 +141,7 @@ function onScriptLoad(arg) {
         tab.className = 'tab active'
         showTab(0)
     }
-    if (plugin.config().role=='CEO') {
+    if (plugin.config().role == 'CEO') {
         showTab(index)
     }
     return tab
@@ -167,7 +163,7 @@ function addWebView(pluginDir, plugin) {
     let div2 = div(div1)
     let webview = document.createElement('webview')
     plugin.webView = webview
-    webview.partition = 'persist:' +  plugin.config().id
+    webview.partition = 'persist:' + plugin.config().id
     webview.id = pluginDir + '-view'
     webview.src = plugin.config().url
     webview.preload = '../plugins/' + pluginDir + '/preload.js'

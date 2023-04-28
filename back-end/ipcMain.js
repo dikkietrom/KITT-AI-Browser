@@ -30,12 +30,6 @@ ipcMain.on('debug-stop', ()=>{
 
 ipcMain.on('debug-main', ()=>{
 
-    //    chromeMainDebug = spawn('open', ['-a', 'Google Chrome', 'chrome://inspect']);
-    //      chromeMainDebug.on('exit', (code) => {
-    //            // spawn('killall', ['Google Chrome']);
-    //          log(code)
-    //
-    //      });
     let process = exec('open -a "Google Chrome" chrome://inspect', (error,stdout,stderr)=>{
         if (error) {
             err(`Error executing command: ${error}`);
@@ -60,6 +54,7 @@ ipcMain.on('debug-main', ()=>{
     );
 }
 )
+
 ipcMain.on('debug-main-stop', ()=>{
     spawn('killall', ['Google Chrome']);
 }
@@ -94,13 +89,12 @@ async function initPlugins() {
             const file = path.join(pluginPath, dir, 'main.js')
 
             // Check if path exists
-            if (fs.existsSync(file)) { 
-                const plugin = require(file); 
-                await plugin(log); 
-            } else{
+            if (fs.existsSync(file)) {
+                const plugin = require(file);
+                await plugin(log);
+            } else {
                 log('[INFO] : ' + file + ' does not exist')
             }
-            
 
         } catch (error) {
             err(error)

@@ -11,7 +11,7 @@ class OpenAssistant extends Plugin {
             name: 'OpenAssistant',
             id: 'oa',
             description: 'OpenAssistant',
-            role: 'manager',
+            role: 'CEOx',
             active: true,
             url: "https://open-assistant.io"
         }
