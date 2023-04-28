@@ -161,14 +161,14 @@ function addWebView(pluginDir, plugin) {
     let tabContent = div('webviews')
     tabContent.className = 'tab-content'
     let main = div(tabContent)
-    let plgWebView = webview(main)
+    let plgWebView = webview()
     plugin.webView = plgWebView
     plgWebView.partition = 'persist:' + plugin.config().id
     plgWebView.id = pluginDir + '-view'
     plgWebView.src = plugin.config().url
     plgWebView.preload = '../plugins/' + pluginDir + '/preload.js'
+    main.appendChild(plgWebView)
 
-    
     let bar = div(main)
     bar.className = 'button-bar'
     let toggleViewButton = button(bar)
@@ -178,7 +178,6 @@ function addWebView(pluginDir, plugin) {
         toggleWebView(this, pluginDir + '-view')
 
     }
-    
 
     let debugButton = button(bar)
     debugButton.className = 'command'
@@ -191,8 +190,8 @@ function addWebView(pluginDir, plugin) {
 
     let urlBox = div(bar)
     urlBox.innerHTML = plgWebView.src
-    urlBox.className ='urlBox'
+    urlBox.className = 'urlBox'
 
-    //plgWebView.urlBox = urlBox
+    plgWebView.urlBox = urlBox
 
 }

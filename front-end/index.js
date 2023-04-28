@@ -166,7 +166,7 @@ function get(id) {
 function element(parent, tag) {
     try {
         let element = document.createElement(tag)
-        if (parent.tagName) {
+        if (parent && parent.tagName) {
             parent.appendChild(element)
         } else if (parent) {
             get(parent).appendChild(element)
@@ -183,7 +183,10 @@ function button(parent) {
     return element(parent, 'button')
 }
 function webview(parent) {
-    return element(parent, 'webview')
+    if(parent){
+        throw new Error('parent is not supported for webview, append it after configuration')
+    }
+    return element(null, 'webview')
 }
 
 function span(parent) {
