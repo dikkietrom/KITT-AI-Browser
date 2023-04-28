@@ -9,7 +9,7 @@ class MjApiHack extends Plugin {
             description: 'MjApiHack',
             role: 'worker',
             skill: 'tti',
-            active:false,    
+            active:true,    
             url: "https://discord.com/channels/@me/1093057901330968647"
         }
     }
@@ -21,4 +21,4 @@ ipcRenderer.on('plugin-mj-api-hack-reply', (event,arg)=>{
 }
 );
 
-new MjApiHack()
+new MjApiHack() 

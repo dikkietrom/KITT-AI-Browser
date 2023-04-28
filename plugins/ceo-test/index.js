@@ -8,8 +8,8 @@ class CeoTest extends Plugin {
         return {
             name: 'CeoTest',
             description: 'CeoTest',
-            id:'ceo-test',
-            role: 'CEO',
+            id:'test',
+            role: 'CEOx',
             active: true,
             url: "../plugins/ceo-test/index.html"
         }
@@ -20,7 +20,7 @@ class CeoTest extends Plugin {
          setTimeout(  () => {
              message.content = 'ceo result : ' + message.content
              message.send() 
-         }  ,1000 )
+         }  ,100 )
          return 'ceo is working on   : ' + message.content 
      }
 }

@@ -1,3 +1,4 @@
+
 .button-bar {
     margin-top: 10px;
     display: flex;
@@ -162,4 +163,7 @@
     display: block;
     margin: 1em;
     margin-top: 0;
+}
+.urlBox{
+    padding: var(---command-padding);
 }

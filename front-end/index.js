@@ -14,7 +14,7 @@ function init() {
         }
     }
     recognition.start();
-    document.getElementById('inp').focus()
+    document.getElementById('inp').focus() 
     if (!currentInp) {
         currentInp = document.getElementById('inp')
     }
@@ -178,6 +178,12 @@ function element(parent, tag) {
 }
 function div(parent) {
     return element(parent, 'div')
+}
+function button(parent) {
+    return element(parent, 'button')
+}
+function webview(parent) {
+    return element(parent, 'webview')
 }
 
 function span(parent) {

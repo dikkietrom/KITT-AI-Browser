@@ -17,9 +17,9 @@ class Feed extends Plugin {
 
     exec(message) {
         if (!this.data) {
-            let gpt = pluginByRole['CEO'][0]
+            let nxt = message.to[1]
             let data = []
-            let size = 2
+            let size = 1000
             let content = message.content
             this.parts = content.length / size
     
@@ -27,25 +27,32 @@ class Feed extends Plugin {
                 this.parts = parseInt(this.parts ) + 1
             }
             let ins = []
+            ins.push(nxt)
+            ins.push(this)
+            data.push(pre)
+      
             for (let i = 0; i < this.parts; i++) {
-                data[i] = content.substring(i * size, (i + 1) * size)
-                ins.push(gpt)
+                data.push(content.substring(i * size, (i + 1) * size))
+         
                 if (i != this.parts - 1) {
+                    ins.push(nxt)
                     ins.push(this)
                 }
             }
+            this.parts ++
             message.to.splice(1, 0, ...ins)
             message.chain.splice(1, 0, ...ins)
-            this.data = data
+            this.data =  data
             this.part = 0
 
         }
-        message.content = this.data[this.part++]
-        let lft = this.part + 1 - this.parts
+        message.content =  this.part 
+            ? chucnk (this.part,this.parts-1, this.data[this.part++]) 
+            : this.data[this.part++]
         if (this.part >= this.parts) {
             this.data = null
         }
-        return "cutting feed : " + this.part + " : " + message.content
+        return "cutting feed : " + (this.part-1) + " : " + message.content
     }
 }
 
@@ -63,10 +70,11 @@ Then you just answer: "Received part 1/10"
         
 And when I tell you "ALL PARTS SENT", then you can continue processing the data and answering my requests.`
 
-let chucnk = (part,from)=>`Do not answer yet. This is just another part of the text I want to send you. 
+let chucnk = (part,from,data)=>`Do not answer yet. This is just another part of the text I want to send you. 
 Just receive and acknowledge as 
 "Part ${part}/${from} received" and wait for the next part.
 [START PART ${part}/${from}]
+${data}
 [END PART ${part}/1${from}]
 Remember not answering yet. Just acknowledge you received this part with the message 
 "Part ${part}/${from} received" and wait for the next part.`

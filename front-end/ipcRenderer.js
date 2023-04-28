@@ -158,35 +158,41 @@ function addWebView(pluginDir, plugin) {
     //           </div>
     //       </div>
     //   </div>
-    let div1 = div('webviews')
-    div1.className = 'tab-content'
-    let div2 = div(div1)
-    let webview = document.createElement('webview')
-    plugin.webView = webview
-    webview.partition = 'persist:' + plugin.config().id
-    webview.id = pluginDir + '-view'
-    webview.src = plugin.config().url
-    webview.preload = '../plugins/' + pluginDir + '/preload.js'
+    let tabContent = div('webviews')
+    tabContent.className = 'tab-content'
+    let main = div(tabContent)
+    let plgWebView = webview(main)
+    plugin.webView = plgWebView
+    plgWebView.partition = 'persist:' + plugin.config().id
+    plgWebView.id = pluginDir + '-view'
+    plgWebView.src = plugin.config().url
+    plgWebView.preload = '../plugins/' + pluginDir + '/preload.js'
 
-    div2.appendChild(webview)
-    let div3 = div(div2)
-    div3.className = 'button-bar'
-    let button = document.createElement('button')
-    button.className = 'command'
-    button.innerHTML = 'Show webview'
-    button.onclick = function() {
+    
+    let bar = div(main)
+    bar.className = 'button-bar'
+    let toggleViewButton = button(bar)
+    toggleViewButton.className = 'command'
+    toggleViewButton.innerHTML = 'Show webview'
+    toggleViewButton.onclick = function() {
         toggleWebView(this, pluginDir + '-view')
 
     }
-    div3.appendChild(button)
-    let button2 = document.createElement('button')
-    button2.className = 'command'
-    button2.innerHTML = 'Debug'
-    button2.onclick = function() {
+    
+
+    let debugButton = button(bar)
+    debugButton.className = 'command'
+    debugButton.innerHTML = 'Debug'
+    debugButton.onclick = function() {
         toggleDevTools(this, pluginDir + '-view')
 
     }
-    webview.debugButton = button2
-    div3.appendChild(button2)
+    plgWebView.debugButton = debugButton
+
+    let urlBox = div(bar)
+    urlBox.innerHTML=plgWebView.src
+    urlBox.className='urlBox'
+
+    plgWebView.urlBox = urlBox
 
 }

@@ -1,3 +1,7 @@
+:root {
+  --command-padding: 0.2em;
+}
+
 body {
     background-color: rgba(1,1,1,1);
     color: #fff;
@@ -48,7 +52,7 @@ input,select,textarea,button {
     background-color: #ff0000ff;
     border: 0px solid #ffffff57;
     margin: 0.2em;
-    padding: 0.2em;
+    padding: var(---command-padding);
     border-radius: .3em;
     color: #Fff;
     text-shadow: -2px 2px 0px black;

@@ -17,7 +17,7 @@ const appName = packageJson.name;
 const {log, err, initShared} = require(path.join(__dirname, '..', 'lib/shared.js'));
 const filter = {
     urls: ['*://*/*'],
-};
+}; 
 autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dikkietrom',
