@@ -6,17 +6,17 @@ async function init(lg) {
     
 }
 
-ipcMain.on('gpt-hack-delta-text', (event,arg)=>{
+ipcMain.on('html-delta-text', (event,arg)=>{
    // Send input data to the renderer process
-   log.send('gpt-hack-delta-text',arg)
+   log.send('html-delta-text',arg)
 
 }
 );
 
 
-ipcMain.on('get-last', (event,last)=>{
-   // Send input data to the renderer process
-   log.send('get-last',last)
+ipcMain.on('html-get-last', (event,last)=>{
+   console.log('')
+   log.send('html-get-last',last)
 
 }
 );

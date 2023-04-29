@@ -2,7 +2,7 @@ const {ipcMain} = require('electron');
 let log
 function init(lg) {
     log = lg
-    console.log(init)
+     
 }
 
 ipcMain.on('oa-delta-text', (event,arg)=>{

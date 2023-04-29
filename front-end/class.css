@@ -159,7 +159,7 @@
     padding: 10px;
     background: #fff7;
     border-radius: 1em;
-    width: calc(100% - 1em);
+    width: calc(100% - 4em);
     overflow: auto;
 }
 

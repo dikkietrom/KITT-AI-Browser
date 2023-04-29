@@ -56,9 +56,8 @@ class Plugin {
     onData(json) {
     }
     onTimeOut() {
-
         if (this.message) {
-            this.webView.send('get-last')
+            this.webView.send('html-get-last')
         }
         this.timeoutId = null
     }
@@ -209,34 +208,7 @@ function pluginImpl() {
     return pluginByName[sel.value]
 }
 
-function codeBlocks(arg) {
-    let index = message.indexOf('```')
-    let code = ''
-    let ret = []
-    if (index != -1) {
 
-        while (index != -1) {
-            let d = document.createElement('span')
-            d.innerHTML = '[code return]'
-            arg.container.appendChild(d)
-            code = message.substring(index + 3, message.indexOf('```', index + 3))
-            message = message.substring(0, index) + message.substring(message.indexOf('```', index + 3) + 3)
-            index = message.indexOf('```')
-            d.innerHTML += '<pre onclick=eval(this.innerHTML) style=background-color:#fff7;padding:1em>' + code + '</pre>'
-            code = code.trim()
-            if (code.indexOf('python' == 0)) {
-                ret.push(new Error("cannot directly execute python, include writing the python and executing it"))
-            } else {
-                ret.push(code)
-            }
-
-        }
-    } else {
-        return null
-    }
-    return ret
-
-}
 function extractPluginDirFromAsar(path) {
     const pattern = /app\.asar\/plugins\/([^/]+)\//;
     const match = path.match(pattern);

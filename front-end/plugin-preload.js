@@ -2,9 +2,8 @@ const {ipcRenderer,contextBridge} = require('electron');
 
 eval(ipcRenderer.sendSync('logPreload'))
 const log = logPreload
-log(' gpt4-api hack preload.js got logPreload')
+log('preload.js got logPreload')
 console.log('test')
-
 
 document.addEventListener('DOMContentLoaded', ()=>{
 
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
 }
 , false);
-
 
 const config = {
     characterData: true,
@@ -29,35 +27,33 @@ const observer = new MutationObserver((mutations)=>{
 
     mutations.forEach((mutation)=>{
       if (mutation.type === 'characterData') {
-            console.log(mutation.target.textContent)
-            ipcRenderer.send('gpt-hack-delta-text',{data:mutation.target.textContent})
+            log('got mutation : ' + mutation.target.textContent.substring(0,5) + ' ...')
+            ipcRenderer.send('html-delta-text',{data:mutation.target.textContent})
       }
     }
     );
 }
 );
 
-
-
 function txtArea() {
     return document.getElementsByTagName('textarea')[0]
 }
 let currentInput
 ipcRenderer.on('send-input', (event,message)=>{
-    log('send-input  gpt4-api hack', message)
-    window.fetch=null
+    log('send-input hack', message)
     reset = true
     txtArea().value = message
-    currentInput= message
+    currentInput = message
     triggerEnterKeyOnTextarea()
 
 }
 )
-ipcRenderer.on('get-last', (event,message)=>{
+ipcRenderer.on('html-get-last', (event,message)=>{
     let last = document.getElementsByClassName('group')
     last = last[last.length-1]
-    last=last.innerText
-    ipcRenderer.send('get-last' , last)
+    last=last.innerText 
+    log('html-get-last preload')
+    ipcRenderer.send('html-get-last' , last)
  }
  )
 function triggerEnterKeyOnTextarea() {
@@ -75,9 +71,3 @@ function triggerEnterKeyOnTextarea() {
         err(e);
     }
 }
-
-
-log('preload gpt4-api hack')
-
-
-

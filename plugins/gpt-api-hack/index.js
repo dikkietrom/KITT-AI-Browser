@@ -20,24 +20,13 @@ class Gpt4apiHack extends Plugin {
         this.webView.send('send-input', message.content)
     }
 
-    onData(json) {
-        // console.log(json.url)
-        if (json.url.indexOf('https://events.statsigapi.net/v1/rgstr') == 0) {// if (json.url.indexOf('https://chat.openai.com/backend-api/conversations?offset') == 0) {
-        //            if (this.message) {
-        //
-        //
-        //               // log('onData ' + gpt4apiHack.container)
-        //                this.webView.send('get-last')
-        //
-        //            }
-        }
-    }
+
 }
 
 // Cancel the timeout
-ipcRenderer.on('gpt-hack-delta-text', (event,json)=>{
+ipcRenderer.on('html-delta-text', (event,json)=>{
     if (gpt4apiHack.message) {
-        console.log(json)
+        log('html-delta-text index')
         gpt4apiHack.message.content = json.data
         if (gpt4apiHack.container) {
             gpt4apiHack.container.innerText = json.data
@@ -49,11 +38,15 @@ ipcRenderer.on('gpt-hack-delta-text', (event,json)=>{
 );
 const synth = window.speechSynthesis
 
-ipcRenderer.on('get-last', (event,last)=>{
-    if (gpt4apiHack.message) {
+ipcRenderer.on('html-get-last', (event,last)=>{
+    let message = gpt4apiHack.message
+    if (message) {
         // Send input data to the renderer process
         console.log('get last index ' + gpt4apiHack.container)
-        gpt4apiHack.message.content = last
+        if(last.indexOf('ChatGPT')==0){
+            last = last.substring('ChatGPT'.length+1)
+        }
+        message.content = last
         if (gpt4apiHack.container) {
             gpt4apiHack.container.innerText = '[CLEARED]'
         }

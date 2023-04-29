@@ -75,6 +75,7 @@ async function initPlugins() {
     log('initPlugins sortedDirs before sort', sortedDirs);
 
     sortedDirs = sortedDirs.sort((a,b)=>a.localeCompare(b));
+    let json = {}
     log('initPlugins sortedFiles after sort', sortedDirs);
 
     for (let i = 0; i < sortedDirs.length; i++) {
@@ -82,16 +83,28 @@ async function initPlugins() {
         if (dir == '.DS_Store') {
             continue
         }
+        json[dir]={}
+        let dirInfo = json[dir]
         log('initPlugins', dir);
         try {
 
             // Path to check
-            const file = path.join(pluginPath, dir, 'main.js')
+            let file = path.join(pluginPath, dir, 'main.js')
 
-            // Check if path exists
+            // Check if path exists, init file
             if (fs.existsSync(file)) {
-                const plugin = require(file);
-                await plugin(log);
+                const pluginInit = require(file);
+                await pluginInit(log);
+            } else {
+                log('[INFO] : ' + file + ' does not exist')
+            }
+
+            // Path to check
+            file = path.join(pluginPath, dir, 'preload.js')
+
+            // Check if path exists, init file
+            if (fs.existsSync(file)) {
+                dirInfo.preload=true
             } else {
                 log('[INFO] : ' + file + ' does not exist')
             }
@@ -101,7 +114,7 @@ async function initPlugins() {
         }
     }
 
-    log.send('plugin-message', sortedDirs);
+    log.send('plugin-message',json );
 
 }
 

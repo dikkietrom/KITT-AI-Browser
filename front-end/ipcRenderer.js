@@ -49,13 +49,13 @@ ipcRenderer.on('dev-tools-closed', (event,arg)=>{
 }
 )
 
-ipcRenderer.on('plugin-message', (event,sortedDirs)=>{
+ipcRenderer.on('plugin-message', (event,json)=>{
 
-    log('plugin-message sortedDirs : ', sortedDirs)
+    log('plugin-message sortedDirs : ', json)
 
     let index = 0
-
-    sortedDirs.forEach(dir=>{
+    for(let dir in json){
+        let info = json[dir]
         log('initPlugins dir : ', dir);
         if (dir != '.DS_Store') {
             let script = document.createElement('script')
@@ -63,28 +63,23 @@ ipcRenderer.on('plugin-message', (event,sortedDirs)=>{
             log(src)
             script.src = src
             document.body.appendChild(script)
-
             script.onload = (arg)=>{
                 let plugin = pluginByDir[dir]
                 if (plugin.config().url && plugin.config().active) {
                     let tab = onScriptLoad({
                         index: index,
                         dir: dir,
-                        plugin: plugin
+                        plugin: plugin,
+                        info:info
                     })
-
                     let i = index++
                     tab.onclick = ()=>{
                         showTab(i)
                     }
-
                 }
             }
-
         }
-
     }
-    )
 }
 )
 
@@ -123,6 +118,7 @@ function onScriptLoad(arg) {
     let index = arg.index
     let dir = arg.dir
     let plugin = arg.plugin
+    let info = arg.info
     log('dir plugin.config : ', dir, JSON.stringify(plugin.config()))
 
     plugByUrl[extractDomain(plugin.config().url)] = plugin
@@ -136,7 +132,7 @@ function onScriptLoad(arg) {
 
     tabbar.appendChild(tab)
 
-    addWebView(dir, plugin, index)
+    addWebView(dir, plugin, info)
     if (index == 0) {
         tab.className = 'tab active'
         showTab(0)
@@ -147,7 +143,7 @@ function onScriptLoad(arg) {
     return tab
 }
 
-function addWebView(pluginDir, plugin) {
+function addWebView(pluginDir, plugin,info) {
     //add the webview like
     //    <div class="tab-content">
     //       <div>
@@ -166,8 +162,12 @@ function addWebView(pluginDir, plugin) {
     plgWebView.partition = 'persist:' + plugin.config().id
     plgWebView.id = pluginDir + '-view'
     plgWebView.src = plugin.config().url
-    plgWebView.preload = '../plugins/' + pluginDir + '/preload.js'
-    main.appendChild(plgWebView)
+    if(info.preload){
+        plgWebView.preload = '../plugins/' + pluginDir + '/preload.js'
+    }else{
+        plgWebView.preload = '../front-end/plugin-preload.js'
+    }
+    main.appendChild(plgWebView)//append after config or no preload
 
     let bar = div(main)
     bar.className = 'button-bar'
