@@ -116,6 +116,18 @@
 .plugin-id {
     background: none;
 }
+.plugin-popup {
+  position: absolute;
+  border: 1px solid #ccc;
+  background: #fff;
+  z-index: 1000;
+}
+
+.plugin-select {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
 .speak {
     width: calc(100% - 1em);
     height: 2em;

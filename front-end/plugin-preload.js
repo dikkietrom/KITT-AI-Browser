@@ -23,8 +23,6 @@ const config = {
 
 let reset = true
 const observer = new MutationObserver((mutations)=>{
-
-
     mutations.forEach((mutation)=>{
       if (mutation.type === 'characterData') {
             log('got mutation : ' + mutation.target.textContent.substring(0,5) + ' ...')

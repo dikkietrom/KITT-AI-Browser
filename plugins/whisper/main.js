@@ -6,7 +6,7 @@ const path = require('path');
 
 const mic = require('mic');
 const wav = require('wav');
-const {log,err} = require(path.join(__dirname, '..','lib/shared.js'));
+const {log,err} = require(path.join(__dirname, '..','../lib/shared.js'));
 
 const sttsMain = {}
 

@@ -36,42 +36,24 @@ function init() {
     ipcRenderer.send('gpt-models')
     ipcRenderer.send('plugin-request')
 }
-
-function setPreset(sel) {
-    if (sel.value == 'google') {
-        currentInp.value = `when I start a question with the word "search" then reply with search() and in between the braces all words after the first word in between single quotes no comments, no explain. Wrap it in a javascript code block. Complete this based upon what I just explained
-
-                            Me : search apples
-                            You : `
-    } else if (sel.value == 'bash') {
-        currentInp.value = `a bash script that generates, compiles and runs a simple hello world c program, no comments, no explain, in a code block please`
-    } else if (sel.value == 'ceo') {
-        currentInp.value = `you are ceo of a company that is run by an ai board, 
-                            ai managers and ai workers. The communication protocol is 
-                            <sender>message<receiver>. When there is no sender the message is from me. You alway use the message protocol, my name is Michael, yours is KITT`
-    } else if (!sel.value) {
-        currentInp.value = ``
-        return
-    }
-    run()
-
-}
-function textInputListener(event) {
+ 
+function textInputListener(input, event) {
     try {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            run();
+        if (event.key === 'Enter' && ! event.shiftKey) {
+            run()
             event.preventDefault();
-            return false;
+            return false
         }
-        if (event.key === '/') {
-            let input = event.target;
-            input.value = '';
-            showPluginSelector(input);
+        if (event.key === '/' ) {
+            
+            input.value+='\u00bb'
             event.preventDefault();
-            return false;
+            //showPluginSelector(input)
+            
+            return false
         }
     } catch (error) {
-        err(error);
+        err(error)
     }
 }
 
@@ -80,9 +62,8 @@ function showPluginSelector(input) {
         return { name: plugin.constructor.name, value: plugin.config().id };
     });
 
-    let popup = document.createElement('div');
+    let popup = document.createElement('select');
     popup.classList.add('plugin-popup');
-    popup.style.position = 'absolute';
     popup.style.left = input.offsetLeft + 'px';
     popup.style.top = input.offsetTop + input.offsetHeight + 'px';
     popup.style.border = '1px solid #ccc';
@@ -90,14 +71,13 @@ function showPluginSelector(input) {
     popup.style.zIndex = 1000;
 
     pluginList.forEach(plugin => {
-        let pluginOption = document.createElement('div');
+        let pluginOption = document.createElement('option');
         pluginOption.classList.add('plugin-option');
         pluginOption.textContent = plugin.name;
-        pluginOption.style.padding = '4px 8px';
-        pluginOption.style.cursor = 'pointer';
+        pluginOption.value = '/' + plugin.value;
 
         pluginOption.addEventListener('click', () => {
-            input.value = '/' + plugin.value;
+            input.value = pluginOption.value;
             popup.remove();
         });
 
@@ -115,7 +95,7 @@ function showPluginSelector(input) {
     });
 }
 
- 
+
 function text(txt) {
     let pre = document.createElement('span')
     pre.innerHTML = txt

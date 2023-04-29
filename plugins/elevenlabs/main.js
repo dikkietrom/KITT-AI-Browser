@@ -2,10 +2,10 @@ const {ipcMain} = require('electron');
 const {spawn} = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const {apiKeys,promptIt} = require("../back-end/keys.js")
-const {log,err} = require(path.join(__dirname, '..','lib/shared.js'));
+const {apiKeys,promptIt} = require("../../back-end/keys.js")
+const {log,err} = require(path.join(__dirname, '..','../lib/shared.js'));
 
- let apiKey
+let apiKey
 async function init() {
 
     apiKey = apiKeys('elevenlabs')

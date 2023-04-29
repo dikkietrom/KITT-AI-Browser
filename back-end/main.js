@@ -76,60 +76,37 @@ function createWindow() {
     )
 
     let ses = session.defaultSession
-    //console.log(session)
-    //            ses.webRequest.onBeforeRedirect((details, callback) => {
-    //                console.log('session.defaultSession.webRequest.onBeforeRedirect', details.url)
-    //
-    //            });
-    //            ses.webRequest.onBeforeRequest((details, callback) => {
-    //                        if (details.url.indexOf('devtool') == -1) {
-    ////
-    ////                            const url = details.url;
-    ////                            const requestId = details.id;
-    ////                            const passThrough = new PassThrough();
-    ////
-    ////                            let data = Buffer.from('');
-    ////
-    ////                            passThrough.on('data', (chunk) => {
-    ////                              data = Buffer.concat([data, chunk]);
-    ////                            });
-    ////
-    ////                            passThrough.on('end', () => {
-    ////                              handleResponseData(url, data);
-    ////                            });
-    ////
-    ////                            callback({ responseHeaders: details.responseHeaders, stream: passThrough });
-    //
-    //                }
-    //
-    //            });
-    //            ses.webRequest.onResponseStarted((details, callback) => {
-    //                console.log('session.defaultSession.webRequest.onResponseStarted', details.url)
-    //
-    //            });
-    //
 
-    //            ses.webRequest.onErrorOccurred((details, callback) => {
-    //                console.log('session.defaultSession.webRequest.onErrorOccurred', details.url)
-    //
-    //            });
-    //            ses.webRequest.onHeadersReceived((details, callback) => {
-    //                console.log('session.defaultSession.webRequest.onHeadersReceived', details.url)
-    //
-    //
-    //            });
-    //            ses.webRequest.onResponseStarted((details, callback) => {
-    //                console.log('session.defaultSession.webRequest.onResponseStarted', details.url)
-    //
-    //            });
-    //
+    try {
+        autoUpdater.checkForUpdatesAndNotify();
+    } catch (error) {
+        err(error)
+    }
+    try {
+        // Get the default menu
+        const menu = Menu.getApplicationMenu();
 
-    //        session.defaultSession.webRequest.onSendHeaders((details,callback)=>{
-    //            if (details.url.indexOf('devtool') == -1) {
-    //                console.log('session.defaultSession.webRequest.onSendHeaders', details.url)
-    //            }
-    //        }
-    //        );
+        // Add a new item to the "File" menu
+        let item = new MenuItem({
+            id: 'update',
+            label: 'update',
+            click() {
+                autoUpdater.checkForUpdatesAndNotify();
+            }
+        })
+        item.menu = menu
+        menu.append(item);
+
+        // Set the updated menu to the application menu
+        // Menu.setApplicationMenu(menu);
+    } catch (error) {
+        err(error)
+    }
+
+    //try init
+
+    initMainScript('./ipcMain.js')
+ 
 
 }
 // This method will be called when Electron has finished
@@ -183,43 +160,7 @@ app.on('web-contents-created', (event,contents)=>{
     )
 }
 )
-// Wait for the app to be ready
-app.whenReady().then(()=>{
-    try {
-        autoUpdater.checkForUpdatesAndNotify();
-    } catch (error) {
-        err(error)
-    }
-    try {
-        // Get the default menu
-        const menu = Menu.getApplicationMenu();
-
-        // Add a new item to the "File" menu
-        let item = new MenuItem({
-            id: 'update',
-            label: 'update',
-            click() {
-                autoUpdater.checkForUpdatesAndNotify();
-            }
-        })
-        item.menu = menu
-        menu.append(item);
-
-        // Set the updated menu to the application menu
-        // Menu.setApplicationMenu(menu);
-    } catch (error) {
-        err(error)
-    }
-
-    //try init
-    initMainScript('../stt/stt-main.js')
-    initMainScript('../tts/tts-main.js')
-    initMainScript('./bash.js')
-    initMainScript('./ipcMain.js')
-
-}
-);
-
+ 
 function initMainScript(script) {
     //try init plugins
     try {

@@ -14,7 +14,7 @@ body {
     background-size: 100%;
     background-attachment: fixed;
     height: fit-content;
-    width: fit-content;
+    width: 100%;
     padding: 0;
     margin: 0;
 }

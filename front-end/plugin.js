@@ -31,19 +31,7 @@ class Plugin {
             log(dir)
         }
 
-        //add it to the plugin select
-        try {
-            let sel = document.getElementById('plugin-impl')
-            let opt = document.createElement('option')
-            sel.appendChild(opt)
-            opt.innerHTML = this.constructor.name
-            opt.value = this.constructor.name
-            if (this.config().role == 'CEO') {
-                opt.selected = true
-            }
-        } catch (error) {
-            err(error)
-        }
+ 
 
     }
 
@@ -93,7 +81,7 @@ function run() {
         currentInp.focus()
     }
     currentInp.outerHTML = ''
-    ipcRenderer.send('tts-kitt', selVal('voices'))
+ 
     let message = new Message()
     let content = currentInp.value.trim()
     let toc = 0
@@ -192,7 +180,7 @@ function newInp(container) {
     let inp = document.createElement('textarea')
     inp.className = 'speak'
     inp.onkeydown = (event)=>{
-        textInputListener(this, event)
+        textInputListener(inp, event)
     }
 
     td.appendChild(inp)

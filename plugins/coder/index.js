@@ -15,6 +15,9 @@ class Coder extends Plugin {
 
     exec(message) {
         try {
+
+            
+
             let code = codeBlock({
                 content: message.content
             })
@@ -62,12 +65,12 @@ function codeBlock(json) {
             }
             code = code.substring(language.length)
 
-            if (language && language != 'javascipt' && language != 'js' && language != 'bash') {
-                throw new Error(`cannot directly execute "${language}". Include writing the language on line one,
-                    options are js,javascript,bash`)
+            if (language != 'bash') {
+                throw new Error(`cannot directly execute "${language}". Include writing the language on line 
+                    one, only option is bash`)
             } else if (!language) {
-                throw new Error(`Firt line of code block does not specify the language. Include writing the language one line one,
-                    options are js,javascript,bash`)
+                throw new Error(`Firt line of code block does not specify the language. Include writing the language on line one,
+                    the only option is bash`)
             }
         }
     }

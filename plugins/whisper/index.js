@@ -1,3 +1,26 @@
+class Whisper extends Plugin {
+    constructor(arg) {
+        super(arg)
+    }
+
+    config() {
+        return {
+            name: 'Whisper API',
+            role: 'sst',
+            active: true,
+            id: 'wsp',
+            description: 'Whisper API'
+        }
+    }
+
+    exec(message) {
+        return 'Whisper got : ' + message.content
+    }
+}
+new Whisper()
+
+
+
 ipcRenderer.on('stts-main-reply', (event,stts)=>{
 
     let sttImpl = document.getElementById('stt-impl')
