@@ -19,7 +19,9 @@ class Gpt4apiHack extends Plugin {
     exec(message) {
         this.webView.send('send-input', message.content)
     }
-
+    onData(json){
+        console.log(json)
+    }
 
 }
 

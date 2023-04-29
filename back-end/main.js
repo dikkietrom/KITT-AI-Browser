@@ -130,27 +130,6 @@ function createWindow() {
     //            }
     //        }
     //        );
-    session.defaultSession.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
-
-        if (details.uploadData) {
-            try {
-
-                const buffer = details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
-                let obj = {}
-                obj.requestHeaders = details.requestHeaders
-                obj.buffer = buffer.split('\n')
-                obj.url = details.referrer
-                log.send('onBeforeSendHeaders', obj)
-
-            } catch (error) {
-                err(error)
-            }
-        }
-        if (callback) {
-            callback(details);
-        }
-    }
-    )
 
 }
 // This method will be called when Electron has finished
@@ -176,6 +155,30 @@ app.on('web-contents-created', (event,contents)=>{
             }
         }
         );
+
+        ses.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
+
+            if (details.uploadData) {
+                try {
+
+                    const buffer = details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+                    let obj = {}
+                    obj.requestHeaders = details.requestHeaders
+                    obj.buffer = buffer.split('\n')
+                    obj.url = details.referrer
+                   // log.send('onBeforeSendHeaders', obj)
+
+                } catch (error) {
+                    err(error)
+                }
+            }
+            if (callback) {
+                callback(details);
+            }
+        }
+        )
+
+
     }
     )
 }

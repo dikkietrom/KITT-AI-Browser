@@ -56,17 +56,66 @@ function setPreset(sel) {
     run()
 
 }
-function textInputListener(input, event) {
+function textInputListener(event) {
     try {
-        if (event.key === 'Enter') {
-            run()
+        if (event.key === 'Enter' && !event.shiftKey) {
+            run();
             event.preventDefault();
-            return false
+            return false;
+        }
+        if (event.key === '/') {
+            let input = event.target;
+            input.value = '';
+            showPluginSelector(input);
+            event.preventDefault();
+            return false;
         }
     } catch (error) {
-        err(error)
+        err(error);
     }
 }
+
+function showPluginSelector(input) {
+    let pluginList = Object.values(pluginById).map(plugin => {
+        return { name: plugin.constructor.name, value: plugin.config().id };
+    });
+
+    let popup = document.createElement('div');
+    popup.classList.add('plugin-popup');
+    popup.style.position = 'absolute';
+    popup.style.left = input.offsetLeft + 'px';
+    popup.style.top = input.offsetTop + input.offsetHeight + 'px';
+    popup.style.border = '1px solid #ccc';
+    popup.style.background = '#fff';
+    popup.style.zIndex = 1000;
+
+    pluginList.forEach(plugin => {
+        let pluginOption = document.createElement('div');
+        pluginOption.classList.add('plugin-option');
+        pluginOption.textContent = plugin.name;
+        pluginOption.style.padding = '4px 8px';
+        pluginOption.style.cursor = 'pointer';
+
+        pluginOption.addEventListener('click', () => {
+            input.value = '/' + plugin.value;
+            popup.remove();
+        });
+
+        popup.appendChild(pluginOption);
+    });
+
+    document.body.appendChild(popup);
+
+    // Remove the popup when clicking outside
+    document.addEventListener('click', function removePopup(event) {
+        if (!popup.contains(event.target)) {
+            popup.remove();
+            document.removeEventListener('click', removePopup);
+        }
+    });
+}
+
+ 
 function text(txt) {
     let pre = document.createElement('span')
     pre.innerHTML = txt
