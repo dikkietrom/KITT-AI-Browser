@@ -20,17 +20,15 @@ class Gpt4apiHack extends Plugin {
     exec(message) {
         this.webView.send('send-input', message.content)
     }
-    onData(json){
-       // console.log(json)
+    onData(json) {// console.log(json)
     }
-    onReplied(container){
-        if(container.children[0]){
-            
-          //  let child = container.children[0].children[0].children[1].children[0].children[0]
-            
-          //  container.removeChild(container.children[0])
-          //  container.appendChild(child)
-            
+    onReplied(container) {
+        if (container.children[0]) {
+        //  let child = container.children[0].children[0].children[1].children[0].children[0]
+
+        //  container.removeChild(container.children[0])
+        //  container.appendChild(child)
+
         }
     }
 }
@@ -54,9 +52,9 @@ ipcRenderer.on('html-get-last', (event,last)=>{
     let message = gpt4apiHack.message
     if (message) {
         // Send input data to the renderer process
-        console.log('get last index ' + gpt4apiHack.container.innerHTML)
-        if(last.indexOf('ChatGPT')==0){
-            last = last.substring('ChatGPT'.length+1)
+        log('get last in index.js ' )
+        if (last.indexOf('ChatGPT') == 0) {
+            last = last.substring('ChatGPT'.length + 1)
         }
         message.content = last
         if (gpt4apiHack.container) {

@@ -57,12 +57,14 @@ ipcRenderer.on('html-get-last', (event,message)=>{
 
  ipcRenderer.on('doInPreload', (event,json)=>{
      try {
-        log('doInPreload' , json)
+        log('doInPreload' ,json.from)
         eval(json.js)
         ipcRenderer.send('doInPreload' , json)
      }catch(e){
         json.js=null
+        json.error = e.message
         ipcRenderer.send('doInPreload' , json)
+        err(e)
      }
   }
   )

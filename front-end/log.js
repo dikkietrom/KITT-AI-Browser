@@ -13,9 +13,11 @@ function log() {
             depth: depth + 1
         })
     } catch (error) {
-        arguments.forEach((a)=>console.error(a))
-        
         console.error(error)
+        for (let i = 0; i < arguments.length; i++) {
+            console.error(arguments[i])
+        }
+
     }
 
 }

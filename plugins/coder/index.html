@@ -5,12 +5,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Coder</title>
 
+
+        <style>
+            .group token{
+                display: inline-block;
+                padding: 0 5px;
+                border-radius: 5px;
+                margin: 0 5px;
+            }
+        </style>
     </head>
-    <body > 
-        
-
- 
-
-        
+    <body onload="document.body.innerHTML += Date.now()" >
+        <button onclick="eval(document.getElementById('code').innerText)">eval</button>
+        <div id="container"></div>
+        <script src="code.js"></script>
     </body>
     </html>

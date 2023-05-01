@@ -15,7 +15,7 @@ ipcMain.on('html-delta-text', (event,arg)=>{
 
 
 ipcMain.on('html-get-last', (event,last)=>{
-   console.log(last)
+   log('html-get-last')
    log.send('html-get-last',last)
 
 }

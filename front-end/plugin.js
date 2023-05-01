@@ -49,7 +49,7 @@ class Plugin {
     onTimeOut() {
         if (this.message) {
             try {
-                console.log('timed out',this.webView)
+                log('timed out',this.webView)
                 this.webView.send('html-get-last')
             } catch(e) {
                 log(e,this.message);
@@ -63,7 +63,7 @@ class Plugin {
         this.timeoutId = setTimeout(()=>{
             this.onTimeOut()
         }
-        , 500);
+        , 2000);
         // Cancel the timeout
     }
     stopTimer() {

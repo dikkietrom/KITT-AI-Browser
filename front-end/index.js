@@ -222,6 +222,10 @@ function insertElementAtIndex(parentElement, newElement, index) {
 function doInPreload(json){
     json.plugin.webView.send('doInPreload' , {from:json.plugin.config().name, js:json.js})
 }
+function writeFileSync(json) {
+    json.js= `fs.writeFileSync(json.loc, json.data)`
+    ipcRenderer.send('doInMain', json)
+}
 function get(id) {
     return document.getElementById(id)
 }

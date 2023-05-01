@@ -72,6 +72,15 @@ ipcMain.on('doInPreload', (event,json)=>{
     log.send(key, json)
 }
 );
+ipcMain.on('doInMain', (event,json)=>{
+    try {
+        console.log('doInMain', json)
+        eval (json.js)
+    } catch (error) {
+        err(error)
+    }
+}
+);
 
 //initialize plugins by getting the files from the plugins folder
 async function initPlugins() {

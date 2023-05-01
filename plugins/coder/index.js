@@ -16,50 +16,59 @@ class Coder extends Plugin {
 
     exec(message) {
         let that = this
+        let error=false
         try {
              let code = codeBlock({
                   content: message.content
               })
+              log('code', code.code)
+            if (code.error) {
+                error=true
+            }
+           writeFileSync({loc:'plugins/coder/code.js',data:code.code})
+
             if (code.code) {
-                 doInPreload({
-                     plugin: that,
-                        js:'document.body.innerHTML+="<pre>code</pre>"'
-//                      js:
-//`
-// let code = ${code}
-// let functionName = code.trim().substring("function ".length,code.indexOf(' ',1) ))
-// document.body.innerHTML = 'functionName ' + code
-// `
-                 })
-                //eval(code)
+                setTimeout(()=>{
+                    doInPreload({
+                         plugin: that,
+                           js:'location="index.html?"+Date.now()'
+     
+                     })
+                    }, 2000)
+                eval(code.code)
                 message.content =  "It works!"
             } else if(!code.error){
+                error = true
                 message.content =  "No code found, did you define language?"
             } else if(code.error){
+                error = true
                 message.content =  code.error
             }
-        } catch (error) {
+        } catch (aerror) {
             err(error)
-            message.content =  '[ERROR] : ' + error.message + ' : ' + error.stack
+            error = true
+            message.content =  '[ERROR] : ' + aerror.message + ' : ' + aerror.stack
             
         }
         return message.content
     }
 }
+
 function codeBlock(json) {
 
      get.parser.innerHTML = json.content
      let element = get.parser.children[get.parser.children.length - 1]
      get.parser.removeChild(element)
      let code = element.getElementsByTagName('pre')
-     if (code.length > 1) {
-         return {error:'One code block per reply please.'}
+     let codes = []
+     for (let i = 0; i < code.length; i++) {
+            codes.push(code[i].children[0].children[1].innerText)
      }
-     code = code[0]
+
      if (!code) {
          return {error: 'No code block found, please supply code block.'}
      }
-    return { code: code.children[0].children[1].innerText}
+    return { code: codes.join('\n') }
 
 }
 
