@@ -25,7 +25,7 @@ let reset = true
 const observer = new MutationObserver((mutations)=>{
     mutations.forEach((mutation)=>{
       if (mutation.type === 'characterData') {
-            log('got mutation : ' + mutation.target.textContent.substring(0,5) + ' ...')
+            log('got mutation : ' + mutation.target.textContent.substring(0,50) + ' ...')
             ipcRenderer.send('html-delta-text',{data:mutation.target.textContent})
       }
     }
@@ -49,11 +49,24 @@ ipcRenderer.on('send-input', (event,message)=>{
 ipcRenderer.on('html-get-last', (event,message)=>{
     let last = document.getElementsByClassName('group')
     last = last[last.length-1]
-    last=last.innerText 
+    last= last.outerHTML
     log('html-get-last preload')
     ipcRenderer.send('html-get-last' , last)
  }
  )
+
+ ipcRenderer.on('doInPreload', (event,json)=>{
+     try {
+        log('doInPreload' , json)
+        eval(json.js)
+        ipcRenderer.send('doInPreload' , json)
+     }catch(e){
+        json.js=null
+        ipcRenderer.send('doInPreload' , json)
+     }
+  }
+  )
+
 function triggerEnterKeyOnTextarea() {
     try {
         const enterKeyEvent = new KeyboardEvent('keydown',{

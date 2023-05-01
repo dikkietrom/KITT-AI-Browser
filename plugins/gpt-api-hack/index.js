@@ -13,6 +13,7 @@ class Gpt4apiHack extends Plugin {
             description: 'Gpt4ApiHack',
             role: 'CEO',
             active: true,
+            icon: 'icon.png',
             url: "https://chat.openai.com/"
         }
     }
@@ -20,9 +21,18 @@ class Gpt4apiHack extends Plugin {
         this.webView.send('send-input', message.content)
     }
     onData(json){
-        console.log(json)
+       // console.log(json)
     }
-
+    onReplied(container){
+        if(container.children[0]){
+            
+          //  let child = container.children[0].children[0].children[1].children[0].children[0]
+            
+          //  container.removeChild(container.children[0])
+          //  container.appendChild(child)
+            
+        }
+    }
 }
 
 // Cancel the timeout
@@ -44,7 +54,7 @@ ipcRenderer.on('html-get-last', (event,last)=>{
     let message = gpt4apiHack.message
     if (message) {
         // Send input data to the renderer process
-        console.log('get last index ' + gpt4apiHack.container)
+        console.log('get last index ' + gpt4apiHack.container.innerHTML)
         if(last.indexOf('ChatGPT')==0){
             last = last.substring('ChatGPT'.length+1)
         }

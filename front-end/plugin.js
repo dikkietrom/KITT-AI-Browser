@@ -28,13 +28,16 @@ class Plugin {
             let role = this.config().role
             pluginByRole[role] = pluginByRole[role] ? pluginByRole[role] : []
             pluginByRole[role].push(this)
+            this.dir = dir
             log(dir)
         }
 
  
 
     }
+    onReplied(message) {
 
+    }
     config() {
         throw new Error('config not implemented for ' + this.config().name)
     }
@@ -45,7 +48,12 @@ class Plugin {
     }
     onTimeOut() {
         if (this.message) {
-            this.webView.send('html-get-last')
+            try {
+                console.log('timed out',this.webView)
+                this.webView.send('html-get-last')
+            } catch(e) {
+                log(e,this.message);
+            }
         }
         this.timeoutId = null
     }
@@ -55,7 +63,7 @@ class Plugin {
         this.timeoutId = setTimeout(()=>{
             this.onTimeOut()
         }
-        , 2000);
+        , 500);
         // Cancel the timeout
     }
     stopTimer() {
@@ -68,7 +76,7 @@ class Plugin {
         this.webView.send(key, message)
     }
 }
-
+const seperator = '\u00bb'
 function run() {
     log('start')
     get('console-view').innerHTML = ''
@@ -85,7 +93,7 @@ function run() {
     let message = new Message()
     let content = currentInp.value.trim()
     let toc = 0
-    if (content.charAt(0) == '/') {
+    if (content.charAt(0) == seperator) {
         let spaceIndex = content.indexOf(' ')
         let pluginId = content.substring(1, spaceIndex == -1 ? content.length : spaceIndex)
         message.to[0] = pluginById[pluginId]
@@ -103,21 +111,22 @@ function run() {
     }
     message.chain.push(message.to[0])
 
-    let chainPos = content.indexOf('/')
+    let chainPos = content.indexOf(seperator)
     let chainSpec = chainPos == -1 ? '' : content.substring(chainPos)
 
-    content = content.indexOf('/') == -1 ? content : content.substring(0, content.indexOf('/') - 1)
+    content = content.indexOf(seperator) == -1 
+        ? content 
+        : content.substring(0, content.indexOf(seperator) - 1)
 
     if (chainPos != -1) {
 
-        let chain = chainSpec.split('/')
+        let chain = chainSpec.split(seperator)
         for (let index = 0; index < chain.length; index++) {
             let pluginId = chain[index]
-            if (pluginId != chain && pluginId) {
+            if (pluginId != chain && pluginId){
                 message.chain.push(pluginById[pluginId])
                 message.to.push(pluginById[pluginId])
-            }
-
+            }               
         }
     }
 
@@ -129,14 +138,19 @@ function run() {
 
 function pluginReply(message) {
     try {
-        log('plugin response : ', message.content)
+        log('plugin response : ', message)
         let pluginTo = message.lockedBy ? message.lockedBy : message.to[0]
         let plgn = pluginTo ? pluginTo : message.chain[message.chain.length - 1]
 
-        let replyTd = newPluginReplyRow(plgn.config().name, 'plugin-id')
+        let replyTd = newPluginReplyRow(plgn, 'plugin-id')
         let container = div(replyTd)
-
-        container.innerText = message.content
+        let content = message.content
+        if (content && content.startsWith('<div')) {
+            container.innerHTML = content
+        } else {
+            container.innerText = content
+        }
+        plgn.onReplied(container)
         container.onclick = (e)=>{
             if (currentInp) {
                 currentInp.value = e.target.innerText
@@ -148,12 +162,12 @@ function pluginReply(message) {
     }
 }
 
-function newPluginReplyRow(who, cls, pos) {
+function newPluginReplyRow(plugin, cls) {
     let row = document.createElement('tr')
+    row.className = 'reply-row'
     let layout = get('layout')
     let tbody = layout.getElementsByTagName('tbody')[0]
-    tbody.insertBefore(row, tbody.children[2])
-    //layout.appendChild( row)
+    tbody.insertBefore(row, tbody.children[1])
 
     row.height = 0
     let cell = td(row)
@@ -165,7 +179,18 @@ function newPluginReplyRow(who, cls, pos) {
     }
     cell.className = '' + (cls ? cls : '')
 
-    cell.innerHTML = `${who} : `
+    cell.innerHTML = `${plugin.config().name} : `
+
+    let icon = div(cell)
+    icon.className = 'plugin-icon'
+
+    const imageUrl = `../plugins/${plugin.dir}/icon.png`
+
+    // Set the background image to the image URL
+    if(plugin.config().icon){
+      icon.style.backgroundImage = `url(${imageUrl})`;
+    };
+
 
     cell = td(row)
     cell.className = 'plugin-reply'
@@ -174,8 +199,8 @@ function newPluginReplyRow(who, cls, pos) {
     return cell
 }
 function newInp(container) {
-
-    let td = newPluginReplyRow('Me', 'chat-id')
+    
+    let td = newPluginReplyRow( pluginById['user'] , 'chat-id')
 
     let inp = document.createElement('textarea')
     inp.className = 'speak'
@@ -190,10 +215,6 @@ function newInp(container) {
     //document.body.scrollTop = document.body.scrollHeight
     currentInp = inp
 
-}
-function pluginImpl() {
-    let sel = document.getElementById('plugin-impl')
-    return pluginByName[sel.value]
 }
 
 

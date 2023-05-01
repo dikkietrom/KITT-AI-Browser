@@ -5,7 +5,7 @@ class User extends Plugin {
 
     config() {
         return {
-            name: 'User',
+            name: 'Me',
             id: 'user',
             description: 'you',
             role: 'user',

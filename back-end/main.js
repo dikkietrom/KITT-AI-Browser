@@ -56,7 +56,7 @@ function createWindow() {
     }));
 
     // Open the DevTools if needed
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     // Handle window close event
     mainWindow.on('closed', function() {
@@ -139,6 +139,7 @@ app.on('web-contents-created', (event,contents)=>{
                 try {
 
                     const buffer = details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+                    console.log(details.requestHeaders.referer)
                     let obj = {}
                     obj.requestHeaders = details.requestHeaders
                     obj.buffer = buffer.split('\n')

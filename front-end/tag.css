@@ -19,15 +19,14 @@ body {
     margin: 0;
 }
 
+
 button {
     cursor: pointer;
 }
 
-video {
-    border : 0px solid black;
-    border-radius : 5%;
+code{
+  background:green;
 }
-
 canvas {
     width: 400px;
     height: 400px;
@@ -38,16 +37,6 @@ input:focus-visible, select:focus-visible, button:focus-visible {
     outline: 2px dotted #fff8;
     drop-shadow: 10 10 0.5em #ffff;
 }
-
-pre {
-    background: #000;
-}
-
-td {
-    vertical-align: top;
-    text-shadow: -2px 2px 0px black;
-}
-
 
 input,select,textarea,button {
     xwidth: 100%;
@@ -61,6 +50,26 @@ input,select,textarea,button {
     font-size: 1em;
     font-weight: bold;
     font-family: monospace;
+}
+pre {
+    background: #000;
+}
+
+td {
+    vertical-align: top;
+    text-shadow: -2px 2px 0px black;
+}
+
+.bg-black.rounded-md.mb-4 {
+    border: 2px solid white;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+
+video {
+    border : 0px solid black;
+    border-radius : 5%;
 }
 
 webview {

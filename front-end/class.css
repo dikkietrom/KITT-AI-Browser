@@ -1,16 +1,14 @@
-
 .button-bar {
     margin-top: 10px;
     display: flex;
 }
 
-.console-view-fade{
+.console-view-fade {
     transition: opacity var(--console-fade-time) ease,z-index var(--console-fade-time) ease,height var(--console-fade-time) ease;
     opacity: 0;
-    z-index:-1000;
+    z-index: -1000;
     height: 0px !important;
     overflow: hidden;
-     
 }
 
 .chat-id , .plugin-id {
@@ -31,10 +29,6 @@
     padding: 1em;
 }
 
-.plugin-reply > div {
-    max-height: 6em;
-    overflow: auto;
-}
 
 .command {
     left: 0px;
@@ -48,19 +42,18 @@
 .command:hover {
 }
 
-.fix {
-}
+.fix {position: fixed;top: 1em;left: 1em;}
+
 .log-error > .log-info {
-    background:white;
-    color:black;
-    font-weight:bold;
+    background: white;
+    color: black;
+    font-weight: bold;
 }
+
 .log-error > .log-word {
-    background:#f00;
-    color:white;
-    font-weight:bold;
-    
-     
+    background: #f00;
+    color: white;
+    font-weight: bold;
 }
 
 .log-line , .log-line-open {
@@ -83,14 +76,17 @@
     white-space: break-spaces;
     padding: 0.3em;
     border: 0.1em solid black;
-    display:block;
+    display: block;
 }
-.log-line-open > .log-info{
-    width:calc(100% - 1em);
+
+.log-line-open > .log-info {
+    width: calc(100% - 1em);
 }
-.log-info:hover{
-    width:100%
+
+.log-info:hover {
+    width: 100%
 }
+
 .log-word , .log-info {
     background: #ddd;
     padding-right: .5em;
@@ -112,25 +108,46 @@
     display: inline;
 }
 
-
 .plugin-id {
     background: none;
+    position: relative;
 }
+
+.plugin-icon {
+    width: 1em;
+    height: 1em;
+    background-size: cover;
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .plugin-popup {
-  position: absolute;
-  border: 1px solid #ccc;
-  background: #fff;
-  z-index: 1000;
+    position: absolute;
+    border: 1px solid #ccc;
+    background: #fff;
+    z-index: 1000;
+}
+.plugin-reply > div {
+    /* max-height: 6em; */
+    /* overflow: auto; */
 }
 
 .plugin-select {
-  padding: 4px 8px;
-  cursor: pointer;
+    padding: 4px 8px;
+    cursor: pointer;
 }
 
+.reply-row {
+    transition-property: opacity;
+    transition-duration: 5s;
+    transition-timing-function: linear;
+}
+
+.reply-row .plugin-reply {
+}
 .speak {
     width: calc(100% - 1em);
-    height: 2em;
+    height: 4em;
     background: #f0f8ff54;
 }
 
@@ -176,7 +193,6 @@
 }
 
 .tab-content > div {
-
 }
 
 .tab-content.active {
@@ -184,7 +200,8 @@
     margin: 1em;
     margin-top: 0;
 }
-.urlBox{
+
+.urlBox {
     padding: var(--command-padding);
     margin: auto;
     margin-left: 1em;

@@ -9,72 +9,57 @@ class Coder extends Plugin {
             id: 'code',
             description: 'Code',
             role: 'worker',
-            active: true
+            active: true,
+            url: "../plugins/coder/index.html"
         }
     }
 
     exec(message) {
+        let that = this
         try {
-
-            
-
-            let code = codeBlock({
-                content: message.content
-            })
-            if (code) {
-                eval(code)
-                return "It works!"
-            } else {
-                return "No code found, did you define language?"
+             let code = codeBlock({
+                  content: message.content
+              })
+            if (code.code) {
+                 doInPreload({
+                     plugin: that,
+                        js:'document.body.innerHTML+="<pre>code</pre>"'
+//                      js:
+//`
+// let code = ${code}
+// let functionName = code.trim().substring("function ".length,code.indexOf(' ',1) ))
+// document.body.innerHTML = 'functionName ' + code
+// `
+                 })
+                //eval(code)
+                message.content =  "It works!"
+            } else if(!code.error){
+                message.content =  "No code found, did you define language?"
+            } else if(code.error){
+                message.content =  code.error
             }
-
-        } catch (e) {
-            err(e)
-            return '[ERROR] : ' + e.message
+        } catch (error) {
+            err(error)
+            message.content =  '[ERROR] : ' + error.message + ' : ' + error.stack
+            
         }
-
+        return message.content
     }
 }
 function codeBlock(json) {
 
-    let code = ''
-    let ret = ''
-    let count = 0
-    let language = ''
-    with (json) {
-        let index = content.indexOf('```')
-
-        while (index != -1) {
-            if (count > 0) {
-                throw new Error('Only once code block at the time please')
-            }
-            count++
-
-            code = content.substring(index + 3, content.indexOf('```', index + 3))
-            content = content.substring(0, index) + content.substring(content.indexOf('```', index + 3) + 3)
-            index = content.indexOf('```')
-            code = code.trim()
-
-            language = code.substring(0, code.indexOf('\n'))
-            if (!language) {
-                language = code.substring(0, code.indexOf(' ')+1)
-                if (language) {
-                    language = language.trim()
-                }
-
-            }
-            code = code.substring(language.length)
-
-            if (language != 'bash') {
-                throw new Error(`cannot directly execute "${language}". Include writing the language on line 
-                    one, only option is bash`)
-            } else if (!language) {
-                throw new Error(`Firt line of code block does not specify the language. Include writing the language on line one,
-                    the only option is bash`)
-            }
-        }
-    }
-    return code
+     get.parser.innerHTML = json.content
+     let element = get.parser.children[get.parser.children.length - 1]
+     get.parser.removeChild(element)
+     let code = element.getElementsByTagName('pre')
+     if (code.length > 1) {
+         return {error:'One code block per reply please.'}
+     }
+     code = code[0]
+     if (!code) {
+         return {error: 'No code block found, please supply code block.'}
+     }
+    return { code: code.children[0].children[1].innerText}
 
 }
 

@@ -13,6 +13,8 @@ function log() {
             depth: depth + 1
         })
     } catch (error) {
+        arguments.forEach((a)=>console.error(a))
+        
         console.error(error)
     }
 
@@ -22,7 +24,8 @@ function addLog(arg) {
     let messages = arg.messages
     let depth = arg.depth
     let consoleView = get('console-view')
-    let line = div(consoleView)
+    let line = div()
+    consoleView.insertBefore(line, consoleView.children[0])
     line.onclick = function() {
         if (line.classList.contains('log-line-open')) {
             line.classList.remove('log-line-open')

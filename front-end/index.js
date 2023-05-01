@@ -2,9 +2,44 @@ let currentInp
 let replyLen = 0
 init.cnt = 0
 let plugByUrl = {}
+// Create an audio context
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+// Load an audio file
+const loadAudio = async (url) => {
+  const response = await fetch(url);
+  const arrayBuffer = await response.arrayBuffer();
+  const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+  return audioBuffer;
+};
+
+// Set the volume of an audio buffer source
+const setVolume = (source, volume) => {
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = volume;
+  source.connect(gainNode);
+  gainNode.connect(audioContext.destination);
+};
+
+// Play the audio
+const playAudio = async (url, volume = 1) => {
+  const audioBuffer = await loadAudio(url);
+  const source = audioContext.createBufferSource();
+  source.buffer = audioBuffer;
+  setVolume(source, volume);
+  source.start(0);
+};
+
+function pathchIdGet(parent){  
+  get[parent.id]=parent
+  for(let child of parent.children){
+    pathchIdGet(child)
+  }
+  
+}
 
 function init() {
-
+    pathchIdGet(document.body)
     let recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
@@ -27,10 +62,7 @@ function init() {
         document.body.style.backgroundImage = "url('kitt.png')";
 
     }
-    let startupAudio = new Audio('tune.mp3')
-    startupAudio.currentTime = 1;
-
-    startupAudio.play();
+    playAudio('tune.mp3', 0.1); // Play audio with a volume level of 0.5
 
     ipcRenderer.send('stts-main')
     ipcRenderer.send('gpt-models')
@@ -46,7 +78,7 @@ function textInputListener(input, event) {
         }
         if (event.key === '/' ) {
             
-            input.value+='\u00bb'
+            input.value+=seperator
             event.preventDefault();
             //showPluginSelector(input)
             
@@ -74,7 +106,7 @@ function showPluginSelector(input) {
         let pluginOption = document.createElement('option');
         pluginOption.classList.add('plugin-option');
         pluginOption.textContent = plugin.name;
-        pluginOption.value = '/' + plugin.value;
+        pluginOption.value = seperator + plugin.value;
 
         pluginOption.addEventListener('click', () => {
             input.value = pluginOption.value;
@@ -184,10 +216,12 @@ function insertElementAtIndex(parentElement, newElement, index) {
     if (index >= parentElement.children.length) {
         parentElement.appendChild(newElement);
     } else {
-        parentElement.insertBefore(newElement, parentElement.children[index]);
+        parentElement.insertBefore(newElement, parentElement.children[index]);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
     }
 }
-
+function doInPreload(json){
+    json.plugin.webView.send('doInPreload' , {from:json.plugin.config().name, js:json.js})
+}
 function get(id) {
     return document.getElementById(id)
 }

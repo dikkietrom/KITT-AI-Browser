@@ -21,20 +21,7 @@ new Whisper()
 
 
 
-ipcRenderer.on('stts-main-reply', (event,stts)=>{
 
-    let sttImpl = document.getElementById('stt-impl')
-
-    for (let p in stts) {
-        let s = stts[p]
-        let option = document.createElement('option')
-        sttImpl.appendChild(option)
-        option.innerHTML = p
-        option.pluginImpl = s
-    }
-    event.sender.send('stt-impl', sttImpl[sttImpl.selectedIndex].value);
-}
-);
 ipcRenderer.on('mic-reply', (event,mes)=>{
 
     log('mic-reply : ', mes)

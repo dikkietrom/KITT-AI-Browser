@@ -66,6 +66,13 @@ ipcMain.on('preload-log', (event,mes)=>{
 }
 );
 
+ipcMain.on('doInPreload', (event,json)=>{
+    let key = `doInPreload-${json.from}`
+    console.log(key)
+    log.send(key, json)
+}
+);
+
 //initialize plugins by getting the files from the plugins folder
 async function initPlugins() {
 
