@@ -1,5 +1,5 @@
 # KITT
-"Knowledge-Intensive Transformational Technology."
+"KITT In Twenty Three"
 
 Introducing the new KITT on the block for all your AI GUI needs. An advanced AI system that focuses on transforming various knowledge-intensive tasks and processes by leveraging deep learning and natural language processing techniques to improve efficiency, accuracy, and overall performance. A powerful AI-driven frontend app built on the Electron framework, designed to give you seamless control over websites without the need for API keys. KITT utilizes a unique WebView feature, enabling full command of any hosted website via JavaScript. For additional flexibility, API key integration is available when required.
 
