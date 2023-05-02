@@ -1,7 +1,14 @@
 # KITT
 "KITT In Twenty Three"
 
-Introducing the new KITT on the block for all your AI GUI needs. An advanced AI system that focuses on transforming various knowledge-intensive tasks and processes by leveraging deep learning and natural language processing techniques to improve efficiency, accuracy, and overall performance. A powerful AI-driven frontend app built on the Electron framework, designed to give you seamless control over websites without the need for API keys. KITT utilizes a unique WebView feature, enabling full command of any hosted website via JavaScript. For additional flexibility, API key integration is available when required.
+Introducing the new KITT on the block for all your AI browsing, developments and execution. 
+An advanced path based AI plugin system that focuses on easily chaining
+AI IO to improve efficiency, accuracy, and overall performance. A powerful AI-driven frontend app built on the Electron framework, 
+designed to give you seamless control over local and online AI based services and 
+websites without the obligation for API keys. 
+KITT utilizes a unique WebView feature, enabling full command of any 
+hosted service via JavaScript. For additional flexibility, API key integration 
+is available when required.
 
 KITT currently includes the following plugins 
 <pre>
