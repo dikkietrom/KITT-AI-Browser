@@ -160,6 +160,7 @@ Configuration and Package Files: The system has package.json, package-lock.json,
 
 In summary, this system is a desktop application built on Electron, designed to accommodate various plugins and functionalities, primarily focused on AI models, multimedia processing, and web services.
 
+---
 
 **Overview Summary** 
 <pre>
