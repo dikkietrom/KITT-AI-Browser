@@ -24,7 +24,6 @@ The plugin system fosters a collaborative environment, encouraging the community
 
 The project structure :
 
-.
 ├── README.md
 ├── back-end
 │   ├── ipcMain.js
