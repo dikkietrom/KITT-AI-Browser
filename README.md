@@ -137,15 +137,11 @@ In summary, this system is a desktop application built on Electron, designed to 
 
 **Overview Summary** 
 <pre>
-├── README.md
 └── back-end
     ├── ipcMain.js
     ├── keys.js
     └── main.js
-
 </pre>
-
-
 This project is an Electron application that consists of multiple JavaScript files handling different aspects of the application. The application uses Electron's IPC communication for message passing between the main and renderer processes. The application also has a plugin system that allows for extensibility.
 
 1. **ipcMain.js** - Handles IPC communication, plugin initialization, and other miscellaneous functions.
