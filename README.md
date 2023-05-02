@@ -138,7 +138,7 @@ In summary, this system is a desktop application built on Electron, designed to 
 **Overview Summary** 
 <pre>
 ├── README.md
-├── back-end
+└── back-end
     ├── ipcMain.js
     ├── keys.js
     └── main.js
