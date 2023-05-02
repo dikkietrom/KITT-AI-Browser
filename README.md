@@ -3,11 +3,12 @@
 
 Introducing the new KITT on the block for all your AI browsing, developments and execution. 
 An advanced path based AI plugin system that focuses on easily chaining
-AI IO to improve efficiency, accuracy, and overall performance. A powerful AI-driven frontend app built on the Electron framework, 
+AI IO to improve efficiency, accuracy, and overall performance. A powerful AI-driven frontend app built on 
+the Electron framework, 
 designed to give you seamless control over local and online AI based services and 
 websites without the obligation for API keys. 
-KITT utilizes a unique WebView feature, enabling full command of any 
-hosted service via JavaScript. For additional flexibility, API key integration 
+KITT utilizes Electron's WebView feature, enabling full remote control of any 
+hosted service. For additional flexibility, API key integration 
 is available when required.
 
 KITT currently includes the following plugins 
