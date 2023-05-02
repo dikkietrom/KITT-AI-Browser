@@ -1,69 +1,63 @@
-// Simple token types and their respective regular expressions.
-const tokenTypes = [
-  { type: 'keyword', regex: /\b(?:if|else|for|while|function|var|let|const|return|switch|case|break|default|continue|do|try|catch|finally|throw|import|export|class)\b/ },
-  { type: 'number', regex: /\b\d+(?:\.\d+)?\b/ },
-  { type: 'string', regex: /(?:'[^']*'|"[^"]*")/ },
-  { type: 'comment', regex: /\/\/.*/ },
-  { type: 'whitespace', regex: /\s+/ },
-  { type: 'punctuation', regex: /[{}()\[\],.;]/ },
-  { type: 'operator', regex: /(?:[+\-*/%|&^<>!=]=?)/ },
-  { type: 'identifier', regex: /\b\w+\b/ },
-];
+function parseCode(code) {
+  const tokens = code.match(/\S+/g);
+  const tree = [];
+  let currentNode = tree;
 
-function tokenize(code) {
-  let tokens = [];
-  let remainingCode = code;
-  let match;
+  for (let i = 0; i < tokens.length; i++) {
+    const token = tokens[i];
 
-  while (remainingCode.length > 0) {
-    let foundToken = false;
-    for (const tokenType of tokenTypes) {
-      if ((match = tokenType.regex.exec(remainingCode)) !== null) {
-        tokens.push({ type: tokenType.type, value: match[0] });
-        remainingCode = remainingCode.slice(match.index + match[0].length);
-        foundToken = true;
+    switch (token) {
+      case "{":
+        const newNode = [];
+        currentNode.push(newNode);
+        currentNode = newNode;
         break;
-      }
-    }
-    if (!foundToken) {
-      throw new Error('Failed to tokenize code');
+      case "}":
+        currentNode = tree;
+        break;
+      default:
+        currentNode.push(token);
+        break;
     }
   }
 
-  return tokens;
+  return tree;
 }
 
-function renderToken(token) {
-  const colors = {
-    keyword: 'blue',
-    number: 'darkorange',
-    string: 'green',
-    comment: 'gray',
-    whitespace: '',
-    punctuation: 'black',
-    operator: 'purple',
-    identifier: 'black',
-  };
+function renderCode(tree) {
+  let html = "";
 
-  return `<span class="${token.type}" style="color: ${colors[token.type]};">${token.value}</span>`;
-}
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
 
-function render(tokens) {
-  return tokens.map(renderToken).join('');
+    if (Array.isArray(node)) {
+      html += "<div style='padding-left: 20px;'>";
+      html += renderCode(node);
+      html += "</div>";
+    } else {
+      const className = `token-${node}`;
+      const color = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+      html += `<span class='${className}' style='color: white; background-color: ${color}; padding: 2px 4px; border-radius: 4px;'>${node}</span>`;
+    }
+  }
+
+  return html;
 }
 
 function test() {
   const code = `
-function sum(a, b) {
-  return a + b;
-}
-console.log(sum(1, 2));
-`;
-  const tokens = tokenize(code);
-  const renderedCode = render(tokens);
-  document.getElementById('container').innerHTML = renderedCode;
+    function factorial(n) {
+      if (n === 0) {
+        return 1;
+      } else {
+        return n * factorial(n - 1);
+      }
+    }
+  `;
+  const tree = parseCode(code);
+  const html = renderCode(tree);
+  const container = document.getElementById("container");
+  container.innerHTML = html;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  test();
-});
+document.addEventListener("DOMContentLoaded", test);

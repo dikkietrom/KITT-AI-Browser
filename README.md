@@ -10,6 +10,7 @@ the module (for instance, using npm rebuild or npm install).
 first do once
 <pre>
 rm -rf node_modules
+rm package-lock.json
 npm install
 ./node_modules/.bin/electron-rebuild
 </pre>
@@ -257,3 +258,132 @@ This project is an Electron application that consists of multiple JavaScript fil
 
 
 
+## Overview Summary
+
+<pre>
+
+└── front-end
+    ├── class.css
+    ├── front-log.js
+    ├── id.css
+    ├── index.html
+    ├── index.js
+    ├── ipcRenderer.js
+    ├── main-log.js
+    ├── plugin-preload.js
+    ├── plugin.js
+    ├── preload-log.js
+    ├── preload.js
+    ├── tag.css
+    └── webgl.js
+
+</pre>
+
+The front-end consists of several JavaScript files that handle different aspects of the application. It includes:
+
+1. `front-log.js`: Handles logging and error reporting in the front-end.
+2. `index.js`: Main entry point for the application's front-end. It initializes and sets up event listeners.
+3. `ipcRenderer.js`: Handles inter-process communication between the front-end and the main process.
+4. `main-log.js`: Handles logging and error reporting in the main process.
+5. `plugin-preload.js`: Preloads plugins and manages plugin-related operations.
+6. `plugin.js`: Implements the core plugin functionality and provides an API for plugin management.
+7. `preload-log.js`: Handles logging and error reporting during the preload phase.
+8. `preload.js`: Sets up the Electron environment and makes necessary modules available for the front-end.
+9. `webgl.js`: Implements audio visualization using WebGL and manages audio input from the user's microphone.
+
+## Detailed API Documentation
+<pre>
+
+└── front-end
+    ├── class.css
+    ├── front-log.js
+    ├── id.css
+    ├── index.html
+    ├── index.js
+    ├── ipcRenderer.js
+    ├── main-log.js
+    ├── plugin-preload.js
+    ├── plugin.js
+    ├── preload-log.js
+    ├── preload.js
+    ├── tag.css
+    └── webgl.js
+
+</pre>
+
+### `front-log.js`
+
+- `addLog(logData)`: Adds a log entry with the specified data.
+- `err(error)`: Logs an error message with the provided error object.
+
+### `index.js`
+
+- `init()`: Initializes the application and sets up event listeners.
+
+### `ipcRenderer.js`
+
+- No specific API functions, but it makes use of Electron's `ipcRenderer` module for inter-process communication.
+
+### `main-log.js`
+
+- `addLog(logData)`: Adds a log entry with the specified data.
+- `err(error)`: Logs an error message with the provided error object.
+
+### `plugin-preload.js`
+
+- `loadPlugins()`: Loads and initializes all available plugins.
+- `registerPlugin(plugin)`: Registers a plugin with the system.
+
+
+
+###  `plugin.js` 
+
+`plugin.js` defines and implements the Plugin class, which represents the core functionality for plugins in the application. Each plugin derives from this class and must override the `config()` and `exec()` methods. The Plugin class also manages plugin instances and categorizes them by name, directory, ID, and role.
+
+### `Plugin Class`
+
+##### Properties `Plugin Class`
+
+- `async`: A boolean indicating if the plugin is asynchronous.
+- `streamer`: A boolean indicating if the plugin is a streamer.
+- `dir`: The plugin's directory.
+
+##### Constructor
+
+The constructor initializes a new instance of the Plugin class, setting its `async` and `streamer` properties to `false`. It also registers the plugin in various global objects by its name, directory, ID, and role.
+
+##### Methods
+
+- `onReplied(message)`: Called when a reply is received. Can be overridden by subclasses to implement custom behavior.
+- `config()`: Should be overridden by subclasses to provide a configuration object with information about the plugin (e.g., name, id, role).
+- `exec(message)`: Should be overridden by subclasses to implement the main functionality of the plugin.
+- `onData(json)`: Called when data is received. Can be overridden by subclasses to implement custom behavior.
+- `onTimeOut()`: Called when the plugin times out. Cleans up any pending tasks or resources.
+- `startTimer()`: Starts a timer that will trigger `onTimeOut()` after 2000 ms.
+- `stopTimer()`: Stops the timer started by `startTimer()`.
+- `send(key, message)`: Sends a message with the specified key to the plugin's associated webView.
+
+#### Functions
+
+- `run()`: Starts the plugin execution process.
+- `pluginReply(message)`: Handles a plugin's reply to a message.
+- `newPluginReplyRow(plugin, cls)`: Creates a new table row for a plugin reply.
+- `newInp(container)`: Creates a new input element for user interaction.
+- `extractPluginDirFromAsar(path)`: Extracts the plugin directory from the given path.
+
+### `preload-log.js`
+
+- `preloadLog(event, mes)`: Logs a message with the provided event and message data.
+
+### `preload.js`
+
+- No specific API functions, but it sets up the Electron environment and makes necessary modules available for the front-end.
+
+### `webgl.js`
+
+- `animate()`: Updates the audio visualization based on the current audio input.
+- `toHex(c)`: Converts a decimal number to its hexadecimal equivalent.
+- `lerp(a, b, t)`: Linearly interpolates between two values based on a parameter t.
+- `gradientToHex(t)`: Converts a gradient value to a corresponding RGB color in hexadecimal format.
+
+Please note that this API documentation is based on the provided code snippets and might not cover all possible functionalities.

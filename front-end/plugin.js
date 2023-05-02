@@ -204,6 +204,7 @@ function newInp(container) {
 
     let inp = document.createElement('textarea')
     inp.className = 'speak'
+    inp.spellcheck = false
     inp.onkeydown = (event)=>{
         textInputListener(inp, event)
     }
