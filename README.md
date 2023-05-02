@@ -1,4 +1,4 @@
-# KITT
+# KITT AI Browser
 "KITT In Twenty Three"
 
 Introducing the new KITT on the block for all your AI browsing, developments and execution. 
