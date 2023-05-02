@@ -1,21 +1,30 @@
 function log() {
     try {
+        let argumentsArr = Array.from(arguments)
+
+
+
         get('console-view-parent').classList.add('console-view-fade')
         let depth = 2
-        if (arguments[0] && arguments[0][0]instanceof Error) {
-            console.error(arguments[0][0])
+        if (argumentsArr[0] && argumentsArr[0][0] instanceof Error) {
+            console.error(argumentsArr[0][0])
             depth++
         }
-        console.log(logInfo(depth), Array.from(arguments).join())
+        if(argumentsArr[0] && (!argumentsArr[0].charAt || argumentsArr[0].charAt(0)!='[')){
+            console.log('[FRONT-END]',logInfo(depth), argumentsArr.join())
+        }else{
+            console.log(logInfo(depth), argumentsArr.join())
+        }
+
 
         addLog({
-            messages: arguments,
+            messages: argumentsArr,
             depth: depth + 1
         })
     } catch (error) {
         console.error(error)
-        for (let i = 0; i < arguments.length; i++) {
-            console.error(arguments[i])
+        for (let i = 0; i < argumentsArr.length; i++) {
+            console.error(argumentsArr[i])
         }
 
     }

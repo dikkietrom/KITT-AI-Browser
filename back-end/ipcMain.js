@@ -72,12 +72,16 @@ ipcMain.on('doInPreload', (event,json)=>{
     log.send(key, json)
 }
 );
+
 ipcMain.on('doInMain', (event,json)=>{
     try {
-        console.log('doInMain', json)
-        eval (json.js)
+        const all = require(json.imp)
+        let returnValue = all[json.func](json)
+        log(returnValue)
+        event.returnValue = returnValue
     } catch (error) {
         err(error)
+        event.returnValue = error.stack
     }
 }
 );
@@ -99,7 +103,7 @@ async function initPlugins() {
         if (dir == '.DS_Store') {
             continue
         }
-        json[dir]={}
+        json[dir] = {}
         let dirInfo = json[dir]
         log('initPlugins', dir);
         try {
@@ -110,7 +114,17 @@ async function initPlugins() {
             // Check if path exists, init file
             if (fs.existsSync(file)) {
                 const pluginInit = require(file);
-                await pluginInit(log);
+
+                if (typeof pluginInit === 'function') {
+                    // If pluginInit is a function, call it directly
+                    await pluginInit(log);
+                } else if (typeof pluginInit === 'object' && !Array.isArray(pluginInit) && typeof pluginInit.init === 'function') {
+                    // If pluginInit is an object and has an 'init' function, call it
+                    await pluginInit.init(log);
+                } else {
+                    // Handle the case where there is no appropriate function to call
+                    log('The module does not export a valid function or init method.');
+                }
             } else {
                 log('[INFO] : ' + file + ' does not exist')
             }
@@ -120,7 +134,7 @@ async function initPlugins() {
 
             // Check if path exists, init file
             if (fs.existsSync(file)) {
-                dirInfo.preload=true
+                dirInfo.preload = true
             } else {
                 log('[INFO] : ' + file + ' does not exist')
             }
@@ -130,7 +144,7 @@ async function initPlugins() {
         }
     }
 
-    log.send('plugin-message',json );
+    log.send('plugin-message', json);
 
 }
 

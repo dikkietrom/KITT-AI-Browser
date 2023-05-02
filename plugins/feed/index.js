@@ -19,7 +19,7 @@ class Feed extends Plugin {
         if (!this.data) {
             let nxt = message.to[1]
             let data = []
-            let size = 8000
+            let size = 15000
             let content = message.content
             this.parts = content.length / size
     
@@ -56,7 +56,7 @@ class Feed extends Plugin {
     }
 }
 
-new Feed()
+Plugin.feed = new Feed()
 
 let pre = `The total length of the content that I want to send you is too large to send in only one piece.
         

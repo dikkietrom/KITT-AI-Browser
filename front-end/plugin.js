@@ -145,7 +145,7 @@ function pluginReply(message) {
         let replyTd = newPluginReplyRow(plgn, 'plugin-id')
         let container = div(replyTd)
         let content = message.content
-        if (content && content.startsWith('<div')) {
+        if (content && content.startsWith && content.startsWith('<div')) {
             container.innerHTML = content
         } else {
             container.innerText = content

@@ -76,8 +76,10 @@ function textInputListener(input, event) {
             event.preventDefault();
             return false
         }
-        if (event.key === '/' ) {
-            
+        if (event.key === '/' && (input.value.endsWith(' ') || input.value.endsWith('/') || !input.value )) {
+            if(input.value.endsWith('/') ){
+                input.value = input.value.substring(0,input.value.length-1)
+            }
             input.value+=seperator
             event.preventDefault();
             //showPluginSelector(input)
@@ -222,9 +224,12 @@ function insertElementAtIndex(parentElement, newElement, index) {
 function doInPreload(json){
     json.plugin.webView.send('doInPreload' , {from:json.plugin.config().name, js:json.js})
 }
-function writeFileSync(json) {
-    json.js= `fs.writeFileSync(json.loc, json.data)`
-    ipcRenderer.send('doInMain', json)
+function doInMain(args, imp) {
+    let json = args[0]
+    json.imp = `../plugins/${imp}/main.js`
+    json.func = arguments.callee.caller.name
+    let r = ipcRenderer.sendSync('doInMain', json)
+    return r
 }
 function get(id) {
     return document.getElementById(id)

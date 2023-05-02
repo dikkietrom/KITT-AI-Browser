@@ -84,25 +84,11 @@ ipcRenderer.on('plugin-message', (event,json)=>{
 )
 
 ipcRenderer.on('main-log', (event,mes)=>{
-    console.log(mes.join(' '))
-    try {
-        addLog({
-            messages: mes
-        })
-    } catch (error) {
-        err(error)
-    }
+    mainLog(event,mes)
 }
 );
 ipcRenderer.on('preload-log', (event,mes)=>{
-    console.log(mes.join(' '))
-    try {
-        addLog({
-            messages: mes
-        })
-    } catch (error) {
-        err(error)
-    }
+    preloadLog(event,mes)
 }
 );
 ipcRenderer.on('ses.webRequest.onCompleted', (event,json)=>{

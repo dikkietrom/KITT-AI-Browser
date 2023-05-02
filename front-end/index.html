@@ -6,7 +6,9 @@
         <title>KITT</title>
         <script src="../lib/shared.js"></script>
         <script src="plugin.js"></script>
-        <script src="log.js"></script>
+        <script src="preload-log.js"></script>
+        <script src="main-log.js"></script>
+        <script src="front-log.js"></script>
         <script src="index.js"></script>
         <script src="ipcRenderer.js"></script>
         <script src="webgl.js"></script>
@@ -31,7 +33,9 @@
                 </td>
             </tr>
             <tr height="0">
-                <td onclick="this.parentElement.style.display='none'" class="chat-id">Me : </td>
+                <td onclick="this.parentElement.style.display='none'" class="chat-id">Me :
+                    <div class="plugin-icon"></div>
+                </td>
                 <td colspan="2" class="chat-reply">
                     <textarea class="speak" onkeydown="textInputListener(this,event)" type="text" id="inp" value=""></textarea>
                 </td>

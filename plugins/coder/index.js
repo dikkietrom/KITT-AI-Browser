@@ -50,8 +50,22 @@ class Coder extends Plugin {
             message.content =  '[ERROR] : ' + aerror.message + ' : ' + aerror.stack
             
         }
+//        if(error){
+//            let ins = []
+//            ins.push(this)
+//            ins.push(message.to[0])
+//            let chainIns = message.chain.length - 1 - message.to.length
+//            message.chain.insert(chainIns,ins)
+//            message.to.insert(1,ins)
+//
+//        }
         return message.content
     }
+}
+function writeFileSync(json) {
+    json.imp= `../plugins/file/main.js`
+    json.func= `writeFileSync`
+    return ipcRenderer.sendSync('doInMain', json)
 }
 
 function codeBlock(json) {

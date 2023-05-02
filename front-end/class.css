@@ -42,7 +42,7 @@
 .command:hover {
 }
 
-.fix {position: fixed;top: 1em;left: 1em;}
+.fix {position: fixed;top: 1em;left: 1em;z-index: 1000;}
 
 .log-error > .log-info {
     background: white;
