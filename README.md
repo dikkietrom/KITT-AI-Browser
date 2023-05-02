@@ -151,7 +151,12 @@ This project is an Electron application that consists of multiple JavaScript fil
 ---
 
 **Detailed API Documentation**
-
+<pre>
+└── back-end
+    ├── ipcMain.js
+    ├── keys.js
+    └── main.js
+</pre>
 1. **ipcMain.js**
 
    Functions:
