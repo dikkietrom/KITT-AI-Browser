@@ -1,3 +1,33 @@
+to prevent
+
+<pre>
+Error: The module <your dir>\KITT\node_modules\robotjs\build\Release\robotjs.node'
+was compiled against a different Node.js version using
+NODE_MODULE_VERSION 108. This version of Node.js requires
+NODE_MODULE_VERSION 113. Please try re-compiling or re-installing
+the module (for instance, using npm rebuild or npm install).
+</pre>
+first do once
+<pre>
+rm -rf node_modules
+npm install
+./node_modules/.bin/electron-rebuild
+</pre>
+then every time you want to start
+<pre>
+npm start
+</pre>
+to make binary apps for win mac & lin do
+<pre>
+npm run build
+</pre>
+
+whereafter generated binaries can be found in ./dist
+
+
+
+
+
 # KITT AI Browser
 "KITT In Twenty Three"
 
