@@ -135,7 +135,7 @@ Configuration and Package Files: The system has package.json, package-lock.json,
 In summary, this system is a desktop application built on Electron, designed to accommodate various plugins and functionalities, primarily focused on AI models, multimedia processing, and web services.
 
 
-**Overview Summary**
+**Overview Summary** back-end folder
 
 This project is an Electron application that consists of multiple JavaScript files handling different aspects of the application. The application uses Electron's IPC communication for message passing between the main and renderer processes. The application also has a plugin system that allows for extensibility.
 
