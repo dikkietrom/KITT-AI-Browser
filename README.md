@@ -23,7 +23,7 @@ This modular approach allows developers to create, share, and implement custom p
 The plugin system fosters a collaborative environment, encouraging the community to contribute to KITT's ever-expanding capabilities. With this straightforward architecture, KITT becomes a versatile and adaptable tool, ready to tackle any challenge you throw its way.
 
 The project structure :
-
+<pre>
 ├── README.md
 ├── back-end
 │   ├── ipcMain.js
@@ -117,6 +117,7 @@ The project structure :
 │       ├── main.js
 │       └── preload.js
 └── wintel-builder-config.json
+</pre>
 
 
 The main components of the system include:
