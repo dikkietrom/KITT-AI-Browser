@@ -1,7 +1,6 @@
 class Bash extends Plugin {
     constructor(arg) {
         super(arg)
-        this.async=true
     }
 
     config() {
@@ -14,12 +13,17 @@ class Bash extends Plugin {
         }
     } 
      exec(message){
-        
-
-         return 'Bash is working on   : ' + message.content 
+        let code = codeBlock({
+            content: message.content
+        })
+        return execBash({data:code.code})
      }
 }
- 
+
+function execBash(json) {
+    return doInMain(arguments, 'bash')
+}
+
 new Bash()
 
 

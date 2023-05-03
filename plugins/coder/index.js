@@ -44,7 +44,7 @@ class Coder extends Plugin {
                 error = true
                 message.content =  code.error
             }
-        } catch (aerror) {
+        } catch (error) {
             err(error)
             error = true
             message.content =  '[ERROR] : ' + aerror.message + ' : ' + aerror.stack
