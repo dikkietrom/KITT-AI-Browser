@@ -12,74 +12,19 @@
   },
   "homepage": "https://your-project-homepage.com",
   "scripts": {
-    "start": "electron back-end/main.js --inspect",
-    "pack": "electron-builder --dir",
-    "build": "electron-builder --win --mac --linux --x64 --arm64",
-    "build:all": "electron-builder --win --mac --linux",
-    "build:mac": "electron-builder --mac ",
-    "build:win": "electron-builder --win ",
-    "build:wintel": "electron-builder --win --x64 --config=wintel-builder-config.json",
-    "build:lin": "electron-builder  --linux",
-    "build:intel": "electron-builder --win --mac --linux --x64"
-  },
-  "build": {
-    "appId": "KITT",
-    "productName": "KITT",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "**/*",
-      "!**/*.js.map",
-      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
-      "node_modules/electron-is-dev/**/*"
-    ],
-    "mac": {
-      "category": "io.KITT",
-      "target": "dmg"
-    },
-    "dmg": {
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ],
-      "maintainer": "Your Name <your.email@example.com>"
-    },
-    "win": {
-      "target": "nsis"
-    }
-  },
-  "devDependencies": {
-    "electron": "^23.2.4",
-    "electron-builder": "^24.2.1"
+    "start": "electron back-end/main.js --inspect"
   },
   "dependencies": {
-    "applescript": "^1.0.0",
+    "electron": "^23.2.4",
     "electron-devtools-installer": "^3.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-prompt": "^1.7.0",
     "electron-rebuild": "^3.2.9",
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
-    "jsdom": "^21.1.1",
     "mic": "^2.1.2",
     "node-pty": "^0.10.1",
     "openai": "^3.2.1",
-    "robotjs": "^0.6.0",
     "stream-buffers": "^3.0.2",
     "wav": "^1.0.2"
   }
