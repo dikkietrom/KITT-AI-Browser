@@ -44,6 +44,7 @@ function createWindow() {
             contextIsolation: false,
             enableRemoteModule: false,
             webviewTag: true,
+            useGL: false,
             preload: path.join(__dirname, '../front-end/preload.js'),
         },
     });

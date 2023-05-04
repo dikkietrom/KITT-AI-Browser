@@ -23,7 +23,6 @@
     "electron-store": "^8.1.0",
     "electron-updater": "^5.3.0",
     "mic": "^2.1.2",
-    "node-pty": "^0.10.1",
     "openai": "^3.2.1",
     "stream-buffers": "^3.0.2",
     "wav": "^1.0.2"
