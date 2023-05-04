@@ -14,12 +14,12 @@ class Plugin {
         } catch (error) {
             let dir = error.stack.split('\n')
             dir = dir[dir.length - 1]
-            let part = '/KITT/plugins'
+            let part = '/plugins/'
             let index = dir.indexOf(part)
             if (index == -1) {
                 dir = extractPluginDirFromAsar(dir)
             } else {
-                dir = dir.substring(index + part.length + 1)
+                dir = dir.substring(index + part.length )
 
                 dir = dir.substring(0, dir.indexOf('/'))
             }

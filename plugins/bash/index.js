@@ -14,9 +14,10 @@ class Bash extends Plugin {
     } 
      exec(message){
         let code = codeBlock({
-            content: message.content
+            content: message.content,
+            message:message
         })
-        return execBash({data:code.code})
+        return execBash({code:code.code})
      }
 }
 

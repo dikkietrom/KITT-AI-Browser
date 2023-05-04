@@ -16,7 +16,7 @@ class Broker extends Plugin {
     exec(message) {
         try {
             //aync end
-            if (!message.to.length) {
+            if (!message.to.length || !message.to[0]) {
                 pluginReply(message)
                 newInp()
                 message.lockedBy.message = null
