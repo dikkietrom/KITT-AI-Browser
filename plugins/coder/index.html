@@ -13,11 +13,22 @@
                 border-radius: 5px;
                 margin: 0 5px;
             }
+            canvas{
+                display: block;
+            }
         </style>
+        <script>
+            function init(){
+                document.body.innerHTML += new Date()
+                let sc = document.createElement('script')
+                sc.src = 'code.js'
+                document.body.appendChild(sc)
+            }
+        </script>
     </head>
-    <body onload="document.body.innerHTML += Date.now()" >
+    <body onload="init()" >
         <button onclick="eval(document.getElementById('code').innerText)">eval</button>
         <div id="container"></div>
-        <script src="code.js"></script>
+
     </body>
     </html>

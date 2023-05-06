@@ -10,7 +10,7 @@ class CeoTest extends Plugin {
             description: 'CeoTest',
             id:'test',
             role: 'CEOx',
-            active: true,
+            active: false,
             url: "../plugins/ceo-test/index.html"
         }
     } 

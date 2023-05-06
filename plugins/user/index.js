@@ -17,4 +17,4 @@ class User extends Plugin {
     }
 }
 
-new User()
+Plugin.user = new User()

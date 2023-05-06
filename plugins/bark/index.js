@@ -7,7 +7,7 @@ class Bark extends Plugin {
         return {
             name: 'Bark API',
             role: 'CEOx',
-            active: true,
+            active: false,
             id: 'brk',
             description: 'Bark API',
             url: 'https://huggingface.co/spaces/DB2323/bark'

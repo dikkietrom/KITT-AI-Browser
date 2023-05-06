@@ -17,7 +17,7 @@ const appName = packageJson.name;
 const {log, err, initShared} = require(path.join(__dirname, '..', 'lib/shared.js'));
 const filter = {
     urls: ['*://*/*'],
-}; 
+};
 autoUpdater.setFeedURL({
     provider: 'github',
     owner: 'dikkietrom',
@@ -107,7 +107,6 @@ function createWindow() {
     //try init
 
     initMainScript('./ipcMain.js')
- 
 
 }
 // This method will be called when Electron has finished
@@ -123,46 +122,146 @@ app.on('web-contents-created', (event,contents)=>{
         // console.log(webPreferences.partition)
         let partition = webPreferences.partition
         let ses = session.fromPartition(partition);
+        // ses.setProxy({ proxyRules: 'http://localhost:8080' })
 
-        ses.webRequest.onCompleted(filter, (details,callback)=>{
-            if (details.url.indexOf('devtool') == -1) {
-                if(partition=='persist:gpt'){
-                    //console.log(details)
-                }
-                log.send('ses.webRequest.onCompleted',{url:details.url,partition:partition})
+        //////////////// RESP
+
+        ses.webRequest.onHeadersReceived(filter, (details,callback)=>{
+            try {
+                let json = {}
+                console.log('onHeadersReceived', details)
+                json.headers = details.responseHeaders
+                json.url = details.url
+                json.referrer = details.referrer
+                json.partition = partition
+                json.method = details.method
+                json.eventType = 'onHeadersReceived'
+                log.send('onHeadersReceived', json)
+                if(callback)callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
             }
         }
         );
-
-        ses.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
-
-            if (details.uploadData) {
-                try {
-
-                    const buffer = details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
-              
-                    let obj = {}
-                    obj.requestHeaders = details.requestHeaders
-                    obj.buffer = buffer.split('\n')
-                    obj.url = details.referrer
-                   // log.send('onBeforeSendHeaders', obj)
-
-                } catch (error) {
-                    err(error)
-                }
+        ses.webRequest.onResponseStarted(filter, (details,callback)=>{
+            try {
+                let json = {}
+                console.log('onResponseStarted', details)
+                json.headers = details.responseHeaders
+                json.url = details.url
+                json.referrer = details.referrer
+                  json.method = details.method
+              json.partition = partition
+                json.eventType = 'onResponseStarted'
+                log.send('onHeadersReceived', json)
+                if(callback)if(callback)callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
             }
-            if (callback) {
-                callback(details);
+        }
+        );
+        ses.webRequest.onCompleted(filter, (details,callback)=>{
+            try {
+                console.log('onCompleted', details)
+                let json = {}
+                json.headers = details.responseHeaders
+                json.url = details.url
+                json.referrer = details.referrer
+                  json.method = details.method
+              json.partition = partition
+                json.eventType = 'onCompleted'
+                log.send('onHeadersReceived', json)
+                if(callback)callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
+            }
+        }
+        );
+        //////////////// REQ
+        ses.webRequest.onBeforeRequest(filter, (details,callback)=>{
+
+            try {
+                console.log('onBeforeRequest', details)
+
+                const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+
+                let json = {}
+                json.headers = details.requestHeaders
+                json.buffer = buffer.split('\n')
+                json.url = details.url
+                    json.method = details.method
+            json.referrer = details.referrer
+                json.partition = partition
+                json.eventType = 'onBeforeRequest'
+                log.send('onBeforeRequest', json)
+                if(callback)callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
             }
         }
         )
+        ses.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
 
+            try {
+                console.log('onBeforeSendHeaders', details)
+
+                const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+
+                let json = {}
+                json.headers = details.requestHeaders
+                json.buffer = buffer.split('\n')
+                    json.method = details.method
+            json.url = details.url
+                json.referrer = details.referrer
+                json.eventType = 'onBeforeSendHeaders'
+                json.partition = partition
+                log.send('onBeforeRequest', json)
+                if(callback)callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
+            }
+        }
+        )
+        ses.webRequest.onSendHeaders(filter, (details,callback)=>{
+
+            try {
+                console.log('onSendHeaders', details)
+
+                const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+
+                let json = {}
+                json.headers = details.requestHeaders
+                json.buffer = buffer.split('\n')
+                json.url = details.url
+                json.method = details.method
+                json.referrer = details.referrer
+                json.partition = partition
+                json.eventType = 'onSendHeaders'
+                log.send('onBeforeRequest', json)
+                if(callback) callback({
+                    cancel: false
+                })
+            } catch (error) {
+                err(error)
+            }
+        }
+        )
 
     }
     )
 }
 )
- 
+
 function initMainScript(script) {
     //try init plugins
     try {

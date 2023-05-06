@@ -1,4 +1,6 @@
 const {ipcRenderer,contextBridge} = require('electron');
+const { session } = require('electron');
+
 
 eval(ipcRenderer.sendSync('logPreload'))
 const log = logPreload
@@ -32,7 +34,7 @@ const observer = new MutationObserver((mutations)=>{
     );
 }
 );
-
+    
 function txtArea() {
     return document.getElementsByTagName('textarea')[0]
 }
@@ -83,4 +85,74 @@ function triggerEnterKeyOnTextarea() {
     } catch (e) {
         err(e);
     }
+}
+ 
+window.addEventListener('DOMContentLoaded', () => {
+    addStartButton()
+});
+
+function addStartButton(){
+  let startButton = document.createElement('button');
+  startButton.innerText = 'Start Recording';
+  startButton.addEventListener('click', () => {
+    startRecording();
+    startButton.remove();
+  });
+  document.body.appendChild(startButton);    
+}
+
+function getDomPath(el) {
+  const stack = [];
+  while ( el.parentNode != null ) {
+    let sibCount = 0;
+    let sibIndex = 0;
+    for ( let i = 0; i < el.parentNode.childNodes.length; i++ ) {
+      let sib = el.parentNode.childNodes[i];
+      if ( sib.nodeName == el.nodeName ) {
+        if ( sib === el ) {
+          sibIndex = sibCount;
+        }
+        sibCount++;
+      }
+    }
+    if ( el.hasAttribute('id') && el.id != '' ) {
+      stack.unshift(el.nodeName.toLowerCase() + '#' + el.id);
+    } else if ( sibCount > 1 ) {
+      stack.unshift(el.nodeName.toLowerCase() + ':eq(' + sibIndex + ')');
+    } else {
+      stack.unshift(el.nodeName.toLowerCase());
+    }
+    el = el.parentNode;
+  }
+  return stack.slice(1); // removes the html element
+}
+
+function startRecording () {
+  let events = [];
+  const listener = (e) => {
+    events.push({
+      type: e.type,
+      target: getDomPath(e.target).join(" > "),
+      timestamp: e.timeStamp,
+    });
+    console.log('Recorded event:', e.type, 'on', getDomPath(e.target).join(" > "));
+  };
+
+  ['click', 'keyup', 'keydown', 'keypress'].forEach((eventType) => {
+    document.addEventListener(eventType, listener);
+  });
+
+  let stopButton = document.createElement('button');
+  stopButton.style.background = 'red' 
+  stopButton.innerText = 'Stop Recording';
+  stopButton.addEventListener('click', () => {
+    ['click', 'keyup', 'keydown', 'keypress'].forEach((eventType) => {
+      document.removeEventListener(eventType, listener);
+    });
+    console.log('Macro:', events);
+    stopButton.remove();
+    addStartButton()
+  });
+
+  document.body.appendChild(stopButton);
 }

@@ -1,4 +1,4 @@
-const {ipcMain} = require('electron')
+const {ipcMain,webContents} = require('electron')
 const path = require('path');
 const fs = require('fs');
 const {spawn, exec} = require('child_process');
@@ -26,6 +26,33 @@ ipcMain.on('debug-stop', ()=>{
 
 }
 )
+
+ 
+ 
+ipcMain.on('attach-debugger', (event, webContentsId) => {
+    const webviewWebContents = webContents.fromId(webContentsId);
+    
+
+    webviewWebContents.closeDevTools();
+
+
+    // you can add event listeners to webviewWebContents here
+    // for example, to listen to network events
+    webviewWebContents.debugger.on('detach', () => {
+        log('Debugger detached');
+    });
+
+    webviewWebContents.debugger.on('message', (event, method, params) => {
+      //  if (method === 'Network.responseReceived') {
+            console.log('Response received:', params);
+      //  }
+    });
+
+    webviewWebContents.debugger.attach('1.0');
+    webviewWebContents.debugger.sendCommand('Network.enable');
+});
+
+ 
 
 ipcMain.on('debug-main', ()=>{
 

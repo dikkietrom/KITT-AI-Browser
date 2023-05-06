@@ -9,7 +9,7 @@ class Coder extends Plugin {
             id: 'code',
             description: 'Code',
             role: 'worker',
-            active: true,
+            active: false,
             url: "../plugins/coder/index.html"
         }
     }
@@ -70,9 +70,11 @@ class Coder extends Plugin {
 
 function codeBlock(json) {
     let pos = json.message.chain.length - 1 - json.message.to.length
-    
-    if (json.message.chain[pos]==Plugin.user) {
-        return json.content
+
+    if (pos < 0 || json.message.chain[pos] == Plugin.user) {
+        return {
+            code: json.content
+        }
     }
     get.parser.innerHTML = json.content
     let element = get.parser.children[get.parser.children.length - 1]

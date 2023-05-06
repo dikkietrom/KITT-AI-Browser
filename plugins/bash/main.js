@@ -30,7 +30,7 @@ function execBash(json) {
 
 
         // Return the output of the child process regardless of error status
-        const output = result.status === 0 ? result.output.join('\n') : result.error.join('\n')
+        const output = !result.error ? result.output.join('\n') : result.error
         log(output)
 //        // Stream the output of the child process to the parent process
 //        child.stdout.on('data', (data) => {

@@ -10,7 +10,7 @@ class Google extends Plugin {
             name: 'Google',
             description: 'Google',
             role: 'worker',
-            active: true,
+            active: false,
             url: "https://google.com"
         }
     }

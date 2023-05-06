@@ -1,32 +1,16 @@
-ipcRenderer.on('onBeforeSendHeaders', function onBeforeSendHeaders_IPC(event, arg) {
-    // log('onBeforeSendHeaders', arg)
-
-    const domain = extractDomain(arg.url);
-
-    let plugin = plugByUrl[domain]
-
+ipcRenderer.on('onBeforeRequest', function onBeforeRequest_IPC(event, json){
+    let plugin = pluginById[json.partition.substring(8)]
     if (plugin) {
-        try {
-            let arr = []
-
-            let buffers = arg.buffer
-
-            for (let index = 0; index < buffers.length; index++) {
-                if (buffers[index]) {
-                    try {
-                        arr[index] = JSON.parse(buffers[index])
-                    } catch (error) {
-                        arr[index] = error
-                    }
-                }
-
-            }
-            plugin.onData(arr)
-        } catch (error) {
-            err(error)
-        }
+        plugin.onFetchRequest(json)
     }
 })
+ipcRenderer.on('onHeadersReceived', function onHeadersReceived_IPC (event,json){
+    let plugin = pluginById[json.partition.substring(8)]
+    if (plugin) {
+        plugin.onFetchResponse(json)
+    }
+}
+);
 
 ipcRenderer.on('plugin-reply', (event,token)=>{
     pluginReply(token)
@@ -91,14 +75,6 @@ ipcRenderer.on('preload-log', (event,mes)=>{
     preloadLog(event,mes)
 }
 );
-ipcRenderer.on('ses.webRequest.onCompleted', (event,json)=>{
-    let plugin = pluginById[json.partition.substring(8)]
-    if (plugin) {
-        plugin.onData(json)
-    }
-
-}
-);
 
 function onScriptLoad(arg) {
     let index = arg.index
@@ -129,7 +105,7 @@ function onScriptLoad(arg) {
     return tab
 }
 
-function addWebView(pluginDir, plugin,info) {
+async function addWebView(pluginDir, plugin,info) {
     //add the webview like
     //    <div class="tab-content">
     //       <div>
@@ -153,8 +129,12 @@ function addWebView(pluginDir, plugin,info) {
     }else{
         plgWebView.preload = '../front-end/plugin-preload.js'
     }
+    let t = plgWebView
+    plgWebView.addEventListener('dom-ready', () => {
+        //ipcRendererenderer.send('attach-debugger',t.getWebContentsId())
+    });
     main.appendChild(plgWebView)//append after config or no preload
-
+                    
     let bar = div(main)
     bar.className = 'button-bar'
     let toggleViewButton = button(bar)
@@ -162,7 +142,6 @@ function addWebView(pluginDir, plugin,info) {
     toggleViewButton.innerHTML = 'Show webview'
     toggleViewButton.onclick = function() {
         toggleWebView(this, pluginDir + '-view')
-
     }
 
     let debugButton = button(bar)
@@ -170,14 +149,19 @@ function addWebView(pluginDir, plugin,info) {
     debugButton.innerHTML = 'Debug'
     debugButton.onclick = function() {
         toggleDevTools(this, pluginDir + '-view')
-
     }
     plgWebView.debugButton = debugButton
+    let custButton = button()
+    custButton.className = 'command'    
+    let custSelect = select()
+    plugin.onInitMenu({menu:bar,button:custButton,select:custSelect}) 
 
-    let urlBox = div(bar)
+    let urlBox = span(bar)
     urlBox.innerHTML = plgWebView.src
     urlBox.className = 'urlBox'
-
+    plugin.menu = bar
     plgWebView.urlBox = urlBox
+
+   
 
 }

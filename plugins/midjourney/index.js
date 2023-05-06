@@ -9,7 +9,7 @@ class MjApiHack extends Plugin {
             description: 'MjApiHack',
             role: 'worker',
             skill: 'tti',
-            active:true,    
+            active:false,    
             url: "https://discord.com/channels/@me/1093057901330968647"
         }
     }

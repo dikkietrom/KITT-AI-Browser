@@ -1,20 +1,24 @@
-#!/bin/bash
-
-# Create the C source file
-cat << EOF > example.c
-#include <stdio.h>
-
-int main() {
-    printf("Hello, world!\n");
-    return 0;
-}
-EOF
-
-# Compile the source code
-gcc -o example example.c
-
-# Execute the resulting program
-./example
-
-# Clean up the intermediate files
-rm example.c example
+"class NatDev extends Plugin {
+  constructor(arg) {
+    super(arg);
+    this.async = true;
+    this.streamer = true;
+  }
+  config() {
+    return {
+      name: 'NatDev',
+      id: 'natdev',
+      description: 'NatDev',
+      role: 'worker',
+      active: true,
+      url: 'https://nat.dev'
+    };
+  }
+  onData(data) {
+    console.log(data);  // log the incoming data for now
+  }
+  exec(message) {
+    this.webView.send('execute-task', message.content);
+  }
+} 
+let natDev = new NatDev();"
