@@ -8,7 +8,7 @@ class NatDev extends Plugin {
     config() {
         return {
             name: 'NatDev',
-            id: 'natdev',
+            id: 'nd',
             description: 'NatDev',
             role: 'worker',
             active: true,
@@ -21,9 +21,13 @@ class NatDev extends Plugin {
         this.modelSelect = select(json.menu)
 
     }
-    exec(message) {}
-    onFetchRequest(data) {
+    exec(message) {
 
+
+        
+    }
+    onFetchRequest(data) {
+    console.log(data.referrer)
         if (!this.menuInit && data.url == 'https://nat.dev/api/all_models' && data.eventType == 'onSendHeaders') {
             let models = getModels(data)
             let json = getModelsByFab(models)
@@ -32,14 +36,21 @@ class NatDev extends Plugin {
             }
             this.menuInit = true
             let that = this
+            
             this.fabSelect.onchange = function fabSelect(e) {
+                that.modelSelect.innerHTML=''
                 let models = json[that.fabSelect.value]
                 for (let p in models) {
                     let model = models[p]
-                    option(that.modelSelect).innerHTML = model.name
+                    if (model.name) {
+                        option(that.modelSelect).innerHTML = model.name
+                    }
                 }
 
             }
+            this.fabSelect.value = 'openai'
+            this.fabSelect.onchange()
+            this.modelSelect.value = 'gpt-4'
 
         }
 
@@ -80,4 +91,4 @@ function getModelsByFab(jsonString) {
     }
 }
 
-Plugin.natDev = new NatDev();
+Plugin.nd = new NatDev();
