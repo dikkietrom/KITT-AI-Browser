@@ -130,7 +130,7 @@ app.on('web-contents-created', (event,contents)=>{
         ses.webRequest.onHeadersReceived(filter, (details,callback)=>{
             try {
                 let json = {}
-                console.log('onHeadersReceived', details)
+               // console.log('onHeadersReceived', details)
                 json.headers = details.responseHeaders
                 json.url = details.url
                 json.referrer = details.referrer
@@ -149,7 +149,7 @@ app.on('web-contents-created', (event,contents)=>{
         ses.webRequest.onResponseStarted(filter, (details,callback)=>{
             try {
                 let json = {}
-                console.log('onResponseStarted', details)
+               // console.log('onResponseStarted', details)
                 json.headers = details.responseHeaders
                 json.url = details.url
                 json.referrer = details.referrer
@@ -167,7 +167,7 @@ app.on('web-contents-created', (event,contents)=>{
         );
         ses.webRequest.onCompleted(filter, (details,callback)=>{
             try {
-                console.log('onCompleted', details)
+               // console.log('onCompleted', details)
                 let json = {}
                 json.headers = details.responseHeaders
                 json.url = details.url
@@ -188,7 +188,7 @@ app.on('web-contents-created', (event,contents)=>{
         ses.webRequest.onBeforeRequest(filter, (details,callback)=>{
 
             try {
-                console.log('onBeforeRequest', details)
+               // console.log('onBeforeRequest', details)
 
                 const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
 
@@ -212,7 +212,7 @@ app.on('web-contents-created', (event,contents)=>{
         ses.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
 
             try {
-                console.log('onBeforeSendHeaders', details)
+               // console.log('onBeforeSendHeaders', details)
 
                 const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
 
@@ -236,7 +236,7 @@ app.on('web-contents-created', (event,contents)=>{
         ses.webRequest.onSendHeaders(filter, (details,callback)=>{
 
             try {
-                console.log('onSendHeaders', details)
+               // console.log('onSendHeaders', details)
 
                 const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
 
