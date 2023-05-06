@@ -254,9 +254,6 @@ function element(parent, tag) {
 function div(parent) {
     return element(parent, 'div')
 }
-function button(parent) {
-    return element(parent, 'button')
-}
 function webview(parent) {
     if(parent){
         throw new Error('parent is not supported for webview, append it after configuration')
@@ -273,4 +270,13 @@ function td(parent) {
 
 function tr(parent) {
     return element(parent, 'tr')
+}
+function button(parent) {
+    return element(parent, 'button')
+}
+function select(parent) {
+    return element(parent, 'select')
+}
+function option(parent) {
+    return element(parent, 'option')
 }

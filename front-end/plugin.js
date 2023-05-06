@@ -35,6 +35,9 @@ class Plugin {
  
 
     }
+    onInitMenu(menu) {
+
+    }
     onReplied(message) {
 
     }
@@ -45,6 +48,10 @@ class Plugin {
         throw new Error('exec not implemented for ' + this.config().name)
     }
     onData(json) {
+    }
+    onFetchResponse(json) {
+    }
+    onFetchRequest(json) {
     }
     onTimeOut() {
         if (this.message) {

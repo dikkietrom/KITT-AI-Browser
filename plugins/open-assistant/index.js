@@ -12,7 +12,7 @@ class OpenAssistant extends Plugin {
             id: 'oa',
             description: 'OpenAssistant',
             role: 'CEOx',
-            active: true,
+            active: false,
             url: "https://open-assistant.io"
         }
     }

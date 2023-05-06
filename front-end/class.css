@@ -201,8 +201,11 @@
     margin-top: 0;
 }
 
-.urlBox {
+.button-bar span {
     padding: var(--command-padding);
-    margin: auto;
+    margin-top: auto;
+    margin-bottom: auto;
     margin-left: 1em;
+    /* max-width: 1px; */
+    white-space: nowrap;
 }
