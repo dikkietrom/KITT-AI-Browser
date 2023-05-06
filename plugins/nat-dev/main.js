@@ -9,6 +9,7 @@ function init(lg) {
 ipcMain.on('nat-dev-models', (event,json)=>{
     try {
 
+        delete json.headers["Sec-Fetch-Mode"];
 
         // Usage:
         (async()=>{
