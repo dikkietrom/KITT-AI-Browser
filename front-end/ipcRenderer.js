@@ -1,6 +1,9 @@
 ipcRenderer.on('onBeforeRequest', function onBeforeRequest_IPC(event, json){
+    
     let plugin = pluginById[json.partition.substring(8)]
+
     if (plugin) {
+        
         plugin.onFetchRequest(json)
     }
 })

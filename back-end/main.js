@@ -76,7 +76,7 @@ function createWindow() {
     }
     )
 
-    let ses = session.defaultSession
+   
 
     try {
         autoUpdater.checkForUpdatesAndNotify();
@@ -122,6 +122,7 @@ app.on('web-contents-created', (event,contents)=>{
         // console.log(webPreferences.partition)
         let partition = webPreferences.partition
         let ses = session.fromPartition(partition);
+        // let ses = session.defaultSession
         // ses.setProxy({ proxyRules: 'http://localhost:8080' })
 
         //////////////// RESP
@@ -156,7 +157,7 @@ app.on('web-contents-created', (event,contents)=>{
               json.partition = partition
                 json.eventType = 'onResponseStarted'
                 log.send('onHeadersReceived', json)
-                if(callback)if(callback)callback({
+                if(callback)callback({
                     cancel: false
                 })
             } catch (error) {

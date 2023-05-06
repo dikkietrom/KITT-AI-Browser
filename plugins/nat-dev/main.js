@@ -1,7 +1,11 @@
 const {ipcMain, net} = require('electron');
-const {log, err, initShared} = require('../../lib/shared.js');
+const { err, initShared} = require('../../lib/shared.js');
+let log
+function init(lg) {
+    
+    log=lg
 
-function init(lg) {}
+}
 ipcMain.on('nat-dev-models', (event,json)=>{
     try {
 
