@@ -22,12 +22,12 @@ class NatDev extends Plugin {
 
     }
     exec(message) {
+        this.webView.send('send-input', message.content)
 
 
         
     }
     onFetchRequest(data) {
-    console.log(data.referrer)
         if (!this.menuInit && data.url == 'https://nat.dev/api/all_models' && data.eventType == 'onSendHeaders') {
             let models = getModels(data)
             let json = getModelsByFab(models)
@@ -59,11 +59,38 @@ class NatDev extends Plugin {
     // console.log('onFetchResponse:',data);
     }
 }
-ipcRenderer.on('doInPreload-nat-dev', (event,json)=>{
-    console.log('doInPreload-nat-dev', json)
-}
-)
 
+// Cancel the timeout
+ipcRenderer.on('html-delta-text', (event,json)=>{
+    if (gpt4apiHack.message) {
+        log('html-delta-text index')
+        gpt4apiHack.message.content = json.data
+        if (gpt4apiHack.container) {
+            gpt4apiHack.container.innerText = json.data
+            gpt4apiHack.container.scrollTop = gpt4apiHack.container.scrollHeight
+        }
+    }
+    gpt4apiHack.startTimer()
+}
+);
+
+ipcRenderer.on('html-get-last', (event,last)=>{
+    let message = gpt4apiHack.message
+    if (message) {
+        // Send input data to the renderer process
+        log('get last in index.js ' )
+        if (last.indexOf('ChatGPT') == 0) {
+            last = last.substring('ChatGPT'.length + 1)
+        }
+        message.content = last
+        if (gpt4apiHack.container) {
+            gpt4apiHack.container.innerText = '[CLEARED]'
+        }
+        gpt4apiHack.message.send()
+    }
+}
+);
+ 
 function getModels(json) {
     return ipcRenderer.sendSync('nat-dev-models', json)
 }

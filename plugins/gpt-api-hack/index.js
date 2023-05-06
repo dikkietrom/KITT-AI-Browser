@@ -60,19 +60,6 @@ ipcRenderer.on('html-get-last', (event,last)=>{
         if (gpt4apiHack.container) {
             gpt4apiHack.container.innerText = '[CLEARED]'
         }
-
-        // const utterThis = new SpeechSynthesisUtterance(gpt4apiHack.message.content)
-        // utterThis.lang = 'nl-NL'
-        // utterThis.pitch = 1
-        // utterThis.rate = 0.8
-        // synth.speak(utterThis)
-        // let voices = synth.getVoices()
-        // voices.forEach((voice)=>{
-        //     if (voice.lang == 'nl-NL') {
-        //       //  console.error(voice.name)
-        //     }
-        // }
-        // )
         gpt4apiHack.message.send()
     }
 }

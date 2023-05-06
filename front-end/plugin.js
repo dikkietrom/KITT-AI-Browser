@@ -114,7 +114,7 @@ function run() {
         }
         content = spaceIndex == -1 ? '' : content.substring(spaceIndex).trim()
     } else {
-        message.to[0] = pluginByRole['CEO'][0]
+        message.to[0] = Plugin.active
     }
     message.chain.push(message.to[0])
 

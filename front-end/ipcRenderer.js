@@ -61,7 +61,8 @@ ipcRenderer.on('plugin-message', (event,json)=>{
                     })
                     let i = index++
                     tab.onclick = ()=>{
-                        showTab(i)
+                        showTab(i,plugin)
+                        
                     }
                 }
             }
@@ -87,7 +88,7 @@ function onScriptLoad(arg) {
     log('dir plugin.config : ', dir, JSON.stringify(plugin.config()))
 
     plugByUrl[extractDomain(plugin.config().url)] = plugin
-    //add to the tabbar like <button class="tab" onclick="showTab(3)">Youtube</button>
+    //add to the tabbar like <button class="tab" onclick="showTab(3,plugin)">Youtube</button>
     let tab = document.createElement('button')
     let tabbar = document.getElementById('webview-tab-bar')
 
@@ -100,10 +101,10 @@ function onScriptLoad(arg) {
     addWebView(dir, plugin, info)
     if (index == 0) {
         tab.className = 'tab active'
-        showTab(0)
+        showTab(0,plugin)
     }
     if (plugin.config().role == 'CEO') {
-        showTab(index)
+        showTab(index,plugin)
     }
     return tab
 }

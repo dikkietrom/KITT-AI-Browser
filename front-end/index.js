@@ -191,7 +191,7 @@ function toggleDevTools(but, id) {
     document.getElementById(id).openDevTools()
 }
 
-function showTab(index) {
+function showTab(index,plugin) {
     // Hide all tab content
     let tabContents = document.getElementsByClassName('tab-content');
     for (let i = 0; i < tabContents.length; i++) {
@@ -207,6 +207,7 @@ function showTab(index) {
 
     // Show the selected tab content
     tabContents[index].classList.add('active');
+    Plugin.active = plugin
 }
 
 function extractDomain(url) {
