@@ -108,7 +108,7 @@ ipcMain.on('doInMain', (event,json)=>{
         event.returnValue = returnValue
     } catch (error) {
         err(error)
-        event.returnValue = error.stack + '\n' + json
+        event.returnValue = `Is ${json.func} exported in ${json.imp}? \n` + error.stack + '\n' + json
     }
 }
 );

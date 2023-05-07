@@ -12,7 +12,7 @@ class Gpt4apiHack extends Plugin {
             id: 'gpt',
             description: 'Gpt4ApiHack',
             role: 'CEO',
-            active: false,
+            active: true,
             icon: 'icon.png',
             url: "https://chat.openai.com/"
         }

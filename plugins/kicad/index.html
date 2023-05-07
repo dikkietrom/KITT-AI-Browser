@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Coder</title>
+
+
+        <style>
+            .group token{
+                display: inline-block;
+                padding: 0 5px;
+                border-radius: 5px;
+                margin: 0 5px;
+            }
+            canvas{
+                display: block;
+            }
+        </style>
+        <script>
+            function init(){
+                document.body.innerHTML += new Date()
+                let sc = document.createElement('script')
+                sc.src = 'code.js'
+                document.body.appendChild(sc)
+            }
+        </script>
+    </head>
+    <body onload="init()" >
+        <button onclick="eval(document.getElementById('code').innerText)">eval</button>
+        <div id="container"></div>
+
+    </body>
+    </html>

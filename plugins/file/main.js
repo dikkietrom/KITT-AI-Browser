@@ -17,9 +17,13 @@ function isFile(json) {
 }
 
 function getFileContent(json) {
-    validate(json)
-    const data = fs.readFileSync(json.path, 'utf8');
-    return data;
+    try {
+        validate(json)
+        const data = fs.readFileSync(__dirname+ '/' +json.path, 'utf8');
+        return data;
+    } catch(e) {
+        return `${__dirname} \n` + e.stack
+    }
 
 }
 function validate(json){
