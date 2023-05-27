@@ -1,81 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>CEO test</title>
+<body>
 
-    </head>
-    <body > 
-        CEO test
 
-<script>
+
+<script> 
+
+     interface IGitHubProject extends IPlugin{
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  install(): Promise<void>;
+  run(): Promise<void>;
+  env(): Promise<IEnvironment>;
+}
+ interface IEnvironment {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  activate(): Promise<void>;
+}
 
 
     
-let macroRecorder = (() => {
-  let recording = false;
-  let events = [];
-
-  function startRecording() {
-    recording = true;
-    events = [];
-    document.addEventListener('click', recordEvent);
-    document.addEventListener('keydown', recordEvent);
-    document.addEventListener('keyup', recordEvent);
-  }
-
-  function stopRecording() {
-    recording = false;
-    document.removeEventListener('click', recordEvent);
-    document.removeEventListener('keydown', recordEvent);
-    document.removeEventListener('keyup', recordEvent);
-  }
-
-  function recordEvent(e) {
-    if (!recording) return;
-    events.push({ type: e.type, target: e.target, timeStamp: e.timeStamp, keyCode: e.keyCode });
-  }
-
-  function replayEvents() {
-    let startTime = events[0].timeStamp;
-    events.forEach((event, index) => {
-      setTimeout(() => {
-        let newEvent = new Event(event.type);
-        newEvent.keyCode = event.keyCode;
-        event.target.dispatchEvent(newEvent);
-      }, events[index].timeStamp - startTime);
-    });
-  }
-
-  return { startRecording, stopRecording, replayEvents };
-})();
-
-let gui = document.createElement('div');
-gui.style.position = 'fixed';
-gui.style.top = '10px';
-gui.style.right = '10px';
-gui.style.zIndex = '9999';
-
-let startButton = document.createElement('button');
-startButton.textContent = 'Start Recording';
-startButton.addEventListener('click', macroRecorder.startRecording);
-gui.appendChild(startButton);
-
-let stopButton = document.createElement('button');
-stopButton.textContent = 'Stop Recording';
-stopButton.addEventListener('click', macroRecorder.stopRecording);
-gui.appendChild(stopButton);
-
-let replayButton = document.createElement('button');
-replayButton.textContent = 'Replay Events';
-replayButton.addEventListener('click', macroRecorder.replayEvents);
-gui.appendChild(replayButton);
-
-document.body.appendChild(gui);
-
 </script>
 
-        
-    </body>
-    </html>
+</body>
+</html>

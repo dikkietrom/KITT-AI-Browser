@@ -11,7 +11,7 @@ class Feed extends Plugin {
             id: 'feed',
             description: 'Feed',
             role: 'worker',
-            active: true,
+            active: false,
         }
     }
 
@@ -19,7 +19,7 @@ class Feed extends Plugin {
         if (!this.data) {
             let nxt = message.to[1]
             let data = []
-            let size = 15000
+            let size = 10000
             let content = message.content
             this.parts = content.length / size
     
@@ -29,7 +29,7 @@ class Feed extends Plugin {
             let ins = []
             ins.push(nxt)
             ins.push(this)
-            data.push(pre)
+            data.push(prefix)
       
             for (let i = 0; i < this.parts; i++) {
                 data.push(content.substring(i * size, (i + 1) * size))
@@ -58,15 +58,15 @@ class Feed extends Plugin {
 
 Plugin.feed = new Feed()
 
-let pre = `The total length of the content that I want to send you is too large to send in only one piece.
+let prefix = `The total length of the content that I want to send you is too large to send in only one piece.
         
 For sending you that content, I will follow this rule:
         
-[START PART 1/10]
-this is the content of the part 1 out of 10 in total
-[END PART 1/10]
+[START PART 1/...]
+this is the content of the part 1 out of ... in total
+[END PART 1/...]
         
-Then you just answer: "Received part 1/10"
+Then you just answer: "Received part 1/..."
         
 And when I tell you "ALL PARTS SENT", then you can continue processing the data and answering my requests.`
 
@@ -75,6 +75,6 @@ Just receive and acknowledge as
 "Part ${part}/${from} received" and wait for the next part.
 [START PART ${part}/${from}]
 ${data}
-[END PART ${part}/1${from}]
+[END PART ${part}/${from}]
 Remember not answering yet. Just acknowledge you received this part with the message 
 "Part ${part}/${from} received" and wait for the next part.`

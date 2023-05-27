@@ -40,7 +40,7 @@ function txtArea() {
 }
 let currentInput
 ipcRenderer.on('send-input', (event,message)=>{
-    log('send-input hack', message)
+    log('send-input hack')
     reset = true
     txtArea().value = message
     currentInput = message
@@ -59,7 +59,7 @@ ipcRenderer.on('html-get-last', (event,message)=>{
 
  ipcRenderer.on('doInPreload', (event,json)=>{
      try {
-        log('doInPreload' ,json.from)
+        log('doInPreload' ,json.js)
         eval(json.js)
         ipcRenderer.send('doInPreload' , json)
      }catch(e){
@@ -88,7 +88,7 @@ function triggerEnterKeyOnTextarea() {
 }
  
 window.addEventListener('DOMContentLoaded', () => {
-    addStartButton()
+   // addStartButton()
 });
 
 function addStartButton(){

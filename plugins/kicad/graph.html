@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neural Network Visualization</title>
+    <style>
+        #canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <script>
+        // get a reference to the canvas element
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+
+        // parameters
+        let neuronRadius = 10;
+        let layerDist = 300;
+        let neuronDist = 50;
+        let layers = [
+            { neurons: 7, label: 'Input Layer' },
+            { neurons: 7, label: 'Hidden Layer' },
+            { neurons: 10, label: 'Output Layer' }
+        ];
+
+        // draw the network
+        for (let layerIndex = 0; layerIndex < layers.length; layerIndex++) {
+            let layer = layers[layerIndex];
+            ctx.fillText(layer.label, layerIndex * layerDist + 10, 10);  // label the layer
+            for (let neuron = 0; neuron < layer.neurons; neuron++) {
+                // calculate the position of the neuron
+                let x = layerIndex * layerDist + neuronRadius * 2;
+                let y = neuron * neuronDist + neuronRadius * 2;
+
+                // draw the neuron
+                ctx.beginPath();
+                ctx.arc(x, y, neuronRadius, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // if this is not the first layer, draw connections to the previous layer
+                if (layerIndex > 0) {
+                    let prevLayer = layers[layerIndex - 1];
+                    for (let prevNeuron = 0; prevNeuron < prevLayer.neurons; prevNeuron++) {
+                        let prevX = (layerIndex - 1) * layerDist + neuronRadius * 2;
+                        let prevY = prevNeuron * neuronDist + neuronRadius * 2;
+                        ctx.beginPath();
+                        ctx.moveTo(prevX, prevY);
+                        ctx.lineTo(x, y);
+                        ctx.strokeStyle = '#dddddd';  // make the lines light so they don't dominate the image
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

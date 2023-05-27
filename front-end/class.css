@@ -128,8 +128,8 @@
     z-index: 1000;
 }
 .plugin-reply > div {
-    /* max-height: 6em; */
-    /* overflow: auto; */
+    max-height: 6em;
+    overflow: auto;
 }
 
 .plugin-select {

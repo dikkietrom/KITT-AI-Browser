@@ -9,8 +9,8 @@ class NanoGPT extends Plugin {
             description: 'nanoGPT',
             id: 'nano',
             role: 'worker',
-            active: true,
-            url: "http://localhost:3000",
+            active: false,
+            url: "../plugins/nano-gpt/index.html",
         }
     }
 }

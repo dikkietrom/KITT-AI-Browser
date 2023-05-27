@@ -223,7 +223,11 @@ function insertElementAtIndex(parentElement, newElement, index) {
     }
 }
 function doInPreload(json){
-    json.plugin.webView.send('doInPreload' , {from:json.plugin.config().name, js:json.js})
+    try {
+      json.plugin.webView.send('doInPreload' , {from:json.plugin.config().name, js:json.js})
+    } catch (error) {
+       err(error) 
+    }
 }
 function doInMain(args, imp) {
     if (!args[0]) {
@@ -252,6 +256,9 @@ function element(parent, tag) {
         err(error)
     }
 }
+function script(parent) {
+    return element(parent, 'script')
+}
 function div(parent) {
     return element(parent, 'div')
 }
@@ -264,6 +271,9 @@ function webview(parent) {
 
 function span(parent) {
     return element(parent, 'span')
+}
+function pre(parent) {
+    return element(parent, 'pre')
 }
 function td(parent) {
     return element(parent, 'td')

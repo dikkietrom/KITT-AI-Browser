@@ -19,8 +19,9 @@ class File extends Plugin {
             let returnValue = isFile({
                 path: content
             })
-            if (returnValue && returnValue.indexOf && returnValue.indexOf('Error')==0) {
-                returnValue = returnValue //duh
+            if (returnValue && returnValue.indexOf && returnValue.indexOf('Error') >= 0) {
+                returnValue = returnValue
+                //duh
             } else if (returnValue) {
                 returnValue = getFileContent({
                     path: content
@@ -30,6 +31,15 @@ class File extends Plugin {
                 let files = getFiles({
                     path: content
                 })
+
+                let temp = []
+                files.forEach(f=>{
+                    if (f.substring(content.length).indexOf('/.') < 0) {
+                        temp.push(f)
+                    }
+                }
+                )
+                files = temp
                 if (!files.forEach && files.indexOf && files.indexOf('Error') == 0) {
                     returnValue = files
                 } else {
@@ -45,6 +55,15 @@ class File extends Plugin {
                 returnValue = getFiles({
                     path: content
                 })
+
+                let temp = []
+                returnValue.forEach(f=>{
+                    if (f.substring( content.length  ).indexOf('/.') < 0) {
+                        temp.push(f)
+                    }
+                }
+                )
+                returnValue = temp
                 returnValue = returnValue.join('\n')
             }
             return returnValue

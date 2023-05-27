@@ -1,0 +1,49 @@
+<html>
+<body>
+<script>
+
+const vertexShaderGLSL = `#version 450
+layout(location = 0) in vec2 position;
+void main() {
+  gl_Position = vec4(position, 0.0, 1.0);
+}`;
+
+const fragmentShaderGLSL = `#version 450
+layout(location = 0) out vec4 outColor;
+void main() {
+  outColor = vec4(1.0, 0.0, 0.0, 1.0);  // Red color
+}`;
+
+async function compileShader(device, source, type) {
+  const shaderModule = device.createShaderModule({
+    code: source,
+  });
+  return shaderModule;
+}
+
+async function main() {
+  if (!navigator.gpu) {
+    throw Error("WebGPU not supported.");
+  }
+
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) {
+    throw Error("Couldn't request WebGPU adapter.");
+  }
+
+  const device = await adapter.requestDevice();
+
+  // Compile shaders
+  const vertexShader = await compileShader(device, vertexShaderGLSL, 'vertex');
+  const fragmentShader = await compileShader(device, fragmentShaderGLSL, 'fragment');
+
+  // TODO: create pipeline, buffers, and draw commands
+
+  //...
+}
+
+main();  
+
+</script>
+</body>
+</html>

@@ -19,7 +19,7 @@ class Plugin {
             if (index == -1) {
                 dir = extractPluginDirFromAsar(dir)
             } else {
-                dir = dir.substring(index + part.length )
+                dir = dir.substring(index + part.length)
 
                 dir = dir.substring(0, dir.indexOf('/'))
             }
@@ -32,34 +32,30 @@ class Plugin {
             log(dir)
         }
 
- 
-
     }
-    onInitMenu(menu) {
-
+    imp(src) {
+        let s = script()
+        s.src = `../plugins/${this.dir}/${src}.js`
+        document.body.appendChild(s)
     }
-    onReplied(message) {
-
-    }
+    onInitMenu(menu) {}
+    onReplied(message) {}
     config() {
         throw new Error('config not implemented for ' + this.config().name)
     }
     exec(message) {
         throw new Error('exec not implemented for ' + this.config().name)
     }
-    onData(json) {
-    }
-    onFetchResponse(json) {
-    }
-    onFetchRequest(json) {
-    }
+    onData(json) {}
+    onFetchResponse(json) {}
+    onFetchRequest(json) {}
     onTimeOut() {
         if (this.message) {
             try {
-                log('timed out',this.webView)
+                log('timed out', this.webView)
                 this.webView.send('html-get-last')
-            } catch(e) {
-                log(e,this.message);
+            } catch (e) {
+                log(e, this.message);
             }
         }
         this.timeoutId = null
@@ -82,12 +78,20 @@ class Plugin {
     send(key, message) {
         this.webView.send(key, message)
     }
+    setPreLoadHTML(json) {
+        doInPreload({
+            plugin: this,
+            js: `document.getElementById('container').innerHTML = \`${json.html}\``
+
+        })
+    }
+
 }
 const seperator = '\u00bb'
 function run() {
     log('start')
     get('console-view').innerHTML = ''
-    get('console-view-parent').className=''
+    get('console-view-parent').className = ''
     let s = span(currentInp.parentElement)
     s.style.cursor = 'pointer'
     s.innerHTML = currentInp.value
@@ -96,7 +100,7 @@ function run() {
         currentInp.focus()
     }
     currentInp.outerHTML = ''
- 
+
     let message = new Message()
     let content = currentInp.value.trim()
     let toc = 0
@@ -104,6 +108,7 @@ function run() {
         let spaceIndex = content.indexOf(' ')
         let pluginId = content.substring(1, spaceIndex == -1 ? content.length : spaceIndex)
         message.to[0] = pluginById[pluginId]
+
         if (!message.to[0]) {
             message.to = []
             message.from = pluginById['user']
@@ -121,19 +126,29 @@ function run() {
     let chainPos = content.indexOf(seperator)
     let chainSpec = chainPos == -1 ? '' : content.substring(chainPos)
 
-    content = content.indexOf(seperator) == -1 
-        ? content 
-        : content.substring(0, content.indexOf(seperator) - 1)
+    content = content.indexOf(seperator) == -1 ? content : content.substring(0, content.indexOf(seperator) - 1)
 
     if (chainPos != -1) {
 
         let chain = chainSpec.split(seperator)
         for (let index = 0; index < chain.length; index++) {
             let pluginId = chain[index]
-            if (pluginId != chain && pluginId){
-                message.chain.push(pluginById[pluginId])
-                message.to.push(pluginById[pluginId])
-            }               
+            if (pluginId != chain && pluginId) {
+                let plg = pluginById[pluginId]
+                if (!plg) {
+                    message.chain.push(pluginById['broker'])
+                    message.to=[]
+                    message.to[0] = pluginById['user']
+                    message.from = pluginById['broker']
+                    message.content = `plugin ${pluginId} does not seem to exist.`
+                    message.send()
+                    return
+                } else {
+                    message.chain.push(plg)
+                    message.to.push(pluginById[pluginId])
+                }
+
+            }
         }
     }
 
@@ -194,20 +209,18 @@ function newPluginReplyRow(plugin, cls) {
     const imageUrl = `../plugins/${plugin.dir}/icon.png`
 
     // Set the background image to the image URL
-    if(plugin.config().icon){
-      icon.style.backgroundImage = `url(${imageUrl})`;
-    };
-
-
-    cell = td(row)
+    if (plugin.config().icon) {
+        icon.style.backgroundImage = `url(${imageUrl})`;
+    }
+    ;cell = td(row)
     cell.className = 'plugin-reply'
     cell.colSpan = 2
 
     return cell
 }
 function newInp(container) {
-    
-    let td = newPluginReplyRow( pluginById['user'] , 'chat-id')
+
+    let td = newPluginReplyRow(pluginById['user'], 'chat-id')
 
     let inp = document.createElement('textarea')
     inp.className = 'speak'
@@ -224,7 +237,6 @@ function newInp(container) {
     currentInp = inp
 
 }
-
 
 function extractPluginDirFromAsar(path) {
     const pattern = /app\.asar\/plugins\/([^/]+)\//;

@@ -1,0 +1,613 @@
+
+
+
+
+
+Geometry Nodes — Blender Manual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Blender 3.5 Manual
+              
+
+
+
+
+
+
+
+
+
+Getting Started
+
+About Blender
+Installing Blender
+Configuring Blender
+Help System
+
+Sections
+
+User Interface
+Editors
+Scenes & Objects
+Modeling
+Introduction
+Meshes
+Curves
+Surfaces
+Metaball
+Text
+Volumes
+Empties
+Modifiers
+Geometry Nodes
+Introduction
+Inspection
+Attributes
+Fields
+Instances
+Node Types
+Attribute Nodes
+Input Nodes
+Output Nodes
+Geometry Nodes
+Curve Nodes
+Instances Nodes
+Mesh Nodes
+Point Nodes
+Volume Nodes
+Material Nodes
+Texture Nodes
+Utilities Nodes
+Group
+Hair Nodes
+
+
+
+
+
+
+Sculpting & Painting
+Grease Pencil
+Animation & Rigging
+Physics
+Rendering
+Compositing
+Motion Tracking & Masking
+Video Editing
+Assets, Files, & Data System
+Add-ons
+Advanced
+Troubleshooting
+Glossary
+Manual Index
+
+Get Involved
+
+Contribute Documentation
+
+
+
+
+
+
+Blender 3.5 Manual
+
+
+
+
+
+
+Modeling
+Geometry Nodes
+
+
+
+
+
+
+
+
+Geometry Nodes
+
+
+Introduction
+Inspection
+Attributes
+Fields
+Instances
+
+
+
+Node Types
+
+
+Attribute Nodes
+Attribute Statistic Node
+Domain Size Node
+Blur Attribute Node
+Capture Attribute Node
+Remove Named Attribute Node
+Store Named Attribute Node
+
+
+Input Nodes
+Constant
+Boolean Node
+Color Node
+Image Node
+Integer Node
+Material Node
+String Node
+Value Node
+Vector Node
+
+
+Scene
+Collection Info Node
+Image Info Node
+Is Viewport Node
+Object Info Node
+Self Object Node
+
+
+
+
+Output Nodes
+Viewer Node
+
+
+
+
+
+
+
+Geometry Nodes
+Read
+ID Node
+Index Node
+Named Attribute Node
+Normal Node
+Position Node
+Radius Node
+
+
+Write
+Set ID Node
+Set Position Node
+
+
+Sample
+Geometry Proximity Node
+Raycast Node
+Sample Index Node
+Sample Nearest Node
+
+
+Operations
+Bounding Box Node
+Convex Hull Node
+Delete Geometry Node
+Duplicate Elements Node
+Merge by Distance Node
+Transform Geometry Node
+Separate Components Node
+Separate Geometry Node
+
+
+Join Geometry Node
+Geometry to Instance Node
+
+
+
+
+
+
+
+Curve Nodes
+Read
+Curve Handle Position Node
+Curve Length Node
+Curve Tangent Node
+Curve Tilt Node
+Endpoint Selection Node
+Handle Type Selection Node
+Is Spline Cyclic Node
+Spline Length Node
+Spline Parameter Node
+Spline Resolution Node
+
+
+Sample
+Sample Curve Node
+
+
+Write
+Set Curve Normal Node
+Set Curve Radius Node
+Set Curve Tilt Node
+Set Handle Positions Node
+Set Handle Type Node
+Set Spline Cyclic Node
+Set Spline Resolution Node
+Set Spline Type Node
+
+
+Operations
+Curve to Mesh Node
+Curve to Points Node
+Deform Curves on Surface Node
+Fill Curve Node
+Fillet Curve Node
+Interpolate Curves Node
+Resample Curve Node
+Reverse Curve Node
+Subdivide Curve Node
+Trim Curve Node
+
+
+Primitives
+Arc Node
+Bézier Segment Node
+Curve Circle Node
+Curve Line Node
+Curve Spiral Node
+Quadratic Bézier Node
+Quadrilateral Node
+Star Node
+
+
+Topology
+Curve of Point Node
+Offset Point in Curve Node
+Points of Curve Node
+
+
+
+
+Instances Nodes
+Instance on Points Node
+Instances to Points Node
+Rotate Instances Node
+Scale Instances Node
+Translate Instances Node
+Realize Instances Node
+Instance Rotation Node
+Instance Scale Node
+
+
+Mesh Nodes
+Read
+Edge Angle Node
+Edge Neighbors Node
+Edge Vertices Node
+Edges to Face Groups Node
+Face Area Node
+Face Neighbors Node
+Face Group Boundaries Node
+Is Face Planar Node
+Is Shade Smooth Node
+Mesh Island Node
+Shortest Edge Paths Node
+Vertex Neighbors Node
+
+
+Sample
+Sample Nearest Surface Node
+Sample UV Surface Node
+
+
+Write
+Set Shade Smooth Node
+
+
+Operations
+Dual Mesh Node
+Edge Paths to Curves Node
+Edge Paths to Selection Node
+Extrude Mesh Node
+Flip Faces Node
+Mesh Boolean Node
+Mesh to Curve Node
+Mesh to Points Node
+Mesh to Volume Node
+Scale Elements Node
+Split Edges Node
+Subdivide Mesh Node
+Subdivision Surface Node
+Triangulate Node
+
+
+Primitives
+Cone Node
+Cube Node
+Cylinder Node
+Grid Node
+Icosphere Node
+Mesh Circle Node
+Mesh Line Node
+UV Sphere Node
+
+
+Topology
+Corners of Face Node
+Corners of Vertex Node
+Edges of Corner Node
+Edges of Vertex Node
+Face of Corner Node
+Offset Corner in Face Node
+Vertex of Corner Node
+
+
+UV
+Pack UV Islands Node
+UV Unwrap Node
+
+
+
+
+Point Nodes
+Distribute Points in Volume
+Distribute Points on Faces
+Points Node
+Points to Vertices Node
+Points to Volume Node
+Set Point Radius Node
+
+
+Volume Nodes
+Volume Cube Node
+Volume to Mesh Node
+
+
+
+
+
+
+
+Material Nodes
+Replace Material Node
+Material Index Node
+Material Selection Node
+Set Material Node
+Set Material Index Node
+
+
+Texture Nodes
+Brick Texture Node
+Checker Texture Node
+Gradient Texture Node
+Image Texture Node
+Magic Texture Node
+Musgrave Texture Node
+Noise Texture Node
+Voronoi Texture Node
+Wave Texture Node
+White Noise Texture Node
+
+
+Utilities Nodes
+Color
+Color Ramp Node
+Combine Color Node
+Mix Node
+RGB Curves Node
+Separate Color Node
+
+
+Text
+Join Strings Node
+Replace String Node
+Slice String Node
+Special Characters Node
+String Length Node
+String to Curves Node
+Value to String Node
+
+
+Vector
+Combine XYZ Node
+Separate XYZ Node
+Vector Curves Node
+Vector Math Node
+Vector Rotate Node
+
+
+Field
+Accumulate Field Node
+Evaluate at Index Node
+Evaluate on Domain Node
+
+
+Math
+Boolean Math Node
+Clamp Node
+Compare Node
+Float Curve
+Float To Integer Node
+Map Range Node
+Math Node
+Mix Node
+
+
+Rotation
+Align Euler to Vector Node
+Rotate Euler Node
+
+
+Random Value Node
+Switch Node
+
+
+
+
+
+
+
+Group
+
+
+
+
+
+Hair Nodes
+Deformation
+Blend Hair Curves
+Displace Hair Curves
+Frizz Hair Curves
+Hair Curves Noise
+Roll Hair Curves
+Rotate Hair Curves
+Shrinkwrap Hair Curves
+Smooth Hair Curves
+Straighten Hair Curves
+Trim Hair Curves
+
+
+Generation
+Duplicate Hair Curves
+Generate Hair Curves
+Interpolate Hair Curves
+
+
+Guides
+Braid Hair Curves
+Clump Hair Curves
+Create Guide Index Map
+Curl Hair Curves
+
+
+Read
+Curve Info
+Curve Root
+Curve Segment
+Curve Tip
+Hair Attachment Info
+
+
+Utility
+Attach Hair Curves to Surface
+Redistribute Curve Points
+Restore Curve Segment Length
+
+
+Write
+Set Hair Curve Profile
+
+
+
+
+
+
+
+Tip
+Asset Catalogs
+that contain geometry node groups will also appear in the add menu.
+
+
+
+
+
+
+ Previous
+Next 
+
+
+
+© Copyright : This page is licensed under a CC-BY-SA 4.0 Int. License.
+      Last updated on 05/17/2023.
+      
+
+
+
+
+ View Source
+
+
+ Report issue on this page
+
+
+
+
+
+
+
+
+
+
+
+
+				3.5
+			
+
+
+Versions
+
+Loading...
+
+
+
+
+
+				 en 
+			
+
+
+Languages
+
+Loading...
+
+
+
+
+
+
+
+
+
+
+

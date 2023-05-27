@@ -102,9 +102,9 @@ ipcMain.on('doInPreload', (event,json)=>{
 ipcMain.on('doInMain', (event,json)=>{
     try {
         const all = require(json.imp)
-        log(json)
+        
         let returnValue = all[json.func](json)
-        log(returnValue)
+         
         event.returnValue = returnValue
     } catch (error) {
         err(error)

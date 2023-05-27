@@ -1,34 +1,61 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Coder</title>
+<body>
 
+<canvas id="myCanvas" width="600" height="600" style="border:1px solid #d3d3d3;">
+Your browser does not support the HTML5 canvas tag.</canvas>
 
-        <style>
-            .group token{
-                display: inline-block;
-                padding: 0 5px;
-                border-radius: 5px;
-                margin: 0 5px;
-            }
-            canvas{
-                display: block;
-            }
-        </style>
-        <script>
-            function init(){
-                document.body.innerHTML += new Date()
-                let sc = document.createElement('script')
-                sc.src = 'code.js'
-                document.body.appendChild(sc)
-            }
-        </script>
-    </head>
-    <body onload="init()" >
-        <button onclick="eval(document.getElementById('code').innerText)">eval</button>
-        <div id="container"></div>
+<script>
+let c = document.getElementById("myCanvas");
+let ctx = c.getContext("2d");
 
-    </body>
-    </html>
+// Draw the Embedding layer
+ctx.fillText("Input Embeddings", 10, 50);
+ctx.rect(10, 70, 100, 100);
+ctx.stroke();
+
+// Draw the Linear Layers (Q,K,V)
+ctx.fillText("Linear Layers (Q,K,V)", 150, 50);
+ctx.rect(150, 70, 100, 100);
+ctx.stroke();
+
+// Draw the Scaled Dot-Product Attention
+ctx.fillText("Scaled Dot-Product Attention", 300, 50);
+ctx.rect(300, 70, 100, 100);
+ctx.stroke();
+
+// Draw the Concatenation
+ctx.fillText("Concatenation", 450, 50);
+ctx.rect(450, 70, 100, 100);
+ctx.stroke();
+
+// Draw the Final Linear Layer
+ctx.fillText("Final Linear Layer", 230, 200);
+ctx.rect(250, 220, 100, 100);
+ctx.stroke();
+
+// Draw arrows
+ctx.beginPath();
+ctx.moveTo(110, 120);
+ctx.lineTo(150, 120);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(250, 120);
+ctx.lineTo(300, 120);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(400, 120);
+ctx.lineTo(450, 120);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(275, 220);
+ctx.lineTo(275, 180);
+ctx.stroke();
+
+</script>
+
+</body>
+</html>

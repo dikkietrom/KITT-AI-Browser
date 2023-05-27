@@ -76,8 +76,6 @@ function createWindow() {
     }
     )
 
-   
-
     try {
         autoUpdater.checkForUpdatesAndNotify();
     } catch (error) {
@@ -122,141 +120,144 @@ app.on('web-contents-created', (event,contents)=>{
         // console.log(webPreferences.partition)
         let partition = webPreferences.partition
         let ses = session.fromPartition(partition);
-        // let ses = session.defaultSession
+        //let ses = session.defaultSession
         // ses.setProxy({ proxyRules: 'http://localhost:8080' })
 
         //////////////// RESP
 
-        ses.webRequest.onHeadersReceived(filter, (details,callback)=>{
-            try {
-                let json = {}
-               // console.log('onHeadersReceived', details)
-                json.headers = details.responseHeaders
-                json.url = details.url
-                json.referrer = details.referrer
-                json.partition = partition
-                json.method = details.method
-                json.eventType = 'onHeadersReceived'
-                log.send('onHeadersReceived', json)
-                if(callback)callback({
-                    cancel: false
-                })
-            } catch (error) {
-                err(error)
-            }
-        }
-        );
-        ses.webRequest.onResponseStarted(filter, (details,callback)=>{
-            try {
-                let json = {}
-               // console.log('onResponseStarted', details)
-                json.headers = details.responseHeaders
-                json.url = details.url
-                json.referrer = details.referrer
-                  json.method = details.method
-              json.partition = partition
-                json.eventType = 'onResponseStarted'
-                log.send('onHeadersReceived', json)
-                if(callback)callback({
-                    cancel: false
-                })
-            } catch (error) {
-                err(error)
-            }
-        }
-        );
-        ses.webRequest.onCompleted(filter, (details,callback)=>{
-            try {
-               // console.log('onCompleted', details)
-                let json = {}
-                json.headers = details.responseHeaders
-                json.url = details.url
-                json.referrer = details.referrer
-                  json.method = details.method
-              json.partition = partition
-                json.eventType = 'onCompleted'
-                log.send('onHeadersReceived', json)
-                if(callback)callback({
-                    cancel: false
-                })
-            } catch (error) {
-                err(error)
-            }
-        }
-        );
+        // ses.webRequest.onHeadersReceived(filter, (details,callback)=>{
+        //     try {
+        //         let json = {}
+        //        // console.log('onHeadersReceived', details)
+        //         json.headers = details.responseHeaders
+        //         json.url = details.url
+        //         json.referrer = details.referrer
+        //         json.partition = partition
+        //         json.method = details.method
+        //         json.eventType = 'onHeadersReceived'
+        //         log.send('onHeadersReceived', json)
+        //         if(callback)callback({
+        //             cancel: false
+        //         })
+        //     } catch (error) {
+        //         err(error)
+        //     }
+        // }
+        // );
+        // ses.webRequest.onResponseStarted(filter, (details,callback)=>{
+        //     try {
+        //         let json = {}
+        //        // console.log('onResponseStarted', details)
+        //         json.headers = details.responseHeaders
+        //         json.url = details.url
+        //         json.referrer = details.referrer
+        //           json.method = details.method
+        //       json.partition = partition
+        //         json.eventType = 'onResponseStarted'
+        //         log.send('onHeadersReceived', json)
+        //         if(callback)callback({
+        //             cancel: false
+        //         })
+        //     } catch (error) {
+        //         err(error)
+        //     }
+        // }
+        // );
+        // ses.webRequest.onCompleted(filter, (details,callback)=>{
+        //     try {
+        //        // console.log('onCompleted', details)
+        //         let json = {}
+        //         json.headers = details.responseHeaders
+        //         json.url = details.url
+        //         json.referrer = details.referrer
+        //           json.method = details.method
+        //       json.partition = partition
+        //         json.eventType = 'onCompleted'
+        //         log.send('onHeadersReceived', json)
+        //         if(callback)callback({
+        //             cancel: false
+        //         })
+        //     } catch (error) {
+        //         err(error)
+        //     }
+        // }
+        // );
         //////////////// REQ
-        ses.webRequest.onBeforeRequest(filter, (details,callback)=>{
+        // ses.webRequest.onBeforeRequest(filter, (details,callback)=>{
 
-            try {
-               // console.log('onBeforeRequest', details)
+        //     try {
+        //        // console.log('onBeforeRequest', details)
 
-                const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+        //         const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
 
-                let json = {}
-                json.headers = details.requestHeaders
-                json.buffer = buffer.split('\n')
-                json.url = details.url
-                    json.method = details.method
-            json.referrer = details.referrer
-                json.partition = partition
-                json.eventType = 'onBeforeRequest'
-                log.send('onBeforeRequest', json)
-                if(callback)callback({
-                    cancel: false
-                })
-            } catch (error) {
-                err(error)
-            }
-        }
-        )
+        //         let json = {}
+        //         json.headers = details.requestHeaders
+        //         json.buffer = buffer.split('\n')
+        //         json.url = details.url
+        //             json.method = details.method
+        //     json.referrer = details.referrer
+        //         json.partition = partition
+        //         json.eventType = 'onBeforeRequest'
+        //         log.send('onBeforeRequest', json)
+        //         if(callback)callback({
+        //             cancel: false
+        //         })
+        //     } catch (error) {
+        //         err(error)
+        //     }
+        // }
+        // )
+        console.log('onBeforeSendHeaders attach')
+
         ses.webRequest.onBeforeSendHeaders(filter, (details,callback)=>{
 
             try {
-               // console.log('onBeforeSendHeaders', details)
+                
 
                 const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
-
+                 console.log('onBeforeSendHeaders', buffer)
                 let json = {}
                 json.headers = details.requestHeaders
                 json.buffer = buffer.split('\n')
-                    json.method = details.method
-            json.url = details.url
+                json.method = details.method
+                json.url = details.url
                 json.referrer = details.referrer
                 json.eventType = 'onBeforeSendHeaders'
                 json.partition = partition
                 log.send('onBeforeRequest', json)
-                if(callback)callback({
-                    cancel: false
-                })
+                if (callback)
+                    callback({
+                        cancel: false
+                    })
             } catch (error) {
                 err(error)
             }
         }
         )
-        ses.webRequest.onSendHeaders(filter, (details,callback)=>{
+        // ses.webRequest.onSendHeaders(filter, (details,callback)=>{
 
-            try {
-               // console.log('onSendHeaders', details)
+        //     try {
+        //        // console.log('onSendHeaders', details)
 
-                const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
+        //         const buffer = details.uploadData && details.uploadData.length ? Array.from(details.uploadData)[0].bytes.toString() : ''
 
-                let json = {}
-                json.headers = details.requestHeaders
-                json.buffer = buffer.split('\n')
-                json.url = details.url
-                json.method = details.method
-                json.referrer = details.referrer
-                json.partition = partition
-                json.eventType = 'onSendHeaders'
-                log.send('onBeforeRequest', json)
-                if(callback) callback({
-                    cancel: false
-                })
-            } catch (error) {
-                err(error)
-            }
-        }
-        )
+        //         let json = {}
+        //         json.headers = details.requestHeaders
+        //         json.buffer = buffer.split('\n')
+        //         json.url = details.url
+        //         json.method = details.method
+        //         json.referrer = details.referrer
+        //         json.partition = partition
+        //         json.eventType = 'onSendHeaders'
+        //         log.send('onBeforeRequest', json)
+        //         if(callback) callback({
+        //             cancel: false
+        //         })
+        //     } catch (error) {
+        //         err(error)
+        //     }
+        // }
+        // )
 
     }
     )

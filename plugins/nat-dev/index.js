@@ -11,7 +11,7 @@ class NatDev extends Plugin {
             id: 'nd',
             description: 'NatDev',
             role: 'worker',
-            active: true,
+            active: false,
             url: 'https://nat.dev',
         };
     }

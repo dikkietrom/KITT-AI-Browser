@@ -1,6 +1,10 @@
 class Kicad extends Plugin {
     constructor(arg) {
         super(arg)
+        this.imp('parser')
+        this.imp('render')
+        this.imp('kicadMod')
+        this.imp('fragment')
     }
 
     config() {
@@ -15,50 +19,29 @@ class Kicad extends Plugin {
     }
 
     exec(message) {
-        message.content = getBoard({path:'test.kicad_pcb'})
-        let pcb = kicadToJSON(message.content)
-        return message.content
+        message.content = getBoard({
+            path: 'test.kicad_pcb',
+        });
+        const code = message.content;
+
+        const inputText = code;
+        const kicadMod = parse({code:inputText,zoom:10});
+
+        console.log(JSON.stringify(kicadMod,null,4))
+        message.content = drawComponentsOnCanvas(kicadMod);
+        message.content = message.content.outerHTML;
+      
+        return message.content;
     }
+
 }
- 
-function makeBoard(json){
+
+function makeBoard(json) {
     return doInMain(arguments, 'kicad')
 }
 
- 
-function getBoard(json){
+function getBoard(json) {
     return doInMain(arguments, 'kicad')
 }
- 
-function kicadToJSON(kicadCode) {
-  const lines = kicadCode.split('\n');
-  const json = {};
-  let currentKey = '';
-
-  lines.forEach(line => {
-    const trimmedLine = line.trim();
-
-    if (trimmedLine.startsWith('(')) {
-      const key = trimmedLine.split(' ')[0].slice(1);
-      currentKey = key;
-      json[key] = [];
-    } else if (trimmedLine.startsWith(')')) {
-      currentKey = '';
-    } else if (currentKey) {
-      const keyValue = trimmedLine.split(' ');
-      const obj = {};
-      keyValue.forEach((value, index) => {
-        if (index % 2 === 0) {
-          obj[value] = keyValue[index + 1];
-        }
-      });
-      json[currentKey].push(obj);
-    }
-  });
-
-  return json;
-}
-
- 
 
 Plugin.kcd = new Kicad()
