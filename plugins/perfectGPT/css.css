@@ -113,6 +113,11 @@ div#canv-container {
     text-align: left;
 }
 
+pre.logWin {
+    color: red;
+    text-align: left;
+}
+
 textarea.code-win {
     display: block;
     width: 20em;

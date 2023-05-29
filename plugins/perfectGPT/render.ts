@@ -1,5 +1,6 @@
-let data
-fetch('http://127.0.0.1:3000/api.ts')
+ 
+var implAst
+fetch('http://127.0.0.1:3000/api.ts')/////////////////////////////////API
 .then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
@@ -7,11 +8,27 @@ fetch('http://127.0.0.1:3000/api.ts')
     
     return response.text()
 })
-.then(d => {
+.then(data => {
     // Process the retrieved data
     currentElem = document.getElementById('editor');
-    data=d
-    let model = parseJavaScript(data)
+    parseApi(data)
+})
+.catch(error => {
+    // Handle any errors that occurred during the fetch request
+    console.error('Error:', error);
+});
+
+fetch('http://127.0.0.1:3000/impl.js')//////////////////////////////IMP
+.then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    
+    return response.text()
+})
+.then(data => {
+    // Process the retrieved data
+    implAst = esprima.parse(data)
 })
 .catch(error => {
     // Handle any errors that occurred during the fetch request
@@ -23,7 +40,7 @@ fetch('http://127.0.0.1:3000/api.ts')
 
 // Get the editor container element
 var currentElem
-function parseJavaScript(code) {
+function parseApi(code) {
 
     try {
 
@@ -44,6 +61,7 @@ function parseJavaScript(code) {
 
             currentElem.className = 'ast-node ' + node.type
             rootView = currentElem
+            rootView.ast = node
         }
 
 
@@ -52,7 +70,7 @@ function parseJavaScript(code) {
             currentElem.innerHTML = node.id.name
             currentElem.className = 'ast-node ' + node.type
             currentElem.onclick = (e) => {
-                createInstance(node,e)
+                createInstance(node,e,rootView)
               
             }
         }

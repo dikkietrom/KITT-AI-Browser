@@ -210,14 +210,14 @@ class IFlowView {
     }
 }
 
-class HtmlModel extends Model{
+class HtmlModel {
     constructor(arg) {
-        super(arg)
+      
         this.title = 'Test Page'
         
     }
     set(){
-        return this.html
+        return this
     }
 }
 
@@ -230,6 +230,14 @@ class HtmlView {
     _update(){
         
     }
+}
+class CssVar  {
+    constructor() {
+       
+        this.root = document.documentElement.style
+ 
+    }
+    
 }
 class AppCss extends CssVar{
     constructor() {

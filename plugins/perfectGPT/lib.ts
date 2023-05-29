@@ -1,51 +1,5 @@
+ 
 
-class Model  {
-    constructor() {
-    }
-    intercept(props,callback) {
-        // for (let p in json.properties) {
-        //     let v
-        //     let that = this
-        //     Object.defineProperty(this, p, {
-        //         get: function() {
-        //             return v
-
-        //         },
-        //         set: function(value) {
-        //             v = value
-        //             json.fn({
-        //                 property: p,
-        //                 value: value,
-        //             })
-
-        //         }
-        //     })
-        // }
-    }
-}
-class View extends HTMLElement {
-    constructor(arg) {
-        super(arg)
-        
-    }
-}
-
-class CssVar extends Model {
-    constructor(json) {
-        super(json)
-        this.root = document.documentElement.style
-        let that = this
-        this.intercept({
-            properties: json,
-            fn: function(json) {
-                that.root.setProperty(
-                    '--' + json.property,
-                    json.value)
-            }
-        })
-    }
-    
-}
 
 function WAIT() {
 }
@@ -113,32 +67,8 @@ class AstCallBack {
     }
 }
 
-function storeImpl(data){
 
-const url = 'http://localhost:3000/store'; // Replace with your API endpoint
-
- 
-const options = {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(data)
-};
-
-fetch(url, options)
-  .then(response => response.json())
-  .then(data => {
-    // Handle the response data
-    console.log(data);
-  })
-  .catch(error => {
-    // Handle any errors
-    console.error(error);
-  });
-
-}
-function updateProp(propInst,propTextBox,val){
+function updateProp(propInst,prop,val,propTextBox){
     propInst[prop] = val//////exec flow
     propTextBox.value = propInst[prop]   
     propTextBox.title = propInst[prop]   
@@ -156,7 +86,7 @@ function updateFlow(start,end){
 
     const propTextBox = end.textBox        
 
-    updateProp(propInst,propTextBox,methodInst[method]())
+    updateProp(propInst,prop,methodInst[method](),propTextBox)
 
     if (propInst[prop] === WAIT) {
       start.jsInst.PROCEED = (data) => {
@@ -166,7 +96,7 @@ function updateFlow(start,end){
           
         })
 
-        updateProp(propInst,propTextBox,textChunk.join(''))
+        updateProp(propInst,prop,textChunk.join(''),propTextBox)
 
       }
     }
@@ -190,4 +120,47 @@ function execFlow(elem1,elem2){
 
 }
 
+function storeCode(node) {
+ 
+    
+    let found = -1
+    let i=0
+    implAst.body.forEach((b)=>{
+        if (b.id.name===node.id.name) {
+            found=i
+        }
+        i++
+    })
+    if (found==-1) {
+        implAst.body.push(node)
+    } else{
+        implAst.body[found] = node
+    }
+    let js = generate(implAst)
+    storeImpl(js)
+}
+function storeImpl(data){
 
+  const url = 'http://localhost:3000/store';  
+  
+   
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/text'
+    },
+    body: data
+  };
+  
+  fetch(url, options)
+    .then(response => response.text())
+    .then(data => {
+      // Handle the response data
+      console.log(data);
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error(error);
+    });
+
+}

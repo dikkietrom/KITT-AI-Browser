@@ -1,8 +1,8 @@
-function createInstance(node, e)
+function createInstance(clssNode, e,rootView)
 {
 	try
 	{
-		const className = node.id.name
+		const className = clssNode.id.name
 		const classConstructor = new Function(`return ${className}`)();
 		let cnst = new classConstructor();
 
@@ -26,7 +26,7 @@ function createInstance(node, e)
 		currentElem = div(currentElem) //////////////////////////CLASS
 		let inst = currentElem
 
-		jsInst.html = inst
+		jsInst._html = inst
 		
 		inst.propCons = []
 		currentElem.className = 'ast-node createInstance collidable draggable'
@@ -56,8 +56,9 @@ function createInstance(node, e)
 			addMethod();
 			 
 		}
+		clssNode.id.name+='_1'
 		let label = div(header)
-		label.innerHTML = node.id.name
+		label.innerHTML = clssNode.id.name
 		label.className = 'headerLabel'
 		currentElem.style.top = e.clientY + 'px'
 		currentElem.style.left = e.clientX + 'px'
@@ -149,7 +150,7 @@ function createInstance(node, e)
 			
 			cd.onclick = (e) =>
 			{ 		//////////////////////////////////but CODE
-				viewCode(cd,label,node,inst)
+				viewCode(cd,label,node,inst,rootView,clssNode)
 			}
 		}
 		let leave = new AstCallBack()
@@ -161,7 +162,7 @@ function createInstance(node, e)
 		{
 			currentElem = currentElem.parentNode
 		}
-		traverse(node, enter, leave)
+		traverse(clssNode, enter, leave)
 		let logWin = pre(inst)
 		logWin.className = 'logWin'
 		inst.logWin = logWin
@@ -196,7 +197,7 @@ function deleteFunction(inst)
 	});
 	inst.remove();
 }
-function viewCode(cd,label,node,inst){
+function viewCode(cd,label,node,inst,rootView,clssNode){
 	if (cd.area)
 	{
 		cd.area.remove()
@@ -231,8 +232,10 @@ function viewCode(cd,label,node,inst){
 	{
 	    
 		try {
-			let ast = esprima.parse('{'+area.value+'}') 
+			let ast = esprima.parse('function dummy(){'+area.value+'}') 
 			inst.logWin.innerHTML = ''
+			node.value.body = ast.body[0].body
+			storeCode(clssNode)
 		} catch (error) {
 			console.error(error)
 			inst.logWin.innerText = error.stack

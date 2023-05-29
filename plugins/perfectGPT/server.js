@@ -1,17 +1,43 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const url = require('url'); // Add this line
 
-const port = 3000; // You can change this to any port you prefer
+const port = 3000;
 
 const server = http.createServer((req, res) => {
-  // Determine the file path based on the URL
-  let filePath = '.' + req.url;
+  const parsedUrl = url.parse(req.url, true);
+  let filePath = '.' + parsedUrl.pathname;
+
   if (filePath === './') {
-    filePath = './index.html'; // Serve index.html as the default page
+    filePath = './index.html';
   }
 
-  // Get the file extension to set the correct content type
+  if (parsedUrl.pathname === '/store' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk;
+    });
+
+    req.on('end', () => {
+      fs.writeFile('./impl.js', body, err => {
+        if (err) {
+          res.writeHead(500);
+          res.end('Server error');
+          return;
+        }
+
+        res.writeHead(200, {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        });
+        res.end(JSON.stringify({ message: 'Data stored in impl.js' }));
+      });
+    });
+
+    return;
+  }
+
   const extname = path.extname(filePath);
   let contentType = 'text/html';
   switch (extname) {
@@ -26,30 +52,26 @@ const server = http.createServer((req, res) => {
       break;
   }
 
-  // Read the file and send the response
   fs.readFile(filePath, (err, content) => {
     if (err) {
       if (err.code === 'ENOENT') {
-        // File not found
         res.writeHead(404);
         res.end('File not found');
       } else {
-        // Server error
         res.writeHead(500);
         res.end('Server error');
       }
     } else {
-      // Success
       res.writeHead(200, {
         'Content-Type': contentType,
-        'Access-Control-Allow-Origin': '*' // Allow requests from any origin
+        'Access-Control-Allow-Origin': '*'
       });
       res.end(content, 'utf-8');
     }
   });
 });
 
-// Start the server
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+  console.log(`Server running on port ${port}`); });
+
+
