@@ -48,6 +48,7 @@ async function fetchTextStream(cllr) {
 
     traverser.traverse(ast, {
         enter: function(node, parent) {
+            node._parent = parent
             enter.call(node, traverser);
         },
         leave: function(node, parent) {
@@ -120,24 +121,59 @@ function execFlow(elem1,elem2){
 
 }
 
-function storeCode(node) {
+function storeCode(classNode,methodNode,jsInst) {
  
     
     let found = -1
     let i=0
     implAst.body.forEach((b)=>{
-        if (b.id.name===node.id.name) {
+        if (b.id.name===classNode.id.name) {
             found=i
         }
         i++
     })
     if (found==-1) {
-        implAst.body.push(node)
+        implAst.body.push(classNode)
     } else{
-        implAst.body[found] = node
+        implAst.body[found] = classNode
     }
-    let js = generate(implAst)
+    const js = generate(implAst)
     storeImpl(js)
+    const nwNm = newName()
+    const funcJs = 'function ' + nwNm + '()' + generate(methodNode.value.body)
+    const methodName = methodNode.key.name
+    const scrpt = document.createElement('script')
+    scrpt.innerHTML = funcJs
+    document.body.appendChild(scrpt)
+    jsInst[methodName] = window[nwNm]
+}
+function storeProperty(classNode,propertyNode,jsInst) {
+   
+    let found = -1
+    const propertyName = propertyNode.property.name
+    const propertyValue = jsInst[propertyNode.property.name]
+    propertyNode._parent.right.raw = "'"+propertyValue+"'"
+    propertyNode._parent.right.value = propertyValue
+    
+    let i=0
+    implAst.body.forEach((b)=>{
+        if (b.id.name===classNode.id.name) {
+            found=i
+        }
+        i++
+    })
+    if (found==-1) {
+        implAst.body.push(classNode)
+    } else{
+        implAst.body[found] = classNode
+    }
+    const js = generate(implAst)
+    storeImpl(js)
+
+}
+
+function newName() {
+    return 'a' + Date.now() 
 }
 function storeImpl(data){
 
@@ -162,5 +198,16 @@ function storeImpl(data){
       // Handle any errors
       console.error(error);
     });
+}
 
+
+function getImpl(name){
+    let ret=null
+    implAst.body.forEach((clssNode)=>{
+        if (clssNode.id.name===name) {
+            ret=clssNode
+            return
+        }
+    })
+    return ret
 }

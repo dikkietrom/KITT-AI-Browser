@@ -211,7 +211,7 @@ class IFlowView {
 }
 
 class HtmlModel {
-    constructor(arg) {
+    constructor() {
       
         this.title = 'Test Page'
         
@@ -228,7 +228,7 @@ class HtmlView {
         this.model = null
     }
     _update(){
-        
+        alert(this.model)
     }
 }
 class CssVar  {

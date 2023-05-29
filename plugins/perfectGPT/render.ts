@@ -65,12 +65,20 @@ function parseApi(code) {
         }
 
 
-        enter.onClassDeclaration = (node)=>{
+        enter.onClassDeclaration = (clssNode)=>{
             currentElem = div(currentElem)
-            currentElem.innerHTML = node.id.name
-            currentElem.className = 'ast-node ' + node.type
-            currentElem.onclick = (e) => {
-                createInstance(node,e,rootView)
+            currentElem.innerHTML = clssNode.id.name
+            currentElem.className = 'ast-node ' + clssNode.type
+            currentElem.onclick = (event) => {
+
+
+                let implClassNode = getImpl(clssNode.id.name+'_1')
+
+                if (implClassNode) {
+                    createInstance(implClassNode,event,rootView)
+                }else{
+                    createInstance(clssNode,event,rootView)
+                }
               
             }
         }

@@ -1,4 +1,4 @@
-function createInstance(clssNode, e,rootView)
+function createInstance(clssNode, event,rootView)
 {
 	try
 	{
@@ -8,16 +8,7 @@ function createInstance(clssNode, e,rootView)
 
 
 		// Creating a Proxy for the target object
-		let jsInst = new Proxy(cnst, {
-		  get(target, property) {
-		    return target[property]
-		  },
-
-		  set(target, property, value) {
-		    target[property] = value
-		    
-		  },
-		});
+		let jsInst = cnst
 
  
 		
@@ -56,12 +47,12 @@ function createInstance(clssNode, e,rootView)
 			addMethod();
 			 
 		}
-		clssNode.id.name+='_1'
+		
 		let label = div(header)
 		label.innerHTML = clssNode.id.name
 		label.className = 'headerLabel'
-		currentElem.style.top = e.clientY + 'px'
-		currentElem.style.left = e.clientX + 'px'
+		currentElem.style.top = event.clientY + 'px'
+		currentElem.style.left = event.clientX + 'px'
 		currentElem.style.position = 'absolute'
 		currentElem.onmousedown = (e) =>
 		{
@@ -75,7 +66,7 @@ function createInstance(clssNode, e,rootView)
 			}
 		}
 		let prnt = currentElem
-		enter.onMemberExpression = (node) =>
+		enter.onMemberExpression = (propertyNode) =>
 		{ 											////////////////PROPERTY
 			currentElem = div(prnt)
 			let header = div(currentElem)
@@ -86,50 +77,49 @@ function createInstance(clssNode, e,rootView)
 			{
 				startWire(con, e, jsInst)
 			}
-			con.jsProperty = node.property.name
+			con.jsProperty = propertyNode.property.name
 			con.jsInst = jsInst
 			inst.propCons.push(con)
 			let text = textarea(header)
 			text.wrap = "off"
 			text.onkeyup = () =>
 			{
-				jsInst[node.property.name] = text.value
+				jsInst[propertyNode.property.name] = text.value
 				updateFlows(jsInst)
+				storeProperty(clssNode,propertyNode,jsInst)
 			}
 			text.onclick = function()
 			{
 				text.style.overflow = 'auto'
 			}
-			text.value = jsInst[node.property.name]
+			text.value = jsInst[propertyNode.property.name]
 			text.className = 'propHeaderText'
 			let label = div(header)
-			label.innerHTML = node.property.name
+			label.innerHTML = propertyNode.property.name
 			label.className = 'propHeaderLabel'
 			con.textBox = text
-			currentElem.className = 'ast-node ' + node.type
+			currentElem.className = 'ast-node ' + propertyNode.type
 		}
-		enter.onMethodDefinition = (node, traverser) =>
+		enter.onMethodDefinition = (methodNode, traverser) =>
 		{ 													//////////////METHOD
-			if (node.kind == 'constructor')
+			if (methodNode.kind == 'constructor')
 			{
 				//traverser.skip()
 				return
 			}
-
-
 			
 			currentElem = div(prnt)
-			currentElem.className = 'ast-node ' + node.type
+			currentElem.className = 'ast-node ' + methodNode.type
 			let header = div(currentElem)
 			header.className = 'MethodHeader'
 			let cd = button(header)
 			cd.className = 'headerButton fa-solid fa-code'
 			let label = div(header)
-			label.innerHTML = node.key.name
+			label.innerHTML = methodNode.key.name
 			label.className = 'methodHeaderLabel'
 
 			let rtrnFound = false
-			node.value.body.body.forEach((line)=>{
+			methodNode.value.body.body.forEach((line)=>{
 				if (line.type === "ReturnStatement") {
 					rtrnFound = true
 				}
@@ -143,22 +133,22 @@ function createInstance(clssNode, e,rootView)
 				{
 					startWire(con, e)
 				}
-				con.jsMethod = node.key.name
+				con.jsMethod = methodNode.key.name
 			}
 			
 			traverser.skip()
 			
 			cd.onclick = (e) =>
 			{ 		//////////////////////////////////but CODE
-				viewCode(cd,label,node,inst,rootView,clssNode)
+				viewCode(cd,label,methodNode,inst,rootView,clssNode,jsInst)
 			}
 		}
 		let leave = new AstCallBack()
-		leave.onMethodDefinition = (node) =>
+		leave.onMethodDefinition = (methodNode) =>
 		{
 			currentElem = currentElem.parentNode
 		}
-		leave.onMemberExpression = (node) =>
+		leave.onMemberExpression = (methodNode) =>
 		{
 			currentElem = currentElem.parentNode
 		}
@@ -197,7 +187,7 @@ function deleteFunction(inst)
 	});
 	inst.remove();
 }
-function viewCode(cd,label,node,inst,rootView,clssNode){
+function viewCode(cd,label,node,inst,rootView,clssNode,jsInst){
 	if (cd.area)
 	{
 		cd.area.remove()
@@ -235,7 +225,7 @@ function viewCode(cd,label,node,inst,rootView,clssNode){
 			let ast = esprima.parse('function dummy(){'+area.value+'}') 
 			inst.logWin.innerHTML = ''
 			node.value.body = ast.body[0].body
-			storeCode(clssNode)
+			storeCode(clssNode,node,jsInst)
 		} catch (error) {
 			console.error(error)
 			inst.logWin.innerText = error.stack
