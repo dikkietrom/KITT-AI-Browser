@@ -791,35 +791,5 @@ var estr
         return tree;
     }
 
- 
-function traverse(code, enter,leave) {
-    let ast = code.indexOf ? esprima.parse(code) : code
-
-    let traverser = new Controller()
-
-    traverser.traverse(ast, {
-        enter: function(node, parent) {
-            enter.call(node,traverser);
-        },
-        leave: function(node, parent) {
-            leave.call(node,traverser);
-        }
-    });
-}
-
-class AstCallBack {
-
-    call(node,traverser) {
-        console.log(node)
-        let fn = this['on' + node.type]
-        if (fn) {
-              fn(node,traverser)
-        }
-
-    }
-
-}
-
-
+  
 /* vim: set sw=4 ts=4 et tw=80 : */
-

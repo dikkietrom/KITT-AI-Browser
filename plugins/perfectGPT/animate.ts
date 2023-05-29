@@ -1,45 +1,33 @@
 
+
 startWire.wires=[]
 function startWire(elem, event) {
   if (startWire.start) {
     startWire.start.classList.remove('pulse')
     if(startWire.start.className != elem.className){//end connect
-      startWire.wires.push( {start : startWire.start , end : elem })
-      
-      const prop = startWire.start.jsProperty   
-        ?  startWire.start.jsProperty   
-        : elem.jsProperty        
-      const propInst = startWire.start.jsProperty   
-        ?  startWire.start.jsInst   
-        : elem.jsInst        
-      const method = startWire.start.jsMethod   
-        ?  startWire.start.jsMethod   
-        : elem.jsMethod         
-      const methodInst = startWire.start.jsMethod   
-        ?  startWire.start.jsInst   
-        : elem.jsInst   
-      const propTextBox = startWire.start.jsProperty   
-        ?  startWire.start.textBox   
-        : elem.textBox        
-      
-      propInst[prop] = methodInst[method]()
-      propTextBox.value = propInst[prop]
+
+        execFlow(startWire.start,elem)
         
     }else if (startWire.start!=elem) {//start connect
       startWire.start=elem
       startWire.start.classList.add('pulse')
       return
     }else if( startWire.start==elem ){//disconnet
-          let t = startWire.wires
-          startWire.wires=[]
-          t.forEach( (w) => {
-            if(w.start!=elem && w.end!=elem) {
-                startWire.wires.push(w)
+      let t = startWire.wires
+      startWire.wires=[]
+      t.forEach( (w) => {
+        if(w.start!=elem && w.end!=elem) {
+            startWire.wires.push(w)
+        } else{
+            if (w.start.textBox) {
+               w.start.textBox.removeAttribute( 'readonly')
+           
+            } else {
+               w.end.textBox.removeAttribute( 'readonly')
             }
-          })
+        }
+      })
     }
-
-    
     startWire.start=null
     return
   }

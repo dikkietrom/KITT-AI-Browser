@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Halftone Effect</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #canvas {
+      display: block;
+      max-width: 100%;
+      max-height: 100vh;
+      margin: 0 auto;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <div>
+    <label for="dotSizeSlider">Dot Size:</label>
+    <input type="range" id="dotSizeSlider" min="1" max="100" value="5">
+    <br>
+    <label for="dotSpacingSlider">Dot Spacing:</label>
+    <input type="range" id="dotSpacingSlider" min="10" max="100" value="50">
+    <br>
+    <label for="thresholdSlider">Threshold:</label>
+    <input type="range" id="thresholdSlider" min="0" max="255" value="256">
+  </div>
+
+  <script>
+    var canvas;
+    var ctx;
+    var image;
+
+    // Parameters for the halftone effect
+    var dotSize;         // Size of each halftone dot
+    var dotSpacing;      // Spacing between halftone dots
+    var grayscaleThreshold; // Threshold for converting to binary
+
+    // Slider elements
+    var dotSizeSlider;
+    var dotSpacingSlider;
+    var thresholdSlider;
+
+    // Event listeners for sliders
+    function updateDotSize() {
+      dotSize = parseInt(dotSizeSlider.value);
+      cleanCanvas();
+      applyHalftoneEffect();
+    }
+
+    function updateDotSpacing() {
+      dotSpacing = parseInt(dotSpacingSlider.value);
+      cleanCanvas();
+      applyHalftoneEffect();
+    }
+
+    function updateThreshold() {
+      grayscaleThreshold = parseInt(thresholdSlider.value);
+      cleanCanvas();
+      applyHalftoneEffect();
+    }
+
+    function cleanCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0);
+    }
+
+    window.onload = function() {
+      canvas = document.getElementById('canvas');
+      ctx = canvas.getContext('2d');
+      image = new Image();
+
+      dotSizeSlider = document.getElementById('dotSizeSlider');
+      dotSpacingSlider = document.getElementById('dotSpacingSlider');
+      thresholdSlider = document.getElementById('thresholdSlider');
+
+      dotSize = parseInt(dotSizeSlider.value);
+      dotSpacing = parseInt(dotSpacingSlider.value);
+      grayscaleThreshold = parseInt(thresholdSlider.value);
+
+      image.onload = function() {
+        canvas.width = image.width;
+        canvas.height = image.height;
+
+        ctx.drawImage(image, 0, 0);
+        applyHalftoneEffect();
+      };
+
+      image.src = 'cathedralinpalma-daytrip4u-20200419191628.jpg';
+
+      dotSizeSlider.addEventListener('input', updateDotSize);
+      dotSpacingSlider.addEventListener('input', updateDotSpacing);
+      thresholdSlider.addEventListener('input', updateThreshold);
+    };
+
+    function applyHalftoneEffect() {
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var data = imageData.data;
+
+      for (var y = 0; y < canvas.height; y += dotSpacing) {
+        for (var x = 0; x < canvas.width; x += dotSpacing) {
+          var pixelIndex = (y * canvas.width + x) * 4;
+          var grayscale = data[pixelIndex] * 0.3 + data[pixelIndex + 1] * 0.59 + data[pixelIndex + 2] * 0.11;
+
+          var binary = grayscale < grayscaleThreshold ? 0 : 255;
+
+          for (var i = y; i < y + dotSize; i++) {
+            for (var j = x; j < x + dotSize; j++) {
+              var dotPixelIndex = (i * canvas.width + j) * 4;
+              data[dotPixelIndex] = data[dotPixelIndex + 1] = data[dotPixelIndex + 2] = binary;
+            }
+          }
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    }
+  </script>
+</body>
+</html>

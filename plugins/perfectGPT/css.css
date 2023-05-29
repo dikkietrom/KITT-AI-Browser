@@ -1,3 +1,15 @@
+:root{
+    --box:1em;
+    --leftBarWidth: 8em;
+    --topBarHeight:8em;
+    --bottomBarHeight:3em;
+    --rightBarWidth:3em;
+    --inportLen:2;
+    --inportLenPx:6px;
+    --outportLen:2;
+    --outportLenPx:6px;
+    --mainColor:#fff;
+}
 @font-face {
     src: url("fonts/Montserrat-Regular.ttf");
     font-family: Montserrat;
@@ -41,6 +53,7 @@ body {
     font-family: 'Montserrat';
     height: 100%;
     xoverflow: scroll;
+    background-color: var(--mainColor);
     /* border: 1px solid black; */
 }
 
@@ -100,6 +113,12 @@ div#canv-container {
     text-align: left;
 }
 
+textarea.code-win {
+    display: block;
+    width: 20em;
+    height: 10em;
+}
+
 input.propHeaderText {
     width: fit-content;
     margin-left: 0.2em;
@@ -143,19 +162,13 @@ input.propHeaderText {
 }
  
 
-button.headerButton.fa-solid.fa-trash {
-    background-repeat: no-repeat;
-    cursor: pointer;
-    width: fit-content;
-    height: fit-content;
-    margin: auto;
-    border-radius: 13.5em;
-    border: 0.1em solid #0004;
-    padding: 0.3em;
-}
+button.headerButton , .fa-code{background-repeat: no-repeat;cursor: pointer;width: fit-content;height: fit-content;margin: auto;border-radius: 13.5em;border: 0.1em solid #0004;padding: 0.3em;margin-left: 0.2em;}
 
 button.headerButton.fa-solid.fa-trash:hover {
     background: #f006;
+}
+button.headerButton:hover {
+    background: #0f06;
 }
 
 .ast-node.createInstance {
@@ -169,6 +182,19 @@ button.headerButton.fa-solid.fa-trash:hover {
     cursor: move;
     background: #fff;
     /* z-index: 1500; */
+}
+
+textarea.propHeaderText {
+    width: fit-content;
+    overflow: auto;
+    overflow-x: hidden;
+    margin-right: 0.2em;
+    height: 1.5em;
+    /* padding: 0px; */
+    /* vertical-align: middle; */
+    position: relative;
+    top: 0.5em;
+    /* white-space: nowrap; */
 }
 
 .headerLabel {
@@ -230,13 +256,15 @@ button.headerButton.fa-solid.fa-trash:hover {
 .ast-node.MethodDefinition {
     /* width: initial; */
     margin: auto;
-    cursor: pointer;
+    /* cursor: pointer; */
     margin: 0.1em;
     border-radius: 0.5em;
 }
 
 .methodHeaderLabel {
     width: 100%;
+    margin: auto;
+    margin-left: 0.2em;
 }
 
 .methodHeaderCon.fa-solid {

@@ -1,22 +1,26 @@
 let data
 fetch('http://127.0.0.1:3000/api.ts')
-  .then(response => {
+.then(response => {
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
-
+    
     return response.text()
-  })
-  .then(data => {
+})
+.then(d => {
     // Process the retrieved data
     currentElem = document.getElementById('editor');
+    data=d
     let model = parseJavaScript(data)
-    
-  })
-  .catch(error => {
+})
+.catch(error => {
     // Handle any errors that occurred during the fetch request
     console.error('Error:', error);
-  });
+});
+
+
+
+
 // Get the editor container element
 var currentElem
 function parseJavaScript(code) {
@@ -24,11 +28,22 @@ function parseJavaScript(code) {
     try {
 
         let enter = new AstCallBack()
-
+        let rootView = null
         enter.onProgram = (node)=>{
+            node.body.sort((a,b)=>{
+                if (a.id.name.charAt(0)=='I' && b.id.name.charAt(0)!='I'  ) {
+                    return -1
+                }  
+                if (a.id.name.charAt(0)!='I' && b.id.name.charAt(0)=='I'  ) {
+                    return 1
+                }  
+                return a.id.name.localeCompare(b.id.name, undefined, { sensitivity: 'base' });
+
+            })
             currentElem = div(currentElem)
 
             currentElem.className = 'ast-node ' + node.type
+            rootView = currentElem
         }
 
 
@@ -49,10 +64,9 @@ function parseJavaScript(code) {
 
         }
 
-        traverse(code, enter, leave);
-
-
-    } catch (error) {
+        traverse(code, enter, leave)
+        
+   } catch (error) {
         console.error("Error parsing JavaScript code:", error);
     }
 }
@@ -105,4 +119,7 @@ function option(parent) {
 }
 function input(parent) {
     return element(parent, 'input')
+}
+function textarea(parent) {
+    return element(parent, 'textarea')
 }
