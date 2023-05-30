@@ -24,3 +24,10 @@ class IFile {
         streamContent(this);
     }
 }
+class ITokenizer {
+    constructor() {
+        this.id = 'ddd';
+    }
+    exec() {
+    }
+}

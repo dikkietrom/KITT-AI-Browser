@@ -53,9 +53,10 @@ function createInstance(clssNode, event,rootView)
 			 
 		}
 		
-		let label = div(header)
+		let label = div(currentElem)
 		label.innerHTML = clssNode.id.name
 		label.className = 'headerLabel'
+			
 		currentElem.style.top = event.clientY + 'px'
 		currentElem.style.left = event.clientX + 'px'
 		currentElem.style.position = 'absolute'
