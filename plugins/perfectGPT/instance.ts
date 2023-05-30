@@ -94,6 +94,9 @@ function createInstance(clssNode, event,rootView)
 				jsInst[propertyName] = text.value
 				updateFlows(jsInst)
 				storeProperty(clssNode,propertyNode.left,jsInst)
+				if (jsInst._update) {
+					jsInst._update()
+				}
 			}
 			text.onclick = function()
 			{

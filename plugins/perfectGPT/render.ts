@@ -1,4 +1,4 @@
- 
+
 var implAst
 var rootView 
 var currentElem
@@ -45,6 +45,10 @@ function parseApi(code) {
     try {
 
         currentElem = document.getElementById('editor');
+        
+        currentElem = div(currentElem)
+        currentElem.className = 'ast-node-container' 
+
         const addClss = div(currentElem)
         addClss.className='addClass fa-solid fa-square-plus'
         addClss.onclick = ()=>{
@@ -60,6 +64,8 @@ function parseApi(code) {
 
         let enter = new AstCallBack()
         let leave = new AstCallBack()
+
+
 
         onProgram(enter,leave)
         onClassDeclaration(enter,leave)
@@ -82,8 +88,7 @@ function onProgram(enter,leave){
             return a.id.name.localeCompare(b.id.name, undefined, { sensitivity: 'base' });
 
         })
-        currentElem = div(currentElem)
-        currentElem.className = 'ast-node-container' 
+
         
         currentElem = div(currentElem)
 

@@ -223,6 +223,7 @@ class HtmlView {
        // super()
         //window.customElements.define('html-view', HtmlView)
         this.model = null
+        this.template = null
     }
     _update(){
         alert(this.model)
@@ -238,7 +239,7 @@ class ICssVar  {
         this.root.background = this.bg
     }
 }
-class IHtmlModel {
+class HtmlModel {
     constructor() {
       
         this.title = 'Test Page'
@@ -248,6 +249,7 @@ class IHtmlModel {
         return this
     }
 }
+ 
 class IConfig {
     rootLLM() {
         // Implementation

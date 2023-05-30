@@ -53,7 +53,7 @@ body {
     padding: 0px;
     font-family: 'Montserrat';
     height: 100%;
-    xoverflow: scroll;
+    overflow: auto;
     background-color: var(--mainColor);
     /* border: 1px solid black; */
     font-size: 12px;
@@ -63,7 +63,7 @@ body {
 .ast-node-container {
     /* display: grid; */
     flex-direction: column;
-    /* position: absolute; */
+    position: sticky;
     top: 0px;
     bottom: 0px;
     flex-grow: 1;
@@ -72,11 +72,11 @@ body {
 }
 
 .addClass.fa-solid.fa-square-plus {
-    /* border: 0.2em solid #0004; */
+    position: sticky;
     /* padding-left: 50%; */
     /* font-family: "Font Awesome 6 Free"; */
     width: fit-content;
-    position: relative;
+    /* position: relative; */
     height: 3.5em;
     margin: unset;
 }
@@ -421,6 +421,7 @@ textarea.propHeaderText {
     /* top: 0px; */
     /* bottom: 0px; */
     /* display: flex; */
+    overflow: auto;
     flex-direction: column;
 }
 
