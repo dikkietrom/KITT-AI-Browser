@@ -273,7 +273,7 @@ textarea.propHeaderText {
     flex-wrap: nowrap;
     align-items: center;
     justify-items: start;
-    /* width: min-content; */
+    width: min-content;
 }
 
 .ast-node.Program {
@@ -359,7 +359,7 @@ textarea.propHeaderText {
 }
 
 .ast-node.MethodDefinition {
-    /* width: fit-content; */
+    width: calc(100% - 0.8em);
     margin: auto;
     /* cursor: pointer; */
     margin: 0.1em;
@@ -406,6 +406,7 @@ textarea.propHeaderText {
  
 .MethodHeader {
     display: flex;
+    /* width: 100%; */
 }
 
 .ast-node.ast-property {
