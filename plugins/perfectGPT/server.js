@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
     });
 
     req.on('end', () => {
-      fs.writeFile('./impl.js', body, err => {
+      fs.writeFile('./object-store.js', body, err => {
         if (err) {
           res.writeHead(500);
           res.end('Server error');
@@ -31,7 +31,7 @@ const server = http.createServer((req, res) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         });
-        res.end(JSON.stringify({ message: 'Data stored in impl.js' }));
+        res.end(JSON.stringify({ message: 'Data stored in object-store.js' }));
       });
     });
 

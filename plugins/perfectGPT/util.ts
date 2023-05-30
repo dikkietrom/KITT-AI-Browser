@@ -1,4 +1,4 @@
- 
+
 
 
 function WAIT() {
@@ -210,4 +210,44 @@ function getImpl(name){
         }
     })
     return ret
+}
+
+function injectObject(clssNode){
+    const js = generate(clssNode)
+    const jsClass = eval(`(function() { ${js} return ${clssNode.id.name}})()`) 
+    return new jsClass()
+    //return newObject(clssNode.id.name)
+}
+function newObject(className){
+    return eval(`
+        (function() { 
+            return new ${className}() 
+        })()
+    `) 
+    
+}
+function findClass(className){
+    let ret = null
+    this.body.forEach((c)=>{
+        if(c.name.id===className){
+            ret = c
+        }
+    })
+    return ret
+}
+
+function sortChildren(elem,calback){
+    const container = elem
+    const children = Array.from(container.children);
+
+    // Sort the children based on text content
+    children.sort(calback);
+
+    // Clear the container
+    container.innerHTML = "";
+
+    // Append the sorted children back to the container
+    children.forEach(child => {
+      container.appendChild(child);
+    });    
 }

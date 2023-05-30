@@ -77,9 +77,9 @@ class ILLM {
     }
 }
 
-class IRootLLM extends ILLM {
+class IRootLLM  {
     constructor() {
-        super();
+        
         this.in = null
     }
 
@@ -92,9 +92,9 @@ class IRootLLM extends ILLM {
     }
 }
 
-class IControlLLM extends ILLM {
+class IControlLLM   {
     constructor() {
-        super();
+        
         this.result = null
     }
 
@@ -104,9 +104,9 @@ class IControlLLM extends ILLM {
 
 }
 
-class ILargeTokenlLLM extends ILLM {
+class ILargeTokenlLLM  {
     constructor() {
-        super();
+        
         this.id = null;
         this.data = null;
     }
@@ -117,9 +117,9 @@ class ILargeTokenlLLM extends ILLM {
     }
 }
 
-class ISmallTokenlLLM extends ILLM {
+class ISmallTokenlLLM  {
     constructor() {
-        super();
+         
         this.id = null;
     }
 
@@ -162,19 +162,15 @@ class IPrompt {
         this.role = null;
         this.data = null;
     }
-
     chat() {
         return this.data;
     }
-
-
 }
 
 class IValue {
     constructor() {
         this.value = null;
     }
-
     set() {
         return this.value
     }
@@ -210,7 +206,8 @@ class IFlowView {
     }
 }
 
-class HtmlModel {
+
+class ICodeView {
     constructor() {
       
         this.title = 'Test Page'
@@ -231,32 +228,26 @@ class HtmlView {
         alert(this.model)
     }
 }
-class CssVar  {
+class ICssVar  {
     constructor() {
        
         this.root = document.documentElement.style
- 
+        this.bg = null
     }
-    
+    background(){
+        this.root.background = this.bg
+    }
 }
-class AppCss extends CssVar{
+class IHtmlModel {
     constructor() {
-        super()
-        this.mainColor = null
+      
+        this.title = 'Test Page'
+        
+    }
+    set(){
+        return this
     }
 }
-
-class TestFile extends IFile {
-    constructor() {
-        super()
-        this.path = 'css.css'
-    }
-    data() {
-        fetchTextStream(this)
-        return WAIT
-    }
-}
-
 class IConfig {
     rootLLM() {
         // Implementation

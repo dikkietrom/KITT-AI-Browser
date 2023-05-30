@@ -55,6 +55,43 @@ body {
     xoverflow: scroll;
     background-color: var(--mainColor);
     /* border: 1px solid black; */
+    font-size: 12px;
+}
+
+.addClass.fa-solid.fa-square-plus {
+    /* border: 0.2em solid #0004; */
+    /* padding-left: 50%; */
+    /* font-family: "Font Awesome 6 Free"; */
+    /* width: 100%; */
+}
+
+.addClass.fa-solid.fa-square-plus.mousedown:hover:before {
+    box-shadow: 0px 1px 1em 1em #0005;
+    background: none;
+    transition: box-shadow 0.2s;
+    border: 0.2em #757575;
+    transition: border 0.1s , box-shadow 0.2s;
+    border-style: dotted;
+}
+
+.addClass.fa-solid.fa-square-plus:hover:before {
+    border-color: #ff0000b5;
+}
+
+.addClass.fa-solid.fa-square-plus.down {}
+
+.addClass.fa-solid.fa-square-plus:before {
+    display: block;
+    /* width: 100%; */
+    font-size: xx-large;
+    /* margin-left: -50%; */
+    cursor: pointer;
+    background: #0000;
+    border: 0.2em dotted #0000;
+    border-radius: 0.2em;
+    /* padding: 0.2em; */
+    transition: box-shadow 1s , border 1s;
+    box-shadow: none;
 }
 
 .PropHeader {
@@ -204,35 +241,73 @@ textarea.propHeaderText {
 
 .headerLabel {
     margin: 0.2em;
+    width: 100%;
+    text-align: left;
 }
 
 .ClassHeader {
-    display: grid;
+    display: flex;
     grid-auto-flow: column;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-content: center;
     flex-wrap: nowrap;
     align-items: center;
-    justify-items: center;
+    justify-items: start;
 }
 
 .ast-node.Program {
     /* display: flex; */
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    /* width: 100%; */
-    /* white-space: pre-wrap; */
-    text-align: center;
+    /* flex-wrap: wrap; */
+    /* flex-direction: column; */
+    /* align-content: center; */
+    /* align-items: flex-start; */
+    /* position: absolute; */
+    /* bottom: 300px; */
+    top: 4em;
+    bottom: 0;
+    text-align: left;
+    height: 100vh;
+    overflow: auto;
+    margin: 0px;
+    padding: 0px;
+    /* padding-right: 5em; */
+    border: none;
+}
+
+.js-type {
+    background: #888;
+    display: flex;
+    padding: 0.2em;
+    border: 0.2em solid #0006;
+    border-radius: 2em;
+}
+
+.js-type {box-shadow: 0 0 20px 10px #4406;border: 0.2em solid #99ffb65e;}
+
+.iface {
+    background: inherit;
+    color: #fff;
+    display: inline;
+}
+
+.onClassDeclaration {
+    border: 1px solid #0004;
 }
 
 .ast-node.ClassDeclaration {
     cursor: pointer;
-    width: fit-content;
-    display: inline-block;
+    width: 100%;
+    display: block;
+    box-shadow: none;
+    transition: box-shadow 0.5s , border 1s , border-radius 2s;
+}
+
+.ast-node.ClassDeclaration:hover {
+    box-shadow: 0 0 1em 1em #f004;
+    transition: box-shadow 0.2s ,border 0.5s ,border-radius 0.75s;
+    border: 1px solid #7fd08b;
+    border-radius: 0.5em;
 }
 
 .ast-node.ClassDeclaration.mousedown:hover:before {
@@ -251,11 +326,14 @@ textarea.propHeaderText {
     right: 0px;
     margin: 0.2em;
     padding: 0.2em;
+    transition:border 1s;
 }
 
 .ast-node.ClassDeclaration:hover:before {
-    border: 0.2em solid #090;
+    border: 0.2em #ff4141;
     text-decoration: underline;
+    transition:border 0.1s;
+    border-style: dashed;
 }
 
 .ast-node.MethodDefinition {
@@ -314,7 +392,11 @@ textarea.propHeaderText {
 #editor {
     width: fit-content;
     /* display: flex; */
-    padding: 1em;
+    /* padding: 1em; */
+    height: 100%;
+    /* position: absolute; */
+    /* top: 0px; */
+    /* bottom: 0px; */
     flex-direction: column-reverse;
 }
 

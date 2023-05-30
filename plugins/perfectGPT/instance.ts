@@ -3,15 +3,20 @@ function createInstance(clssNode, event,rootView)
 	try
 	{
 		const className = clssNode.id.name
-		const classConstructor = new Function(`return ${className}`)();
-		let cnst = new classConstructor();
-
+		const exists = (()=>{
+				try{
+					return new (eval(className))()				
+				}catch(e){
+					return null
+				}
+			})()
+		const cnst = exists
+			? exists
+			: injectObject(clssNode)
 
 		// Creating a Proxy for the target object
 		let jsInst = cnst
-
  
-		
 		currentElem = document.getElementById('editor');
 		let enter = new AstCallBack()
 		currentElem = div(currentElem) //////////////////////////CLASS
@@ -23,7 +28,7 @@ function createInstance(clssNode, event,rootView)
 		currentElem.className = 'ast-node createInstance collidable draggable'
 		let header = div(currentElem)
 		header.className = 'ClassHeader'
-            
+
 		let dlt = button(header)///////////but DELETE 
 		dlt.className = 'headerButton fa-solid fa-trash'
 		dlt.onclick = (e) =>
@@ -66,8 +71,9 @@ function createInstance(clssNode, event,rootView)
 			}
 		}
 		let prnt = currentElem
-		enter.onMemberExpression = (propertyNode) =>
+		enter.onAssignmentExpression = (propertyNode) =>
 		{ 											////////////////PROPERTY
+			const propertyName = propertyNode.left.property.name
 			currentElem = div(prnt)
 			let header = div(currentElem)
 			header.className = 'PropHeader'
@@ -77,28 +83,28 @@ function createInstance(clssNode, event,rootView)
 			{
 				startWire(con, e, jsInst)
 			}
-			con.jsProperty = propertyNode.property.name
+			con.jsProperty = propertyName
 			con.jsInst = jsInst
 			inst.propCons.push(con)
 			let text = textarea(header)
 			text.wrap = "off"
 			text.onkeyup = () =>
 			{
-				jsInst[propertyNode.property.name] = text.value
+				jsInst[propertyName] = text.value
 				updateFlows(jsInst)
-				storeProperty(clssNode,propertyNode,jsInst)
+				storeProperty(clssNode,propertyNode.left,jsInst)
 			}
 			text.onclick = function()
 			{
 				text.style.overflow = 'auto'
 			}
-			text.value = jsInst[propertyNode.property.name]
+			text.value = jsInst[propertyName]
 			text.className = 'propHeaderText'
 			let label = div(header)
-			label.innerHTML = propertyNode.property.name
+			label.innerHTML = propertyName
 			label.className = 'propHeaderLabel'
 			con.textBox = text
-			currentElem.className = 'ast-node ' + propertyNode.type
+			currentElem.className = 'ast-node ' + propertyNode.left.type
 		}
 		enter.onMethodDefinition = (methodNode, traverser) =>
 		{ 													//////////////METHOD
@@ -144,14 +150,14 @@ function createInstance(clssNode, event,rootView)
 			}
 		}
 		let leave = new AstCallBack()
-		leave.onMethodDefinition = (methodNode) =>
+		leave.onMethodDefinition = () =>
 		{
 			currentElem = currentElem.parentNode
 		}
-		leave.onMemberExpression = (methodNode) =>
-		{
-			currentElem = currentElem.parentNode
-		}
+		leave.onAssignmentExpression = () => currentElem = currentElem.parentNode
+		
+			
+	
 		traverse(clssNode, enter, leave)
 		let logWin = pre(inst)
 		logWin.className = 'logWin'
