@@ -1,4 +1,5 @@
 
+
 var implAst
 var rootView 
 var currentElem
@@ -52,14 +53,21 @@ function parseApi(code) {
         const addClss = div(currentElem)
         addClss.className='addClass fa-solid fa-square-plus'
         addClss.onclick = ()=>{
-            const name = prompt('name')
+            let name = 
+                prompt('name').toLowerCase()
+            if(name.charAt(0)!=='i'){
+                name = 'i' + name
+            }
+            name = name.substring(0,2).toUpperCase() + name.substring(2)
             const js = `class ${name} {}`
             let enter = new AstCallBack()
             let leave = new AstCallBack()
             currentElem = rootView
             onClassDeclaration(enter,leave)
-            traverse(js, enter, leave)
+            let newClassAst = traverse(js, enter, leave)
+            rootView.ast.body.push(newClassAst.body[0])
             sortChildren( rootView , (a, b) => a.textContent.localeCompare(b.textContent))
+            storeAsJsFilel(rootView.ast,"api.ts")
         }  
 
         let enter = new AstCallBack()
@@ -77,8 +85,8 @@ function parseApi(code) {
     }
 }
 function onProgram(enter,leave){
-    enter.onProgram = (node)=>{
-        node.body.sort((a,b)=>{
+    enter.onProgram = (programNode)=>{
+        programNode.body.sort((a,b)=>{
             if (a.id.name.charAt(0)=='I' && b.id.name.charAt(0)!='I'  ) {
                 return -1
             }  
@@ -88,15 +96,34 @@ function onProgram(enter,leave){
             return a.id.name.localeCompare(b.id.name, undefined, { sensitivity: 'base' });
 
         })
-
+         
+        programNode.body.remove = function(clssNode) {
+          let index = -1
+          let i = 0
+          this.forEach((cn)=>{
+              console.log( cn.id )
+             // console.log( cn.id.name )
+              if (cn.id && cn.id.name == clssNode.id.name) {    
+                  index=i
+              }
+              i++
+              
+          })
+          if (index !== -1) {
+            this.splice(index, 1)
+            storeAsJsFilel(rootView.ast,"api.ts")
+            clssNode._html.className+= ' removed'
+          }
+          
+        };
         
         currentElem = div(currentElem)
 
-        currentElem.className = 'ast-node ' + node.type
+        currentElem.className = 'ast-node ' + programNode.type
         rootView = currentElem
-        rootView.ast = node
+        rootView.ast = programNode
     }
-    leave.onProgram = (node)=>{
+    leave.onProgram = (programNode)=>{
         currentElem = rootView
 
     }
@@ -110,8 +137,9 @@ function onClassDeclaration(enter,leave){
         currentElem = div(currentElem)
 
         currentElem.className = 'onClassDeclaration'
+        clssNode._html = currentElem
         let header = div(currentElem)
-        header.className = 'ClassHeader'
+        header.className = 'ClassHeader level1'
 
         let tpe = div(header)   
         tpe.className = 'js-type'
@@ -127,7 +155,14 @@ function onClassDeclaration(enter,leave){
         label.className = 'headerLabel'            
         label.className = 'ast-node ' + clssNode.type
 
-        
+		let dlt = button(header)///////////but DELETE 
+		dlt.className = 'headerButton dlt fa-solid fa-trash'
+		dlt.onclick = (e) =>
+		{ 
+            e.stopPropagation()
+			rootView.ast.body.remove( clssNode  )
+              
+		}        
         currentElem.onclick = (event) => {
             let implClassNode = getImpl(clssNode.id.name)
 

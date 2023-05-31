@@ -61,14 +61,15 @@ body {
 }
 
 .ast-node-container {
-    /* display: grid; */
-    flex-direction: column;
+    /* display: flex; */
+    flex-direction: row;
     position: sticky;
     top: 0px;
     bottom: 0px;
     flex-grow: 1;
     /* overflow: auto; */
     height: calc(100% - 4em);
+    width: fit-content;
 }
 
 .addClass.fa-solid.fa-square-plus {
@@ -161,7 +162,7 @@ div#canv-container {
     margin: 0.2em;
     padding: 0.2em;
     user-select: none; /* Prevent text selection */
-    width: fit-content;
+    /* width: 100%; */
     /* margin: auto; */
     text-align: left;
 }
@@ -222,6 +223,12 @@ input.propHeaderText {
 
 button.headerButton , .fa-code{background-repeat: no-repeat;cursor: pointer;width: fit-content;height: fit-content;margin: auto;border-radius: 13.5em;border: 0.1em solid #0004;padding: 0.3em;margin-left: 0.2em;}
 
+button.headerButton.dlt.fa-solid.fa-trash {
+    opacity: 0;
+    transition: font-size 1s ,opacity 1s;
+    font-size: xx-small;
+}
+
 button.headerButton.fa-solid.fa-trash:hover {
     background: #f006;
 }
@@ -265,7 +272,7 @@ textarea.propHeaderText {
 }
 
 .ClassHeader {
-    display: flex;
+    /* display: grid; */
     grid-auto-flow: column;
     flex-direction: row;
     justify-content: flex-start;
@@ -273,13 +280,15 @@ textarea.propHeaderText {
     flex-wrap: nowrap;
     align-items: center;
     justify-items: start;
-    width: min-content;
+    width: 100%;
+    /* width: min-content; */
 }
 
 .ast-node.Program {
+    position: relative;
     /* display: flex; */
     /* flex-wrap: wrap; */
-    /* flex-direction: column; */
+    flex-direction: column;
     /* align-content: center; */
     /* align-items: flex-start; */
     /* position: absolute; */
@@ -294,6 +303,7 @@ textarea.propHeaderText {
     /* padding-right: 5em; */
     border: none;
     flex-grow: 1;
+    width: fit-content;
 }
 
 .js-type {
@@ -314,15 +324,36 @@ textarea.propHeaderText {
 
 .onClassDeclaration {
     border: 1px solid #0004;
+    position: relative;
+    /* display: flex; */
+    flex-direction: row;
+    left:0px;
+    height:max-content;
+ 
+}
+
+.Program .removed {
+    height: 0px; 
+    /* width: 0px; */
+    overflow:hidden;
+    transition: left 1s , height 2s;
+    position: relative;
+    left: -100%;
 }
 
 .ast-node.ClassDeclaration {
+    /* display: flex; */
+    position: relative;
     cursor: pointer;
-    width: 100%;
-    display: block;
+    /* width: 100%; */
+    /* display: block; */
     box-shadow: none;
     transition: box-shadow 0.5s , border 1s , border-radius 2s;
     flex-grow: 1;
+    flex-direction: row;
+    align-content: space-around;
+    justify-content: space-between;
+    border: 1px solid #0000;
 }
 
 .ast-node.ClassDeclaration:hover {
@@ -331,7 +362,7 @@ textarea.propHeaderText {
     border: 1px solid #7fd08b;
     border-radius: 0.5em;
 }
-
+ 
 .ast-node.ClassDeclaration.mousedown:hover:before {
     xbackground: #0082;
     color: #000;
@@ -339,7 +370,7 @@ textarea.propHeaderText {
     box-shadow: 0px 0px 8px #000000;
 
 }
-
+ 
 .ast-node.ClassDeclaration:before {
     content: 'new';
     border: 0.2em solid #0005;
@@ -440,5 +471,15 @@ textarea.propHeaderText {
     align-items: baseline;
 }
 .onClassDeclaration .ClassHeader{
-    width:100%;
+    /* width:100%; */
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.ClassHeader.level1:hover button.headerButton.dlt.fa-solid.fa-trash {
+    opacity: 1;
+    transition: font-size 0.5s , opacity 0.3s;
+    font-size: large;
+    margin: 0.2em;
 }

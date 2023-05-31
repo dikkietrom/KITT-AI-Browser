@@ -55,6 +55,7 @@ async function fetchTextStream(cllr) {
             leave.call(node, traverser);
         }
     });
+    return ast
 }
 
 class AstCallBack {
@@ -175,15 +176,15 @@ function storeProperty(classNode,propertyNode,jsInst) {
 function newName() {
     return 'a' + Date.now() 
 }
-function storeImpl(data){
+function storeImpl(data,path){
 
   const url = 'http://localhost:3000/store';  
   
-   
   const options = {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/text'
+      'Content-Type': 'application/text',
+      'Content-Path': path
     },
     body: data
   };
@@ -204,7 +205,7 @@ function storeImpl(data){
 function getImpl(name){
     let ret=null
     implAst.body.forEach((clssNode)=>{
-        if (clssNode.id.name===name) {
+        if (clssNode.id && clssNode.id.name===name) {
             ret=clssNode
             return
         }
@@ -250,4 +251,8 @@ function sortChildren(elem,calback){
     children.forEach(child => {
       container.appendChild(child);
     });    
+}
+
+function storeAsJsFilel(ast,path){
+    storeImpl(generate(ast),path)
 }

@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const url = require('url'); // Add this line
+const url = require('url');
 
 const port = 3000;
 
@@ -20,7 +20,9 @@ const server = http.createServer((req, res) => {
     });
 
     req.on('end', () => {
-      fs.writeFile('./object-store.js', body, err => {
+      const contentPath = req.headers['content-path']
+      console.log(contentPath)
+      fs.writeFile(contentPath, body, err => {
         if (err) {
           res.writeHead(500);
           res.end('Server error');
@@ -72,6 +74,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`); });
-
-
+  console.log(`Server running on port ${port}`);
+});
