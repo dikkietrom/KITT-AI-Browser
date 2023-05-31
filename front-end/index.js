@@ -1,3 +1,4 @@
+
 let currentInp
 let replyLen = 0
 init.cnt = 0

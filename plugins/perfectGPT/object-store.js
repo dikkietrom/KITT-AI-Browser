@@ -1,3 +1,4 @@
+{
 class HtmlView {
     constructor() {
         this.model = null;
@@ -50,7 +51,7 @@ class IHtmlModel {
 }
 class HtmlModel {
     constructor() {
-        this.title = 'Test page';
+        this.title = 'Test page22222';
     }
     set() {
         return this;
@@ -58,9 +59,10 @@ class HtmlModel {
 }
 class IValue {
     constructor() {
-        this.value = '<style>\n.test{\nbackground:#fff8;\ncolor:red;\npadding:1em;\n}\n</style>\n<div class="test">\n${this.model.title}\n</div>';
+        this.value = '<style>\n.test{\nbackground:#fff8;\ncolor:green;\npadding:1em;\nfont-size:large;\n}\n</style>\n<div class="test">\n${this.model.title}\n</div>';
     }
     set() {
         return this.value;
     }
 }
+    }
