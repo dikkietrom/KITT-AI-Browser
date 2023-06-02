@@ -33,7 +33,7 @@ const server = http.createServer((req, res) => {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
         });
-        res.end(JSON.stringify({ message: 'Data stored in object-store.js' }));
+        res.end(JSON.stringify({ message: 'Data stored in ' + contentPath }));
       });
     });
 
