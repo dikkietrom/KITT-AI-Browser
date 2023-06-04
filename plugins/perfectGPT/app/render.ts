@@ -66,7 +66,7 @@ function parseApi(code) {
             onClassDeclaration(enter,leave)
             let newClassAst = traverse(js, enter, leave)
             rootView.ast.body.push(newClassAst.body[0])
-            sortChildren( rootView , (a, b) => a.textContent.localeCompare(b.textContent))
+            sortChildren( rootView , nodeSorter)
             storeAsJsFile({ast:rootView.ast,path:"api.ts"})
         }  
 
@@ -84,38 +84,13 @@ function parseApi(code) {
         console.error("Error parsing JavaScript code:", error);
     }
 }
+  
+
 function onProgram(enter,leave){
     enter.onProgram = (programNode)=>{
-        programNode.body.sort((a,b)=>{
-            if (a.id.name.charAt(0)=='I' && b.id.name.charAt(0)!='I'  ) {
-                return -1
-            }  
-            if (a.id.name.charAt(0)!='I' && b.id.name.charAt(0)=='I'  ) {
-                return 1
-            }  
-            return a.id.name.localeCompare(b.id.name, undefined, { sensitivity: 'base' });
+        programNode.body.sort(classSorter)
+        programNode.removeClassNode = removeClassNode
 
-        })
-         
-        programNode.body.remove = function(clssNode) {
-          let index = -1
-          let i = 0
-          this.forEach((cn)=>{
-              console.log( cn.id )
-             // console.log( cn.id.name )
-              if (cn.id && cn.id.name == clssNode.id.name) {    
-                  index=i
-              }
-              i++
-              
-          })
-          if (index !== -1) {
-            this.splice(index, 1)
-            storeAsJsFile({ast:rootView.ast,path:"api.ts"})
-            clssNode._html.className+= ' removed'
-          }
-          
-        };
         
         currentElem = div(currentElem)
 
@@ -160,7 +135,7 @@ function onClassDeclaration(enter,leave){
 		dlt.onclick = (e) =>
 		{ 
             e.stopPropagation()
-			rootView.ast.body.remove( clssNode  )
+			rootView.ast.removeClassNode( clssNode  )
               
 		}        
         currentElem.onclick = (event) => {

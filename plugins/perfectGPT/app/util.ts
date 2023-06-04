@@ -211,7 +211,23 @@ function findClass(className){
     })
     return ret
 }
+function nodeSorter(a, b){
 
+    return genSorter(a.textContent,b.textContent)
+}
+function genSorter(a, b){
+    // if (a.charAt(0)=='I' && b.charAt(0)!='I'  ) {
+    //     return -1
+    // }  
+    // if (a.charAt(0)!='I' && b.charAt(0)=='I'  ) {
+    //     return 1
+    // }  
+    return a.localeCompare(b, undefined, { sensitivity: 'base' });
+}
+
+function classSorter(a,b){
+    return genSorter(a.id.name,b.id.name)
+}
 function sortChildren(elem,calback){
     const container = elem
     const children = Array.from(container.children);
@@ -240,7 +256,12 @@ function storeAsJsFile(json = {}){
     json.path='app/flow/a1.ts'
     
     
-    storeImpl(wiresToJson(),json.path)
+    storeImpl(wiresToJson(),json.path)    
+
+    json.path='app/api.ts'
+    
+    storeImpl(generate(rootView.ast),json.path)
+
 }
 
 function wiresToJson(){
